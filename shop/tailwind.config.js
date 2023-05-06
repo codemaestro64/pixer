@@ -84,11 +84,10 @@ module.exports = {
         '15px': '15px',
         '18px': '18px',
         '22px': '22px',
-        '30px': '30px',
-        '40px': '40px',
       },
       fontFamily: {
         body: ["'Inter', sans-serif"],
+        poppins: ["'Poppins', 'Inter', sans-serif"],
       },
     },
   },

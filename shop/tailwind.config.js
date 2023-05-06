@@ -26,6 +26,10 @@ module.exports = {
       '4xl': '2160px', // only need to control product grid mode in ultra 4k device
     },
     extend: {
+      backgroundImage: {
+        'hero-desktop': 'url("/hero-bg-desktop.png")',
+        'hero-mobile': 'url("/hero-bg-mobile.png")',
+      },
       colors: {
         brand: {
           DEFAULT: '#24b47e',
@@ -61,6 +65,7 @@ module.exports = {
           900: '#999999',
           950: '#2b2b2b',
         },
+        hero_input: '#096140',
         warning: '#e66767',
         wishlist_price: '#ffffff1a',
         'border-50': withOpacity('--color-border-50'),
@@ -77,6 +82,10 @@ module.exports = {
         '10px': '.625rem',
         '13px': '13px',
         '15px': '15px',
+        '18px': '18px',
+        '22px': '22px',
+        '30px': '30px',
+        '40px': '40px',
       },
       fontFamily: {
         body: ["'Inter', sans-serif"],

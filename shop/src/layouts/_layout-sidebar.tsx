@@ -80,7 +80,7 @@ export function Sidebar({
             />
             <NavLink
               title={t('text-explore')}
-              href={routes.explore}
+              href={routes.chat}
               isCollapse={isCollapse}
               icon={<DiscoverIcon className="h-[18px] w-[18px] text-current" />}
             />

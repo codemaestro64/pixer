@@ -63,6 +63,8 @@ module.exports = {
         },
         warning: '#e66767',
         wishlist_price: '#ffffff1a',
+        online: '#55A99D',
+        gradient: '#007665',
         'border-50': withOpacity('--color-border-50'),
         'border-100': withOpacity('--color-border-100'),
         'border-200': withOpacity('--color-border-200'),

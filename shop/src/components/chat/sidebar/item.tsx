@@ -2,29 +2,34 @@ import { useTranslation } from 'next-i18next';
 import Input from '@/components/ui/forms/input';
 import { useState } from 'react';
 import Image from '@/components/ui/image';
+import { number } from 'yup';
 
 type ChatItemProps = {
+  channel_id: number;
   avatar: any;
   name: string;
   message: string;
   time: string;
   online: boolean;
   newMsgCnt: number;
+  onSelectChannel: any;
 };
 
 const ChatItem: React.FC<ChatItemProps> = ({
+  channel_id,
   avatar,
   name,
   message,
   time,
   online,
   newMsgCnt,
+  onSelectChannel,
 }) => {
   const { t } = useTranslation('common');
   let [searchText, setSearchText] = useState('');
 
   return (
-    <li className="py-3 sm:py-4" onClick={() => console.log('sdsdsd')}>
+    <li className="py-3 sm:py-4" onClick={() => onSelectChannel(channel_id)}>
       <div className="flex items-center space-x-2 ">
         <div className="flex-shrink-0">
           <div

@@ -63,6 +63,7 @@ const ChatDetails = () => {
           online={true}
           avatar={sampleAvatar1}
           forCall={false}
+          onSelectChannel={() => console.log('testing')}
         />
 
         <Scrollbar className="relative mt-10 h-full w-full">

@@ -1,5 +1,5 @@
 import { useTranslation } from 'next-i18next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SearchIcon } from '@/components/icons/chat/search-icon';
 import { SpeechIcon } from '@/components/icons/chat/speech-icon';
 import Scrollbar from '@/components/ui/scrollbar';
@@ -23,6 +23,7 @@ const avatarData = [
 
 const recentChats = [
   {
+    channel_id: 1,
     avatar: sampleAvatar1,
     online: false,
     name: 'Neil Sims',
@@ -31,6 +32,7 @@ const recentChats = [
     time: '12 mar',
   },
   {
+    channel_id: 2,
     avatar: sampleAvatar2,
     online: true,
     name: 'Neil Sims',
@@ -39,6 +41,7 @@ const recentChats = [
     time: '12 mar',
   },
   {
+    channel_id: 3,
     avatar: sampleAvatar3,
     online: true,
     name: 'Neil Sims',
@@ -47,6 +50,7 @@ const recentChats = [
     time: '12 mar',
   },
   {
+    channel_id: 4,
     avatar: sampleAvatar4,
     online: true,
     name: 'Neil Sims',
@@ -55,6 +59,7 @@ const recentChats = [
     time: '12 mar',
   },
   {
+    channel_id: 5,
     avatar: sampleAvatar5,
     online: true,
     name: 'Neil Sims',
@@ -64,14 +69,40 @@ const recentChats = [
   },
 ];
 
-const ChatSidebar = () => {
+type ChatSiderbarProps = {
+  onSelectChannel: any;
+  selectedChannelID: number;
+};
+
+const ChatSidebar: React.FC<ChatSiderbarProps> = ({
+  onSelectChannel,
+  selectedChannelID,
+}) => {
   const { t } = useTranslation('common');
   let [searchText, setSearchText] = useState('');
 
   const onArchiveChat = () => {};
+
+  const [width, setWidth] = useState<number>(0);
+  const handleWindowSizeChange = () => {
+    setWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', handleWindowSizeChange);
+    return () => {
+      window.removeEventListener('resize', handleWindowSizeChange);
+    };
+  }, []);
+
+  const isMobile = width <= 640;
   // xl:w-[400px]
   return (
-    <div className="h-full w-full border-r-[1px] border-light-400 dark:border-dark-300 sm:w-[50%] md:w-[40%] lg:w-[30%]">
+    <div
+      className={`${
+        isMobile && selectedChannelID >= 0 ? 'hidden' : 'w-full'
+      } h-full border-r-[1px] border-light-400 dark:border-dark-300 sm:w-[50%] md:w-[40%] lg:w-[30%]`}
+    >
       <div className="flex h-full flex-col  justify-between bg-white text-dark-900 dark:bg-dark-100">
         <div className="items-centerleading-6 mt-10 flex-col px-4">
           <div className="text-xl text-black dark:text-white">Chat</div>
@@ -118,7 +149,11 @@ const ChatSidebar = () => {
 
             <ul role="list" className="mt-4">
               {recentChats.map((item, key) => (
-                <ChatItem key={key} {...item} />
+                <ChatItem
+                  key={key}
+                  {...item}
+                  onSelectChannel={onSelectChannel}
+                />
               ))}
             </ul>
 
@@ -129,7 +164,11 @@ const ChatSidebar = () => {
 
             <ul role="list" className="mt-4">
               {recentChats.map((item, key) => (
-                <ChatItem key={key} {...item} />
+                <ChatItem
+                  key={key}
+                  {...item}
+                  onSelectChannel={onSelectChannel}
+                />
               ))}
             </ul>
           </div>

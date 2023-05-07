@@ -21,6 +21,9 @@ import { useTypes } from '@/data/type';
 import isEmpty from 'lodash/isEmpty';
 import { fadeInBottom } from '@/lib/framer-motion/fade-in-bottom';
 import { motion } from 'framer-motion';
+import { useBreakpoint } from '@/lib/hooks/use-breakpoint';
+import { useIsMounted } from '@/lib/hooks/use-is-mounted';
+import { SetStateAction, useState } from 'react';
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   const queryClient = new QueryClient();
@@ -58,11 +61,31 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
 
 function ChatMain() {
   const { query } = useRouter();
+  const breakpoint = useBreakpoint();
+  const isMounted = useIsMounted();
+
+  const [channelID, setChannelID] = useState(-1);
 
   return (
-    <div className="flex h-[calc(100vh-70px)] flex-row bg-white dark:bg-dark-100">
-      <ChatSidebar />
-      <ChatContent />
+    <div
+      className={`${
+        isMounted && ['xs'].indexOf(breakpoint) !== -1
+          ? 'h-[calc(100vh-120px)]'
+          : 'h-[calc(100vh-70px)]'
+      } flex  flex-row bg-white dark:bg-dark-100`}
+    >
+      <ChatSidebar
+        onSelectChannel={(selectedChannelID: SetStateAction<number>) =>
+          setChannelID(selectedChannelID)
+        }
+        selectedChannelID={channelID}
+      />
+      <ChatContent
+        onSelectChannel={(selectedChannelID: SetStateAction<number>) =>
+          setChannelID(-1)
+        }
+        selectedChannelID={channelID}
+      />
       <ChatDetails />
     </div>
   );

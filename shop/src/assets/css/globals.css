@@ -260,3 +260,12 @@ html.dark .StripeElement {
 [dir='rtl'] .react-tel-input .country-list {
   left: 0;
 }
+.border-right {
+  border-right: 1px solid #fff;
+}
+.author-tile {
+  background-image: url("../images/author_tile_bg.jpg");
+  background-size: 100%;
+  background-position: cover;
+  background-repeat: no-repeat;
+}

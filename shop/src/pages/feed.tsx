@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import type { GetStaticProps } from 'next';
 import type {
@@ -15,13 +15,8 @@ import routes from '@/config/routes';
 import { dehydrate, QueryClient } from 'react-query';
 import { API_ENDPOINTS } from '@/data/client/endpoints';
 import client from '@/data/client';
-import feedCardImage from '@/assets/images/feed-card-image.png';
-import teamImage from '@/assets/images/omnico-team.png';
-import FeedMenu from '@/components/feed/feed-menu';
-import FeedInput from '@/components/feed/feed-input';
-import FeedActions from '@/components/feed/feed-actions';
-import FeedTrendLatest from '@/components/feed/feed-trend-latest';
-import FeedCard from '@/components/feed/feed-card';
+import FeedFixedSection from '@/components/feed/feed-fixed-section';
+import FeedMainSection from '@/components/feed/feed-main-section';
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   const queryClient = new QueryClient();
@@ -73,15 +68,19 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
 //   );
 // }
 
-function FeedContainer({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="pb-4 sm:pb-5 md:pb-6 lg:pb-7 3xl:pb-8 pt-[10px] md:pt-6 px-4 sm:px-5 md:px-6 lg:px-7 3xl:px-8">
-      {children}
-    </div>
-  )
-}
-
 const Feed: NextPageWithLayout = () => {
+  const [is2xl, setIs2xl] = useState(false)
+
+  function updateIs2xlOnResize() {
+    setIs2xl(window.innerWidth >= 1440)
+  }
+  
+  useEffect(() => {
+    updateIs2xlOnResize()
+    window.addEventListener('resize', updateIs2xlOnResize)
+    return () => window.removeEventListener('resize', updateIs2xlOnResize)
+  }, [])
+
   return (
     <>
       <Seo
@@ -89,28 +88,12 @@ const Feed: NextPageWithLayout = () => {
         description="Fastest digital download template built with React, NextJS, TypeScript, React-Query and Tailwind CSS."
         url={routes.feed}
       />
-      <FeedContainer>
-        <div>
-          <FeedMenu />
+      <FeedMainSection is2xl={is2xl} />
+      { is2xl ? (
+        <div className='fixed top-[69px] bottom-0 right-0 w-[482px]'>
+          <FeedFixedSection />
         </div>
-        <div className='mt-[18px]'>
-          <FeedInput />
-        </div>
-        <div className='mt-[6px]'>
-          <FeedActions />
-        </div>
-        <div className='my-[14px]'>
-          <FeedTrendLatest />
-        </div>
-        
-        <div className='grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-[14px] px-[12px] mt-[21px]'>
-          <FeedCard appName='ChawkBazar Laravel Flutter Mobile App' teamName='Omnico Team' cardImage={feedCardImage} teamImage={teamImage} />
-          <FeedCard appName='ChawkBazar Laravel Flutter Mobile App' teamName='Omnico Team' cardImage={feedCardImage} teamImage={teamImage} />
-          <FeedCard appName='ChawkBazar Laravel Flutter Mobile App' teamName='Omnico Team' cardImage={feedCardImage} teamImage={teamImage} />
-          <FeedCard appName='ChawkBazar Laravel Flutter Mobile App' teamName='Omnico Team' cardImage={feedCardImage} teamImage={teamImage} />
-          <FeedCard appName='ChawkBazar Laravel Flutter Mobile App' teamName='Omnico Team' cardImage={feedCardImage} teamImage={teamImage} />
-        </div>
-      </FeedContainer>
+      ) : null }
       {/* <Products /> */}
     </>
   );

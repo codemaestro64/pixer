@@ -268,4 +268,6 @@ html.dark .StripeElement {
   background-size: 100%;
   background-position: cover;
   background-repeat: no-repeat;
+  background-blend-mode: multiply;
+  background-color: gray;
 }

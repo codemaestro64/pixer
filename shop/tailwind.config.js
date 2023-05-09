@@ -77,6 +77,8 @@ module.exports = {
         card: '0px 0px 6px rgba(79, 95, 120, 0.1)',
         dropdown: '0px 10px 32px rgba(46, 57, 72, 0.2)',
         'bottom-nav': '0 -2px 3px rgba(0, 0, 0, 0.08)',
+        'feed-card': '6.92px 6.92px 3.4px rgba(71, 71, 71, 0.25)',
+        'feed-cardimage': '5.21px 6.08px 8px rgba(0, 0, 0, 0.25)',
       },
       fontSize: {
         '10px': '.625rem',

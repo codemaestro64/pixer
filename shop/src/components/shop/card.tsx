@@ -10,7 +10,7 @@ import Button from '@/components/ui/button';
 import { UserIcon } from '@/components/icons/user-icon';
 import { HeartFillIcon } from '@/components/icons/heart-fill';
 import { PurchaseIcon } from '@/components/icons/purchase-icon';
-
+import FollowButton from '@/components/follow/follow-button';
 
 interface AnalyticsProps {
   metric: number;
@@ -83,9 +83,7 @@ export default function Card({ shop }: { shop: Shop }) {
         </div>
       </div>
      <div className="mt-10">
-       <Button className="min-h-[36px] sm:h-8 rounded-full">
-          {t('Follow')}
-        </Button>
+       <FollowButton shop_id={shop.id} />
      </div>
     </motion.div>
   );

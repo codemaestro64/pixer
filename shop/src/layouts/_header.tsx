@@ -20,6 +20,8 @@ import { useModalAction } from '@/components/modal-views/context';
 import Button from '@/components/ui/button';
 import LanguageSwitcher from '@/components/ui/language-switcher';
 import { useTranslation } from 'next-i18next';
+import { useMutation } from 'react-query';
+import client from '@/data/client';
 
 const AuthorizedMenuItems = [
   {
@@ -98,11 +100,13 @@ function LoginMenu() {
   const { openModal } = useModalAction();
   const { me, isAuthorized, isLoading } = useMe();
   const isMounted = useIsMounted();
+
   if (!isMounted) {
     return (
       <div className="h-8 w-8 animate-pulse rounded-full bg-light-300 dark:bg-dark-500" />
     );
   }
+
   if (isAuthorized && me && !isLoading) {
     return <AuthorizedMenu user={me} />;
   }

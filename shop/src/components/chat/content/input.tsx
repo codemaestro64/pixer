@@ -24,7 +24,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
         <Button
           variant="icon"
           aria-label="Search"
-          className="h-[40px] w-[40px] rounded-full bg-dark-400"
+          className="h-[40px] w-[40px] rounded-full bg-dark-400 hover:opacity-30"
         >
           <AttachmentIcon className="h-[16px] w-[16px]" />
         </Button>
@@ -34,6 +34,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
         <input
           onChange={(e) => setMessageText(e.target.value)}
           autoFocus={true}
+          value={message}
           placeholder="Send message"
           className="border-dark-30 h-full w-full border-0 bg-transparent bg-light  pl-2 text-13px outline-none focus:ring-0 dark:bg-dark-100"
         />
@@ -43,14 +44,19 @@ const ChatInput: React.FC<ChatInputProps> = ({
         <Button
           variant="icon"
           aria-label="Search"
-          className="h-[40px] w-[40px]"
+          className="h-[40px] w-[40px] hover:opacity-40"
+          onClick={() => {
+            if (message.length === 0) return;
+            onClickedSend(message);
+            setMessageText('');
+          }}
         >
           <SendIcon className="h-[16px] w-[16px]" />
         </Button>
         <Button
           variant="icon"
           aria-label="Search"
-          className="h-[40px] w-[40px] rounded-full bg-gradient-to-b from-online to-gradient"
+          className="h-[40px] w-[40px] rounded-full bg-gradient-to-b from-online to-gradient hover:opacity-40"
         >
           <SpeechIcon className="h-[16px] w-[16px] text-white" />
         </Button>

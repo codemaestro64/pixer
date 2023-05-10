@@ -8,97 +8,69 @@ import ChatHeader from '@/components/chat/content/header';
 import sampleAvatar1 from '@/assets/images/avatars/1.png';
 import { useBreakpoint } from '@/lib/hooks/use-breakpoint';
 import { useIsMounted } from '@/lib/hooks/use-is-mounted';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext, useRef } from 'react';
+import ChatContext from '@/lib/chat-context';
+import { ChannelMemberResponse, MessageResponse } from 'stream-chat';
+import { getAuthUserInfo } from '@/data/client/token.utils';
 
-const messagesData = [
-  {
-    type: 'text',
-    sender: 'opposite',
-    avatar: sampleAvatar1,
-    message: 'Are you still travelling?',
-    date: '2:50PM',
-  },
-  {
-    type: 'text',
-    sender: 'mine',
-    avatar: null,
-    message: "Yes, i'm at Istanbul.",
-    date: '3:00PM',
-  },
-  {
-    type: 'text',
-    sender: 'opposite',
-    avatar: sampleAvatar1,
-    message: "OoOo. That's so cool!",
-    date: '4:00PM',
-  },
-  {
-    type: 'text',
-    sender: 'opposite',
-    avatar: sampleAvatar1,
-    message: 'Raining???',
-    date: '4:00PM',
-  },
-  {
-    type: 'date',
-    sender: '',
-    avatar: '',
-    message: '',
-    date: 'Thursday 24, 2022',
-  },
-  {
-    type: 'text',
-    sender: 'mine',
-    avatar: null,
-    message: 'No. Weather is good here.',
-    date: '5:00PM',
-  },
-  {
-    type: 'text',
-    sender: 'opposite',
-    avatar: sampleAvatar1,
-    message: 'Amazing, I am really wating for you.',
-    date: '5:30PM',
-  },
-];
-
-type ChatContentProps = {
-  onSelectChannel: any;
-  selectedChannelID: number;
-};
-
-const ChatContent: React.FC<ChatContentProps> = ({
-  onSelectChannel,
-  selectedChannelID,
-}) => {
+const ChatContent = () => {
   const { t } = useTranslation('common');
-  const breakpoint = useBreakpoint();
-  const isMounted = useIsMounted();
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const authUserInfo = getAuthUserInfo();
+
+  const [curMembers, setCurrentMembers] = useState<ChannelMemberResponse[]>([]);
+  const [curMessages, setCurrentMessages] = useState<MessageResponse[]>([]);
+
+  const { selected_channel, setSelectedChannel } = useContext(ChatContext);
+
+  selected_channel!.on('message.new', (event) => {
+    setCurrentMessages([...curMessages, event.message!]);
+
+    setTimeout(() => {
+      scrollToBottom(true);
+    }, 100);
+  });
 
   const onClickedAttachment = () => {};
 
-  const onClickedSend = () => {};
+  const onClickedSend = async (message: string) => {
+    await selected_channel!.sendMessage({
+      text: message,
+    });
+  };
 
   const onClickedSpeech = () => {};
 
-  const [width, setWidth] = useState<number>(0);
-  const handleWindowSizeChange = () => {
-    setWidth(window.innerWidth);
+  const scrollToBottom = (animation: boolean = false) => {
+    scrollRef.current?.scrollIntoView({
+      behavior: animation ? 'smooth' : 'auto',
+    });
+  };
+
+  const loadInfo = async () => {
+    const { members, messages } = await selected_channel!.watch();
+    console.log('message setting ~~~~~~~~~~~~~~~~~', messages);
+    setCurrentMembers(members);
+    setCurrentMessages(messages);
+
+    await selected_channel?.markRead({ user_id: authUserInfo! });
+
+    setTimeout(() => {
+      scrollToBottom();
+    }, 100);
   };
 
   useEffect(() => {
-    window.addEventListener('resize', handleWindowSizeChange);
-    return () => {
-      window.removeEventListener('resize', handleWindowSizeChange);
-    };
-  }, []);
+    if (!selected_channel) return;
 
-  const isMobile = width <= 640;
+    loadInfo();
+  }, [selected_channel]);
 
   return (
     <div
       className={`${
-        isMobile && selectedChannelID >= 0 ? 'block w-full' : 'hidden'
+        selected_channel ? 'block w-full' : 'hidden'
       }  h-full w-full grow border-r-[1px] border-light-400 dark:border-dark-300 sm:block`}
     >
       <div className="flex h-full flex-col">
@@ -107,17 +79,17 @@ const ChatContent: React.FC<ChatContentProps> = ({
           online={true}
           avatar={sampleAvatar1}
           forCall={true}
-          onSelectChannel={onSelectChannel}
         />
 
         <div className="mt-10 h-[2px] bg-light-400 px-4 dark:bg-dark-300 " />
 
         <Scrollbar className="relative h-full w-full px-4">
           <div className="flex w-full flex-col pb-4">
-            {messagesData.map((item, key) => (
-              <ChatMessageItem key={key} {...item} />
+            {curMessages.map((item, key) => (
+              <ChatMessageItem key={key} info={item} />
             ))}
           </div>
+          <div ref={scrollRef} />
         </Scrollbar>
 
         <ChatInput

@@ -1,5 +1,5 @@
 import { useTranslation } from 'next-i18next';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import Scrollbar from '@/components/ui/scrollbar';
 import ChatDetailSection from '@/components/chat/details/section';
 import ChatMedia from '@/components/chat/details/media';
@@ -11,6 +11,8 @@ import sampleAvatar1 from '@/assets/images/avatars/1.png';
 import sampleMedia1 from '@/assets/images/medias/1.png';
 import sampleMedia2 from '@/assets/images/medias/2.png';
 import sampleMedia3 from '@/assets/images/medias/3.png';
+import ChatContext from '@/lib/chat-context';
+import { getAuthUserInfo } from '@/data/client/token.utils';
 
 const mediaData = [
   { media: sampleMedia1 },
@@ -49,7 +51,7 @@ const starMsgData = [
 
 const ChatDetails = () => {
   const { t } = useTranslation('common');
-  let [searchText, setSearchText] = useState('');
+  const { selected_channel, setSelectedChannel } = useContext(ChatContext);
 
   const onClickedSection = (title: string) => {
     console.log('Section is clicked - ', title);
@@ -63,7 +65,6 @@ const ChatDetails = () => {
           online={true}
           avatar={sampleAvatar1}
           forCall={false}
-          onSelectChannel={() => console.log('testing')}
         />
 
         <Scrollbar className="relative mt-10 h-full w-full">

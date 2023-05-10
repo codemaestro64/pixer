@@ -34,6 +34,7 @@ use Marvel\Database\Repositories\UserRepository;
 use Marvel\Database\Repositories\DownloadRepository;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Marvel\Database\Models\Permission as ModelsPermission;
+use GetStream\StreamChat\Client as StreamClient;
 
 class UserController extends CoreController
 {
@@ -548,5 +549,19 @@ class UserController extends CoreController
         } catch (\Throwable $th) {
             throw new MarvelException(SOMETHING_WENT_WRONG);
         }
+    }
+
+    //chat apis
+    public function generateToken(Request $request)
+    {
+        $client = new StreamClient(env('MIX_STREAM_API_KEY'), env('MIX_STREAM_API_SECRET'));
+        $items = explode('@', $request->email);
+        $user_id = str_replace('.', '_', $items[0]) . "_" . str_replace('.', '_', $items[1]);
+
+        return response()->json([
+            'token' => $client->createToken($user_id),
+            'user_id' =>  $user_id,
+            'user_name' => $request->name
+        ]);
     }
 }

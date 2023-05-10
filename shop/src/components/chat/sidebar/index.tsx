@@ -1,107 +1,139 @@
 import { useTranslation } from 'next-i18next';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext, useRef } from 'react';
 import { SearchIcon } from '@/components/icons/chat/search-icon';
 import { SpeechIcon } from '@/components/icons/chat/speech-icon';
 import Scrollbar from '@/components/ui/scrollbar';
 import ChatAvatar from '@/components/chat/sidebar/avatar';
 import ChatItem from '@/components/chat/sidebar/item';
+import { Spin } from 'react-cssfx-loading';
+import { createChannel, getChannels, searchUsers } from '@/data/chat';
+import { ChatUser } from '@/types';
+import { getAuthUserInfo } from '@/data/client/token.utils';
+import { Channel, UserResponse } from 'stream-chat';
+import ChatContext from '@/lib/chat-context';
+import { useTheme } from 'next-themes';
 
-import sampleAvatar1 from '@/assets/images/avatars/1.png';
-import sampleAvatar2 from '@/assets/images/avatars/2.png';
-import sampleAvatar3 from '@/assets/images/avatars/3.png';
-import sampleAvatar4 from '@/assets/images/avatars/4.png';
-import sampleAvatar5 from '@/assets/images/avatars/5.png';
-
-const avatarData = [
-  { addNew: true, avatar: null },
-  { addNew: false, avatar: sampleAvatar1 },
-  { addNew: false, avatar: sampleAvatar2 },
-  { addNew: false, avatar: sampleAvatar3 },
-  { addNew: false, avatar: sampleAvatar4 },
-  { addNew: false, avatar: sampleAvatar5 },
-];
-
-const recentChats = [
-  {
-    channel_id: 1,
-    avatar: sampleAvatar1,
-    online: false,
-    name: 'Neil Sims',
-    message: 'Hi, How are you?',
-    newMsgCnt: 3,
-    time: '12 mar',
-  },
-  {
-    channel_id: 2,
-    avatar: sampleAvatar2,
-    online: true,
-    name: 'Neil Sims',
-    message: 'Hi, How are you?',
-    newMsgCnt: 0,
-    time: '12 mar',
-  },
-  {
-    channel_id: 3,
-    avatar: sampleAvatar3,
-    online: true,
-    name: 'Neil Sims',
-    message: 'Hi, How are you?',
-    newMsgCnt: 0,
-    time: '12 mar',
-  },
-  {
-    channel_id: 4,
-    avatar: sampleAvatar4,
-    online: true,
-    name: 'Neil Sims',
-    message: 'Hi, How are you?',
-    newMsgCnt: 0,
-    time: '12 mar',
-  },
-  {
-    channel_id: 5,
-    avatar: sampleAvatar5,
-    online: true,
-    name: 'Neil Sims',
-    message: 'Hi, How are you?',
-    newMsgCnt: 0,
-    time: '12 mar',
-  },
-];
-
-type ChatSiderbarProps = {
-  onSelectChannel: any;
-  selectedChannelID: number;
-};
-
-const ChatSidebar: React.FC<ChatSiderbarProps> = ({
-  onSelectChannel,
-  selectedChannelID,
-}) => {
+const ChatSidebar = () => {
   const { t } = useTranslation('common');
   let [searchText, setSearchText] = useState('');
+  const { resolvedTheme } = useTheme();
+  const isDarkMode = resolvedTheme === 'dark';
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  const {
+    selected_channel,
+    setSelectedChannel,
+    got_new_channel,
+    setGotNewChannel,
+    new_created_channel_id,
+    setNewCreatedChannelID,
+  } = useContext(ChatContext);
+
+  const [users, setUsers] = useState<{
+    loading: boolean;
+    data: UserResponse[];
+  }>({ loading: true, data: [] });
+
+  const [recentChannels, setRecentChannels] = useState<{
+    loading: boolean;
+    data: Channel[];
+  }>({ loading: true, data: [] });
+  const [recentGroupChannels, setRecentGroupChannels] = useState<{
+    loading: boolean;
+    data: Channel[];
+  }>({ loading: true, data: [] });
+
+  const authUserInfo = getAuthUserInfo();
+
+  useEffect(() => {
+    searchUsers(searchText, authUserInfo ? authUserInfo : '').then((result) => {
+      setUsers({ loading: false, data: result });
+    });
+
+    getChannels(authUserInfo ? authUserInfo : '').then((result) => {
+      setGotNewChannel(false);
+
+      if (result.length > 0) {
+        const channels = result.filter(
+          (eachChannel) => eachChannel.type == 'messaging'
+        );
+        const groupChannels = result.filter(
+          (eachChannel) => eachChannel.type == 'team'
+        );
+
+        setRecentChannels({ loading: false, data: channels });
+        setRecentGroupChannels({ loading: false, data: groupChannels });
+
+        console.log('############### - ', new_created_channel_id);
+        let foundChannelIdx = channels.findIndex(
+          (item) => item.id === new_created_channel_id
+        );
+        console.log('############### - ', foundChannelIdx);
+        if (foundChannelIdx >= 0) {
+          setSelectedChannel(channels[foundChannelIdx]);
+        }
+
+        setNewCreatedChannelID('');
+      }
+    });
+  }, [got_new_channel]);
+
+  useEffect(() => {
+    console.log('helllo - ------------------', users);
+  }, [users]);
+
+  const onClickedAvatar = (info: ChatUser) => {
+    if (!authUserInfo) return;
+
+    setNewCreatedChannelID(`${authUserInfo}-${info.id}`);
+
+    createChannel(authUserInfo, info.id);
+    setGotNewChannel(true);
+  };
 
   const onArchiveChat = () => {};
 
-  const [width, setWidth] = useState<number>(0);
-  const handleWindowSizeChange = () => {
-    setWidth(window.innerWidth);
+  const makeRecentChatsUI = () => {
+    if (recentChannels.data.length == 0) {
+      return (
+        <div className="mt-4 flex w-full items-center justify-center bg-white text-xs text-black dark:bg-dark-100 dark:text-white">
+          No recent chat found
+        </div>
+      );
+    } else {
+      return (
+        <ul role="list" className="mt-4">
+          {recentChannels.data.map((item, key) => (
+            <ChatItem key={key} channel={item} />
+          ))}
+        </ul>
+      );
+    }
   };
 
-  useEffect(() => {
-    window.addEventListener('resize', handleWindowSizeChange);
-    return () => {
-      window.removeEventListener('resize', handleWindowSizeChange);
-    };
-  }, []);
+  const makeRecentGroupChatsUI = () => {
+    if (recentGroupChannels.data.length == 0) {
+      return (
+        <div className="mt-4 mb-4 flex w-full items-center justify-center bg-white text-xs text-black dark:bg-dark-100 dark:text-white">
+          No recent group chat found
+        </div>
+      );
+    } else {
+      return (
+        <ul role="list" className="mt-4">
+          {recentGroupChannels.data.map((item, key) => (
+            <ChatItem key={key} channel={item} />
+          ))}
+        </ul>
+      );
+    }
+  };
 
-  const isMobile = width <= 640;
-  // xl:w-[400px]
   return (
     <div
       className={`${
-        isMobile && selectedChannelID >= 0 ? 'hidden' : 'w-full'
-      } h-full border-r-[1px] border-light-400 dark:border-dark-300 sm:w-[50%] md:w-[40%] lg:w-[30%]`}
+        selected_channel ? 'hidden' : 'w-full'
+      } h-full border-r-[1px] border-light-400 dark:border-dark-300 sm:block sm:w-[50%] md:w-[40%] lg:w-[30%]`}
     >
       <div className="flex h-full flex-col  justify-between bg-white text-dark-900 dark:bg-dark-100">
         <div className="items-centerleading-6 mt-10 flex-col px-4">
@@ -120,16 +152,26 @@ const ChatSidebar: React.FC<ChatSiderbarProps> = ({
         </div>
 
         <Scrollbar className="relative mt-10 h-full w-full">
-          <div className="flex w-full flex-col px-4">
+          <div ref={bottomRef} className="flex w-full flex-col px-4">
             <div className="w-full">
               <div className="flex flex-row flex-nowrap items-center justify-start gap-2 overflow-x-auto overflow-y-hidden ">
-                {avatarData.map((item, key) => (
-                  <ChatAvatar
-                    key={key}
-                    addNew={item.addNew}
-                    avatar={item.avatar}
-                  />
-                ))}
+                {users.loading ? (
+                  <div className="flex w-full items-center justify-center">
+                    <Spin color={isDarkMode ? '#ffffff' : '#181818'} />
+                  </div>
+                ) : (
+                  <>
+                    <ChatAvatar addNew={true} />
+                    {users.data.map((item, key) => (
+                      <ChatAvatar
+                        key={key}
+                        addNew={false}
+                        info={item}
+                        onClickedAvatar={onClickedAvatar}
+                      />
+                    ))}
+                  </>
+                )}
               </div>
             </div>
 
@@ -147,30 +189,25 @@ const ChatSidebar: React.FC<ChatSiderbarProps> = ({
               RECENT CHAT
             </div>
 
-            <ul role="list" className="mt-4">
-              {recentChats.map((item, key) => (
-                <ChatItem
-                  key={key}
-                  {...item}
-                  onSelectChannel={onSelectChannel}
-                />
-              ))}
-            </ul>
+            {recentChannels.loading ? (
+              <div className="mt-4 flex w-full items-center justify-center">
+                <Spin color={isDarkMode ? '#ffffff' : '#181818'} />
+              </div>
+            ) : (
+              makeRecentChatsUI()
+            )}
 
             <div className="mt-4 h-[2px] bg-light-400 px-4 dark:bg-dark-300 " />
             <div className="sticky top-0 z-20 mt-10 bg-white text-xs text-black dark:bg-dark-100 dark:text-white">
               GROUP CHAT
             </div>
-
-            <ul role="list" className="mt-4">
-              {recentChats.map((item, key) => (
-                <ChatItem
-                  key={key}
-                  {...item}
-                  onSelectChannel={onSelectChannel}
-                />
-              ))}
-            </ul>
+            {recentGroupChannels.loading ? (
+              <div className="mt-4 flex w-full items-center justify-center">
+                <Spin color={isDarkMode ? '#ffffff' : '#181818'} />
+              </div>
+            ) : (
+              makeRecentGroupChatsUI()
+            )}
           </div>
         </Scrollbar>
       </div>

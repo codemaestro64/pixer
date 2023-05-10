@@ -22,7 +22,7 @@ const ChatDetailSection: React.FC<ChatDetailSectionProps> = ({
         </div>
       </div>
       <button
-        className="flex items-center justify-center hover:bg-opacity-10"
+        className="flex items-center justify-center hover:opacity-40"
         onClick={() => onClickedSeeAll(title)}
       >
         <p className="text-[10px] text-gray-500 dark:text-gray-400">See All</p>

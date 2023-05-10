@@ -141,3 +141,13 @@
   margin: 0;
   -webkit-overflow-scrolling: touch;
 }
+
+/* Used to hide the vertical scrollbar for tags and gallery on the product page (Chrome, Safari and Opera) */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+/* for IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}

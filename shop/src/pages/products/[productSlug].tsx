@@ -5,28 +5,39 @@ import type {
   GetStaticProps,
   InferGetStaticPropsType,
 } from 'next';
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
 import type { NextPageWithLayout, Product } from '@/types';
-import { motion } from 'framer-motion';
+// import { motion } from 'framer-motion';
 import Layout from '@/layouts/_layout';
 import client from '@/data/client';
 import Image from '@/components/ui/image';
-import ProductSocialShare from '@/components/product/product-social-share';
-import ProductInformation from '@/components/product/product-information';
-import ProductDetailsPaper from '@/components/product/product-details-paper';
-import { LongArrowIcon } from '@/components/icons/long-arrow-icon';
-import { staggerTransition } from '@/lib/framer-motion/stagger-transition';
-import {
-  fadeInBottom,
-  fadeInBottomWithScaleX,
-  fadeInBottomWithScaleY,
-} from '@/lib/framer-motion/fade-in-bottom';
-import placeholder from '@/assets/images/placeholders/product.svg';
-import ProductReviews from '@/components/review/product-reviews';
-import AverageRatings from '@/components/review/average-ratings';
-import ProductQuestions from '@/components/questions/product-questions';
-import isEmpty from 'lodash/isEmpty';
+// import ProductSocialShare from '@/components/product/product-social-share';
+// import ProductInformation from '@/components/product/product-information';
+// import ProductDetailsPaper from '@/components/product/product-details-paper';
+// import { LongArrowIcon } from '@/components/icons/long-arrow-icon';
+// import { staggerTransition } from '@/lib/framer-motion/stagger-transition';
+// import {
+//   fadeInBottom,
+//   fadeInBottomWithScaleX,
+//   fadeInBottomWithScaleY,
+// } from '@/lib/framer-motion/fade-in-bottom';
+// import placeholder from '@/assets/images/placeholders/product.svg';
+// import ProductReviews from '@/components/review/product-reviews';
+// import AverageRatings from '@/components/review/average-ratings';
+// import ProductQuestions from '@/components/questions/product-questions';
+// import isEmpty from 'lodash/isEmpty';
 import invariant from 'tiny-invariant';
+import pluralize from 'pluralize';
+
+import coverImageMobile from '@/assets/images/product/product-cover-mobile.png';
+import coverImageDesktopLight from '@/assets/images/product/product-cover-desktop-light.png';
+import { VerifiedIcon } from '@/components/icons/verified-icon';
+import { BookmarkIcon } from '@/components/icons/bookmark-icon';
+import { LinkIcon } from '@/components/icons/link-icon';
+import { NotificationIcon } from '@/components/icons/notification-icon';
+import { StarIcon } from '@/components/icons/star-icon';
+import { DownloadAltIcon } from '@/components/icons/download-alt-icon';
+import { useIsDarkMode } from '@/lib/hooks/use-is-dark-mode';
 
 // This function gets called at build time
 type ParsedQueryParams = {
@@ -79,119 +90,147 @@ export const getStaticProps: GetStaticProps<
   }
 };
 
-function getPreviews(gallery: any[], image: any) {
-  if (!isEmpty(gallery) && Array.isArray(gallery)) return gallery;
-  if (!isEmpty(image)) return [image, {}];
-  return [{}, {}];
-}
+// function getPreviews(gallery: any[], image: any) {
+//   if (!isEmpty(gallery) && Array.isArray(gallery)) return gallery;
+//   if (!isEmpty(image)) return [image, {}];
+//   return [{}, {}];
+// }
 
 const ProductPage: NextPageWithLayout<
   InferGetStaticPropsType<typeof getStaticProps>
 > = ({ product }) => {
   const { t } = useTranslation('common');
   const {
-    id,
+    // id,
     name,
-    slug,
+    // slug,
     image,
     gallery,
     description,
-    created_at,
-    updated_at,
+    // created_at,
+    // updated_at,
     ratings,
-    rating_count,
-    total_reviews,
+    // rating_count,
+    // total_reviews,
+    total_downloads,
     tags,
-    type,
+    // type,
+    shop,
+    sale_price,
   } = product;
-  const router = useRouter();
-  const previews = getPreviews(gallery, image);
+  // const router = useRouter();
+  // const previews = getPreviews(gallery, image);
+  const { isDarkMode } = useIsDarkMode()
+
+  console.log(isDarkMode)
 
   return (
-    <div className="relative">
-      <div className="h-full min-h-screen p-4 md:px-6 lg:px-8 lg:pt-6">
-        <div className="sticky top-0 z-20 -mx-4 mb-1 -mt-2 flex items-center bg-light-300 p-4 dark:bg-dark-100 sm:static sm:top-auto sm:z-0 sm:m-0 sm:mb-4 sm:bg-transparent sm:p-0 sm:dark:bg-transparent">
-          <button
-            onClick={() => router.back()}
-            className="group inline-flex items-center gap-1.5 font-medium text-dark/70 hover:text-dark rtl:flex-row-reverse dark:text-light/70 hover:dark:text-light lg:mb-6"
-          >
-            <LongArrowIcon className="h-4 w-4" />
-            {t('text-back')}
-          </button>
+    <div className="relative xl:ml-[22px] xl:mr-[31.8px] xl:mt-[22px]">
+      <div className='absolute top-0 left-0 right-0 h-[151px] xl:h-[583px] w-full rounded-[3.25px] xl:rounded-[10px] overflow-hidden'>
+        <Image src={image.original} alt={name} layout='fill' objectFit='cover' className='z-[1]' />
+        <div className='absolute top-0 left-0 right-0 bottom-[-4px]'>
+          <Image src={coverImageMobile} alt='Cover' layout='fill' objectFit='cover' className={`z-[2] absolute inset-[-2px] ${ !isDarkMode ? 'xl:hidden' : ''}`} />
+          { !isDarkMode ? (
+            <Image src={coverImageDesktopLight} alt='Cover' layout='fill' objectFit='cover' className='z-[2] absolute inset-[-2px] hidden xl:block' />
+          ) : null } 
         </div>
-        <motion.div
-          variants={staggerTransition()}
-          className="grid gap-4 sm:grid-cols-2 lg:gap-6"
-        >
-          {previews?.map((img) => (
-            <motion.div
-              key={img.id}
-              variants={fadeInBottomWithScaleX()}
-              className="relative aspect-[3/2]"
-            >
-              <Image
-                alt={name}
-                layout="fill"
-                quality={100}
-                objectFit="cover"
-                src={img?.original ?? placeholder}
-                className="bg-light-500 dark:bg-dark-300"
-              />
-            </motion.div>
-          ))}
-        </motion.div>
-        <motion.div
-          variants={fadeInBottom()}
-          className="justify-center py-6 lg:flex lg:flex-col lg:py-10"
-        >
-          <ProductDetailsPaper product={product} className="lg:hidden" />
-          <div className="lg:mx-auto 3xl:max-w-[1200px]">
-            <div className="w-full rtl:space-x-reverse lg:flex lg:space-x-14 lg:pb-3 xl:space-x-20 3xl:space-x-28">
-              <div className="hidden lg:block 3xl:max-w-[600px]">
-                <div className="pb-5 leading-[1.9em] dark:text-light-600">
-                  {description}
-                </div>
-                <ProductSocialShare
-                  productSlug={slug}
-                  className="border-t border-light-500 pt-5 dark:border-dark-400 md:pt-7"
-                />
-              </div>
-              <ProductInformation
-                tags={tags}
-                created_at={created_at}
-                updated_at={updated_at}
-                layoutType={type.name}
-                //@ts-ignore
-                icon={type?.icon}
-                className="flex-shrink-0 pb-6 pt-2.5 lg:min-w-[350px] lg:max-w-[470px] lg:pb-0"
-              />
-            </div>
-            <div className="mt-4 w-full md:mt-8 md:space-y-10 lg:mt-12 lg:flex lg:flex-col lg:space-y-12">
-              <AverageRatings
-                ratingCount={rating_count}
-                totalReviews={total_reviews}
-                ratings={ratings}
-              />
-              <ProductReviews productId={id} />
-              <ProductQuestions
-                productId={product?.id}
-                shopId={product?.shop?.id}
-              />
+      </div>
+      <div className='relative z-[3] pt-[89px] xl:pt-[330px] grid grid-cols-[65%_35%]'>
+        {/* product */}
+        <div className='xl:flex xl:pl-[74px]'>
+          <div className='pl-[26px] xl:pl-[0]'>
+            <div className='w-[65px] xl:w-[124px] h-[65px] xl:h-[124px] relative rounded-full overflow-hidden'>
+              <Image src={shop.logo.original} alt={shop.name} layout='fill' />
             </div>
           </div>
-
-          <ProductSocialShare
-            productSlug={slug}
-            className="border-t border-light-500 pt-5 dark:border-dark-400 md:pt-7 lg:hidden"
-          />
-        </motion.div>
+          <div>
+            <div className='pl-[19px] mt-[8px] xl:mt-0'>
+              <p className='text-[16.93px] xl:text-[32px] max-w-[260px] xl:max-w-[516px] text-dark-300 dark:text-[#eee] xl:text-white font-poppins font-semibold'>{name}</p>
+            </div>
+            <div className='mt-[14px] xl:mt-[8px] pl-[19px]'>
+              <div className='flex items-center'>
+                <Image src={shop.logo.original} width={20.67} height={20.67} alt={shop.name} className='rounded-full overflow-hidden' />
+                <span className='text-[17.88px] xl:text-[20.77px] ml-[7px] xl:ml-[8px] text-[#4eeeb2] font-poppins font-semibold'>{shop.name}</span>
+                <VerifiedIcon className='w-[20.49px] h-[20.49px] xl:w-[23.79px] xl:h-[23.79px] ml-[2px]' />
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* product rate*/}
+        <div className='self-end xl:row-span-2 ml-auto mr-[7.07px] xl:mr-[83px] mb-[24px]  text-dark-300 dark:text-[#eee] xl:text-[#eee] font-poppins flex'>
+          {/* downloads */}
+          <div className='px-[10px] py-[4.63px] xl:px-[20px] xl:py-[10px] mr-[10px] border-r-[1px] border-r-[#868686]'>
+            <div className='mb-[4.63px] xl:mb-[14px] flex items-center justify-end xl:justify-center'>
+              <DownloadAltIcon className='h-[14.81px] w-[14.81px] xl:w-[32px] xl:h-[32px] mr-[6px] xl:mr-[10px]' />
+              <span className='text-[12.96px] xl:text-[28px] text-right font-bold xl:translate-y-[2.5px]'>{total_downloads}</span>
+            </div>
+            <div className='text-[7.41px] xl:text-[16px] font-semibold text-center'>
+              <span>{pluralize(t('text-download', 'Downloads'))}</span>
+            </div>
+          </div>
+          {/* rating */}
+          <div className='px-[10px] py-[4.63px] xl:px-[20px] xl:py-[10px]'>
+            <div className='mb-[4.63px] xl:mb-[14px] flex items-center justify-end'>
+              <StarIcon className='h-[14.81px] w-[14.81px] xl:w-[32px] xl:h-[32px] text-[#FFCF23] mr-[6px] xl:mr-[10px]' />
+              <span className='text-[12.96px] xl:text-[28px] text-right font-bold xl:translate-y-[2.5px]'>{ratings}</span>
+            </div>
+            <div className='text-[7.41px] xl:text-[16px] font-semibold text-center'>
+              <span>{pluralize.singular(t('table-item-ratings', 'Rating'))}</span>
+            </div>
+          </div>
+        </div>
+        {/* product buy / interactions */}
+        <div className='col-span-2 xl:col-span-1 ml-[19.67px] xl:ml-[74px] mr-[18.91px] mt-[28px] flex'>
+          <div>
+            <button className='text-[13.65px] xl:text-[18px] w-[182.69px] xl:w-[241px] h-[47px] xl:h-[62px] font-poppins text-white flex items-center justify-center bg-brand rounded-[75.8px]'>
+              <span>${sale_price} Buy</span>
+            </button>
+          </div>
+          <div className='flex gap-[18.19px] xl:gap-[24px] items-center ml-auto xl:ml-[25px]'>
+            <div>
+              <button className='text-[#343434] dark:text-white xl:text-white w-[47px] h-[47px] xl:w-[62px] xl:h-[62px] rounded-full border border-[#d4d4d444] flex items-center justify-center'>
+                <BookmarkIcon className='h-[18.19px] xl:h-[24px] w-[18.19px] xl:w-[25px]' />
+              </button>
+            </div>
+            <div>
+              <button className='text-[#343434] dark:text-white xl:text-white w-[47px] h-[47px] xl:w-[62px] xl:h-[62px] rounded-full border border-[#d4d4d444] flex items-center justify-center'>
+                <LinkIcon className='h-[18.19px] xl:h-[24px] w-[18.19px] xl:w-[25px]' />
+              </button>
+            </div>
+            <div>
+              <button className='text-[#343434] dark:text-white xl:text-white w-[47px] h-[47px] xl:w-[62px] xl:h-[62px] rounded-full border border-[#d4d4d444] flex items-center justify-center'>
+                <NotificationIcon className='h-[18.19px] xl:h-[24px] w-[18.19px] xl:w-[25px]' />
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-      <motion.div
-        variants={fadeInBottomWithScaleY()}
-        className="sticky bottom-0 right-0 z-10 hidden h-[100px] w-full border-t border-light-500 bg-light-100 px-8 py-5 dark:border-dark-400 dark:bg-dark-200 lg:flex 3xl:h-[120px]"
-      >
-        <ProductDetailsPaper product={product} />
-      </motion.div>
+      <div className='mt-[42px] xl:mt-[57px]'>
+        {/* tags */}
+        <div className='overflow-hidden'>
+          <div className='flex xl:flex-wrap gap-[8.68px] xl:gap-[14px] px-[13px] xl:px-0 overflow-x-auto scrollbar-hide'>
+            {tags.map(({ id, name }) => (
+              <div key={id} className='px-[20px] py-[11px] xl:px-[32.2px] xl:py-[17.17px] border border-[#ececec] dark:border-dark-850 rounded-[66px] whitespace-nowrap'>
+                <span className='text-[11.98px] xl:text-[19.32px] text-dark-850 font-semibold'>{name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* description */}
+        <div className='px-[15.5px] xl:px-[5px] mt-[26px]'>
+          <p className='text-[14px] xl:text-[18px] text-dark-300 dark:text-white font-medium'>{description}</p>
+        </div>
+        {/* gallery */}
+        <div className='overflow-hidden mt-[26px] mb-[42px]'>
+          <div className='flex gap-[16px] px-[16px] xl:px-[9px] overflow-x-auto scrollbar-hide xl:grid xl:grid-cols-4'>
+            {gallery.map(({ id, original }, index) => (
+              <div key={id} className='relative min-h-[169px] xl:min-h-0 min-w-[144px] xl:min-w-0 xl:w-full xl:h-full xl:pb-[70.41%] rounded-[4.32px] overflow-hidden'>
+                <Image src={original} alt={(index+1).toString()} layout='fill' objectFit='cover' />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

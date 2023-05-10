@@ -8,12 +8,12 @@ import { fadeInBottomWithScaleX } from '@/lib/framer-motion/fade-in-bottom';
 import { useTranslation } from 'next-i18next';
 import Button from '@/components/ui/button';
 import { UserIcon } from '@/components/icons/user-icon';
-import { HeartIcon } from '@/components/icons/heart-icon';
-import { DownloadIcon } from '@/components/icons/download-icon';
-
+import { HeartFillIcon } from '@/components/icons/heart-fill';
+import { PurchaseIcon } from '@/components/icons/purchase-icon';
+import FollowButton from '@/components/follow/follow-button';
 
 interface AnalyticsProps {
-  metric: string;
+  metric: number;
   icon: React.ReactNode;
 }
 
@@ -32,7 +32,7 @@ function AnalyticsItem({metric, icon}: AnalyticsProps) {
 
 
 export default function Card({ shop }: { shop: Shop }) {
-  const { name, slug, logo, products_count } = shop ?? {};
+  const { name, slug, logo, products_count, orders_count, users_count, wishlists_count } = shop ?? {};
   const router = useRouter();
   const { t } = useTranslation('common');
   
@@ -42,7 +42,7 @@ export default function Card({ shop }: { shop: Shop }) {
       whileHover={{ scale: 1.05 }}
       variants={fadeInBottomWithScaleX()}
       onClick={() => router.push(routes.shopUrl(slug))}
-      className="group cursor-pointer bg-light px-4 py-7 dark:bg-dark-250 author-tile"
+      className="relative group cursor-pointer bg-light px-4 py-7 author-tile"
     >
       <div className="flex pt-10">
         <div className="pr-2">
@@ -69,23 +69,21 @@ export default function Card({ shop }: { shop: Shop }) {
         <div className="flex-1 border-right">
           <AnalyticsItem 
             icon={<UserIcon className="h-[18px] w-[18px] text-current" />} 
-            metric="10" />
+            metric={ users_count } />
         </div>
         <div className="flex-1 border-right">
           <AnalyticsItem  
-            icon={<HeartIcon className="h-[18px] w-[18px] text-current" />} 
-            metric="67" />
+            icon={<HeartFillIcon className="h-[18px] w-[18px] text-current" />} 
+            metric={ wishlists_count } />
         </div>
         <div className="flex-1 border-right">
           <AnalyticsItem  
-            icon={<DownloadIcon className="h-[18px] w-[18px] text-current" />} 
-            metric="67" />
+            icon={<PurchaseIcon className="h-[18px] w-[18px] text-current" />} 
+            metric={ orders_count } />
         </div>
       </div>
      <div className="mt-10">
-       <Button className="min-h-[36px] sm:h-8 rounded-full">
-          {t('Follow')}
-        </Button>
+       <FollowButton shop_id={shop.id} />
      </div>
     </motion.div>
   );

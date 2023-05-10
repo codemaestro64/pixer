@@ -29,7 +29,7 @@ import { useRouter } from 'next/router';
 import { getDirection } from '@/lib/constants';
 import { useMe } from '@/data/user';
 import ChatContext from '@/lib/chat-context';
-import { Channel } from 'stream-chat';
+import { Channel, MessageResponse } from 'stream-chat';
 
 const PrivateRoute = dynamic(() => import('@/layouts/_private-route'), {
   ssr: false,
@@ -57,6 +57,12 @@ function CustomApp({ Component, pageProps }: AppPropsWithLayout) {
   const [got_new_channel, setGotNewChannel] = useState<boolean>(false);
   const [selected_channel, setSelectedChannel] = useState<Channel | null>(null);
   const [new_created_channel_id, setNewCreatedChannelID] = useState<string>('');
+  const [selected_channel_update, setSelectedChannelUpdate] =
+    useState<boolean>(false);
+  const [new_message_info, setNewMessageInfo] = useState<{
+    gotNew: boolean;
+    message: MessageResponse | null;
+  }>({ gotNew: false, message: null });
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -78,6 +84,10 @@ function CustomApp({ Component, pageProps }: AppPropsWithLayout) {
               setSelectedChannel,
               new_created_channel_id,
               setNewCreatedChannelID,
+              selected_channel_update,
+              setSelectedChannelUpdate,
+              new_message_info,
+              setNewMessageInfo,
             }}
           >
             <SearchProvider>

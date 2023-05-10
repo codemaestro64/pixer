@@ -12,6 +12,8 @@ import { useEffect, useState, useContext, useRef } from 'react';
 import ChatContext from '@/lib/chat-context';
 import { ChannelMemberResponse, MessageResponse } from 'stream-chat';
 import { getAuthUserInfo } from '@/data/client/token.utils';
+import { Spin } from 'react-cssfx-loading';
+import { useTheme } from 'next-themes';
 
 const ChatContent = () => {
   const { t } = useTranslation('common');
@@ -19,18 +21,20 @@ const ChatContent = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const authUserInfo = getAuthUserInfo();
 
+  const { resolvedTheme } = useTheme();
+  const isDarkMode = resolvedTheme === 'dark';
+
   const [curMembers, setCurrentMembers] = useState<ChannelMemberResponse[]>([]);
   const [curMessages, setCurrentMessages] = useState<MessageResponse[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const { selected_channel, setSelectedChannel } = useContext(ChatContext);
-
-  selected_channel!.on('message.new', (event) => {
-    setCurrentMessages([...curMessages, event.message!]);
-
-    setTimeout(() => {
-      scrollToBottom(true);
-    }, 100);
-  });
+  const {
+    selected_channel,
+    setSelectedChannel,
+    setSelectedChannelUpdate,
+    new_message_info,
+    setNewMessageInfo,
+  } = useContext(ChatContext);
 
   const onClickedAttachment = () => {};
 
@@ -49,12 +53,20 @@ const ChatContent = () => {
   };
 
   const loadInfo = async () => {
+    setLoading(true);
+
     const { members, messages } = await selected_channel!.watch();
-    console.log('message setting ~~~~~~~~~~~~~~~~~', messages);
     setCurrentMembers(members);
     setCurrentMessages(messages);
+    setLoading(false);
 
-    await selected_channel?.markRead({ user_id: authUserInfo! });
+    try {
+      selected_channel?.markRead(); //user_id: authUserInfo!
+    } catch (e) {
+      console.log('mark read - ', e);
+    }
+
+    setSelectedChannelUpdate(true);
 
     setTimeout(() => {
       scrollToBottom();
@@ -64,8 +76,49 @@ const ChatContent = () => {
   useEffect(() => {
     if (!selected_channel) return;
 
+    console.log(
+      '---------------getting messages from selected channel----------------------'
+    );
     loadInfo();
   }, [selected_channel]);
+
+  useEffect(() => {
+    if (new_message_info.gotNew) {
+      //add new message
+      const bExist = curMessages.some(
+        (eachItem) => eachItem.id == new_message_info.message!.id
+      );
+      if (!bExist) {
+        setCurrentMessages([...curMessages, new_message_info.message!]);
+      } else {
+        console.log('same here ------------------');
+      }
+
+      setNewMessageInfo({ gotNew: false, message: null });
+
+      setTimeout(() => {
+        scrollToBottom(true);
+      }, 300);
+    }
+  }, [new_message_info.gotNew]);
+
+  const makeMessageUI = () => {
+    if (curMessages.length == 0) {
+      return (
+        <div className="mt-4 mb-4 flex w-full items-center justify-center bg-white text-xs text-black dark:bg-dark-100 dark:text-white">
+          No message recently. start chatting now.
+        </div>
+      );
+    } else {
+      return (
+        <div className="flex w-full flex-col pb-4">
+          {curMessages.map((item, key) => (
+            <ChatMessageItem key={key} info={item} />
+          ))}
+        </div>
+      );
+    }
+  };
 
   return (
     <div
@@ -84,11 +137,14 @@ const ChatContent = () => {
         <div className="mt-10 h-[2px] bg-light-400 px-4 dark:bg-dark-300 " />
 
         <Scrollbar className="relative h-full w-full px-4">
-          <div className="flex w-full flex-col pb-4">
-            {curMessages.map((item, key) => (
-              <ChatMessageItem key={key} info={item} />
-            ))}
-          </div>
+          {loading ? (
+            <div className="mt-4 mb-4 flex w-full items-center justify-center bg-white text-xs text-black dark:bg-dark-100 dark:text-white">
+              <Spin color={isDarkMode ? '#ffffff' : '#181818'} />
+            </div>
+          ) : (
+            makeMessageUI()
+          )}
+
           <div ref={scrollRef} />
         </Scrollbar>
 

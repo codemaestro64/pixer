@@ -42,9 +42,10 @@ export default function Layout({ children }: React.PropsWithChildren<{}>) {
         setAuthUserInfo(data.user_id);
 
         chatClient.on((event) => {
-          console.log('Event - event', event, new_created_channel_id);
-          if (event.type === 'message.new') {
+          //console.log('Event - event', event, new_created_channel_id);
+          if (event.type === 'notification.added_to_channel') {
             setGotNewChannel(true);
+            console.log('Event - event', event, new_created_channel_id);
           }
 
           if (event.total_unread_count) {

@@ -18,6 +18,19 @@ const ChatInput: React.FC<ChatInputProps> = ({
 }) => {
   const [message, setMessageText] = useState('');
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter') {
+      onSendMessage();
+    }
+  };
+
+  const onSendMessage = () => {
+    if (message.length === 0) return;
+
+    onClickedSend(message);
+    setMessageText('');
+  };
+
   return (
     <div className="flex w-full flex-row items-center justify-center gap-2 border-t-[1px] border-light-400 py-2 px-4 dark:border-dark-300">
       <div className="items-center justify-center">
@@ -35,6 +48,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
           onChange={(e) => setMessageText(e.target.value)}
           autoFocus={true}
           value={message}
+          onKeyDown={handleKeyDown}
           placeholder="Send message"
           className="border-dark-30 h-full w-full border-0 bg-transparent bg-light  pl-2 text-13px outline-none focus:ring-0 dark:bg-dark-100"
         />
@@ -45,11 +59,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
           variant="icon"
           aria-label="Search"
           className="h-[40px] w-[40px] hover:opacity-40"
-          onClick={() => {
-            if (message.length === 0) return;
-            onClickedSend(message);
-            setMessageText('');
-          }}
+          onClick={onSendMessage}
         >
           <SendIcon className="h-[16px] w-[16px]" />
         </Button>

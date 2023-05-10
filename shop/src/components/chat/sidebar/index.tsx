@@ -6,14 +6,27 @@ import Scrollbar from '@/components/ui/scrollbar';
 import ChatAvatar from '@/components/chat/sidebar/avatar';
 import ChatItem from '@/components/chat/sidebar/item';
 import { Spin } from 'react-cssfx-loading';
-import { createChannel, getChannels, searchUsers } from '@/data/chat';
+import {
+  createChannel,
+  getChannel,
+  getChannels,
+  searchUsers,
+} from '@/data/chat';
 import { ChatUser } from '@/types';
 import { getAuthUserInfo } from '@/data/client/token.utils';
 import { Channel, UserResponse } from 'stream-chat';
 import ChatContext from '@/lib/chat-context';
 import { useTheme } from 'next-themes';
 
-const ChatSidebar = () => {
+type ChatSidebarProps = {
+  onSelectChannel: any;
+  clickedAvatar: any;
+};
+
+const ChatSidebar: React.FC<ChatSidebarProps> = ({
+  clickedAvatar,
+  onSelectChannel,
+}) => {
   const { t } = useTranslation('common');
   let [searchText, setSearchText] = useState('');
   const { resolvedTheme } = useTheme();
@@ -50,79 +63,87 @@ const ChatSidebar = () => {
       setUsers({ loading: false, data: result });
     });
 
-    getChannels(authUserInfo ? authUserInfo : '').then((result) => {
-      setGotNewChannel(false);
+    getChannels(authUserInfo ? authUserInfo : '')
+      .then((result) => {
+        setGotNewChannel(false);
 
-      if (result.length > 0) {
-        const channels = result.filter(
-          (eachChannel) => eachChannel.type == 'messaging'
-        );
-        const groupChannels = result.filter(
-          (eachChannel) => eachChannel.type == 'team'
-        );
+        if (result.length > 0) {
+          const channels = result.filter(
+            (eachChannel) => eachChannel.type == 'messaging'
+          );
+          const groupChannels = result.filter(
+            (eachChannel) => eachChannel.type == 'team'
+          );
 
-        setRecentChannels({ loading: false, data: channels });
-        setRecentGroupChannels({ loading: false, data: groupChannels });
+          console.log('channel amount - ', channels);
+          setRecentChannels({ loading: false, data: channels });
+          setRecentGroupChannels({ loading: false, data: groupChannels });
 
-        console.log('############### - ', new_created_channel_id);
-        let foundChannelIdx = channels.findIndex(
-          (item) => item.id === new_created_channel_id
-        );
-        console.log('############### - ', foundChannelIdx);
-        if (foundChannelIdx >= 0) {
-          setSelectedChannel(channels[foundChannelIdx]);
+          let foundChannelIdx = channels.findIndex(
+            (item) => item.id === new_created_channel_id
+          );
+
+          if (foundChannelIdx >= 0) {
+            onSelectChannel(channels[foundChannelIdx]);
+          }
+        } else {
+          setRecentChannels({ loading: false, data: [] });
+          setRecentGroupChannels({ loading: false, data: [] });
         }
 
+        clickedAvatar(false);
         setNewCreatedChannelID('');
-      }
-    });
+      })
+      .catch((e) => {
+        setGotNewChannel(false);
+
+        setRecentChannels({ loading: false, data: [] });
+        setRecentGroupChannels({ loading: false, data: [] });
+
+        clickedAvatar(false);
+        setNewCreatedChannelID('');
+      });
   }, [got_new_channel]);
 
-  useEffect(() => {
-    console.log('helllo - ------------------', users);
-  }, [users]);
+  useEffect(() => {}, [users]);
 
   const onClickedAvatar = (info: ChatUser) => {
     if (!authUserInfo) return;
 
-    setNewCreatedChannelID(`${authUserInfo}-${info.id}`);
+    clickedAvatar(true);
 
-    createChannel(authUserInfo, info.id);
-    setGotNewChannel(true);
+    getChannel(authUserInfo, info.id).then((result) => {
+      if (result.length > 0) {
+        clickedAvatar(false);
+        onSelectChannel(result[0]);
+      } else {
+        setNewCreatedChannelID(`${authUserInfo}-${info.id}`);
+
+        createChannel(authUserInfo, info.id).then(() => {
+          //setGotNewChannel(true);
+        });
+      }
+    });
   };
 
   const onArchiveChat = () => {};
 
-  const makeRecentChatsUI = () => {
-    if (recentChannels.data.length == 0) {
+  const makeChatsUI = (channels: Channel[], bRecent: boolean) => {
+    if (channels.length == 0) {
       return (
         <div className="mt-4 flex w-full items-center justify-center bg-white text-xs text-black dark:bg-dark-100 dark:text-white">
-          No recent chat found
+          No {bRecent ? 'recent chat' : 'recent group chat'} found
         </div>
       );
     } else {
       return (
         <ul role="list" className="mt-4">
-          {recentChannels.data.map((item, key) => (
-            <ChatItem key={key} channel={item} />
-          ))}
-        </ul>
-      );
-    }
-  };
-
-  const makeRecentGroupChatsUI = () => {
-    if (recentGroupChannels.data.length == 0) {
-      return (
-        <div className="mt-4 mb-4 flex w-full items-center justify-center bg-white text-xs text-black dark:bg-dark-100 dark:text-white">
-          No recent group chat found
-        </div>
-      );
-    } else {
-      return (
-        <ul role="list" className="mt-4">
-          {recentGroupChannels.data.map((item, key) => (
-            <ChatItem key={key} channel={item} />
+          {channels.map((item, key) => (
+            <ChatItem
+              key={key}
+              channel={item}
+              onSelectChannel={onSelectChannel}
+            />
           ))}
         </ul>
       );
@@ -194,7 +215,7 @@ const ChatSidebar = () => {
                 <Spin color={isDarkMode ? '#ffffff' : '#181818'} />
               </div>
             ) : (
-              makeRecentChatsUI()
+              makeChatsUI(recentChannels.data, true)
             )}
 
             <div className="mt-4 h-[2px] bg-light-400 px-4 dark:bg-dark-300 " />
@@ -206,7 +227,7 @@ const ChatSidebar = () => {
                 <Spin color={isDarkMode ? '#ffffff' : '#181818'} />
               </div>
             ) : (
-              makeRecentGroupChatsUI()
+              makeChatsUI(recentGroupChannels.data, false)
             )}
           </div>
         </Scrollbar>

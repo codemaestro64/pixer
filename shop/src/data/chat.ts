@@ -1,6 +1,6 @@
 import { ChatTokenResponse, ChatUser } from '@/types';
 import { createStoreForExport } from 'jotai/core/store';
-import { StreamChat } from 'stream-chat';
+import { Channel, StreamChat } from 'stream-chat';
 import Moment from 'moment';
 
 export const chatClient = new StreamChat('zg644f9wpd3r', { timeout: 10000 });
@@ -83,12 +83,35 @@ export const getChannels = async (current_user_id: string) => {
   return channels;
 };
 
-export const getChannel = async (channel_type: string, channel_id: string) => {
-  const filter = { type: channel_type, id: { $in: [channel_id] } };
+export const getChannelByID = async (channel_id: string) => {
+  const filter = { id: { $in: [channel_id] } };
 
   const channels = await chatClient.queryChannels(filter, {});
 
   return channels;
+};
+
+export const getChannel = async (
+  current_user_id: string,
+  opposite_user_id: string
+) => {
+  const filter = { members: { $in: [current_user_id] } };
+
+  const channels = await chatClient.queryChannels(filter, {});
+  if (channels.length > 0) {
+    let selectedChannel: Channel | undefined = channels.find(
+      (eachChannel) =>
+        eachChannel.id == `${current_user_id}-${opposite_user_id}` ||
+        eachChannel.id == `${opposite_user_id}-${current_user_id}`
+    );
+    if (selectedChannel) {
+      return [selectedChannel];
+    } else {
+      return [];
+    }
+  } else {
+    return [];
+  }
 };
 
 export const getUser = async (user_id: string) => {

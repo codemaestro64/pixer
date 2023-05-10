@@ -25,6 +25,10 @@ import { useBreakpoint } from '@/lib/hooks/use-breakpoint';
 import { useIsMounted } from '@/lib/hooks/use-is-mounted';
 import { SetStateAction, useState, useContext, useEffect } from 'react';
 import ChatContext from '@/lib/chat-context';
+import { chatClient } from '@/data/chat';
+import { Channel } from 'stream-chat';
+import { Spin } from 'react-cssfx-loading';
+import { useTheme } from 'next-themes';
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   const queryClient = new QueryClient();
@@ -64,11 +68,73 @@ function ChatMain() {
   const { query } = useRouter();
   const breakpoint = useBreakpoint();
   const isMounted = useIsMounted();
-  const { selected_channel, setSelectedChannel } = useContext(ChatContext);
+  const { resolvedTheme } = useTheme();
+  const isDarkMode = resolvedTheme === 'dark';
+
+  const {
+    selected_channel,
+    setSelectedChannel,
+    new_message_info,
+    setNewMessageInfo,
+    got_new_channel,
+  } = useContext(ChatContext);
+
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const onSelectChannel = (channel: Channel) => {
+    if (selected_channel) {
+      selected_channel!.off('message.new', messageNewHandler);
+    }
+
+    setSelectedChannel(channel);
+  };
+
+  const clickedAvatar = (bFlag: boolean) => {
+    setLoading(bFlag);
+  };
+
+  const messageNewHandler = async (event: any) => {
+    setNewMessageInfo({ gotNew: true, message: event.message });
+
+    if (selected_channel) {
+      try {
+        selected_channel?.markRead(); //user_id: authUserInfo!
+      } catch (e) {
+        console.log('mark read - ', e);
+      }
+    }
+  };
 
   useEffect(() => {
+    if (selected_channel) {
+      selected_channel?.off('message.new', messageNewHandler);
+    }
+
     setSelectedChannel(null);
+
+    return () => {
+      if (selected_channel) {
+        selected_channel?.off('message.new', messageNewHandler);
+      }
+    };
   }, []);
+
+  useEffect(() => {
+    if (selected_channel) {
+      selected_channel!.off('message.new', messageNewHandler);
+    } else {
+      return;
+    }
+
+    selected_channel!.off('message.new', messageNewHandler);
+    selected_channel!.on('message.new', messageNewHandler);
+  }, [selected_channel]);
+
+  useEffect(() => {
+    if (got_new_channel && selected_channel) {
+      selected_channel!.off('message.new', messageNewHandler);
+    }
+  }, [got_new_channel]);
 
   return (
     <div
@@ -76,9 +142,12 @@ function ChatMain() {
         isMounted && ['xs'].indexOf(breakpoint) !== -1
           ? 'h-[calc(100vh-120px)]'
           : 'h-[calc(100vh-70px)]'
-      } flex  flex-row bg-white dark:bg-dark-100`}
+      } flex flex-row bg-white dark:bg-dark-100`}
     >
-      <ChatSidebar />
+      <ChatSidebar
+        clickedAvatar={clickedAvatar}
+        onSelectChannel={onSelectChannel}
+      />
       {selected_channel ? (
         <>
           <ChatContent />
@@ -89,6 +158,12 @@ function ChatMain() {
           <div className="flex h-full w-full items-center justify-center bg-white text-[16px] text-black dark:bg-dark-100 dark:text-white">
             Select a conversation to start chatting
           </div>
+        </div>
+      )}
+
+      {loading && (
+        <div className="z-90 fixed top-0 bottom-0 flex w-full items-center justify-center bg-dark-200 opacity-80 duration-700">
+          <Spin color={isDarkMode ? '#ffffff' : '#181818'} />
         </div>
       )}
     </div>

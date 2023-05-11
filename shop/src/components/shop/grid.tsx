@@ -34,7 +34,7 @@ export default function Grid({
     );
   }
   return (
-    <div className="px-4 pt-5 pb-9 md:px-6 md:pb-10 md:pt-6 lg:px-7 lg:pb-12 3xl:px-8">
+    <div className="px-4 pb-9 md:px-6 md:pb-10 lg:px-7 lg:pb-12 3xl:px-8">
       <motion.div
         variants={staggerTransition(0.025)}
         className="grid grid-cols-1 gap-5 xs:grid-cols-2 md:grid-cols-[repeat(auto-fill,minmax(300px,1fr))] lg:gap-6 3xl:gap-7 2xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-[repeat(auto-fill,minmax(300px,1fr))]"

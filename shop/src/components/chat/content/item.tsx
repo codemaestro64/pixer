@@ -45,7 +45,9 @@ const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ info }) => {
                 textSizeRatio={2}
                 src={info.user?.avatar as string}
               />
-              <span className="absolute top-0 right-0 flex min-h-[12px] min-w-[12px] shrink-0 items-center justify-center rounded-full border-2 border-light-100 bg-brand px-0.5 text-10px font-bold leading-none text-light" />
+              {info.user?.online && (
+                <span className="absolute top-0 right-0 flex min-h-[12px] min-w-[12px] shrink-0 items-center justify-center rounded-full border-2 border-light-100 bg-brand px-0.5 text-10px font-bold leading-none text-light" />
+              )}
             </div>
           </div>
 

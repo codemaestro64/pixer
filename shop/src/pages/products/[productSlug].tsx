@@ -11,22 +11,29 @@ import { motion } from 'framer-motion';
 import Layout from '@/layouts/_layout';
 import client from '@/data/client';
 import Image from '@/components/ui/image';
-import ProductSocialShare from '@/components/product/product-social-share';
-import ProductInformation from '@/components/product/product-information';
-import ProductDetailsPaper from '@/components/product/product-details-paper';
-import { LongArrowIcon } from '@/components/icons/long-arrow-icon';
-import { staggerTransition } from '@/lib/framer-motion/stagger-transition';
-import {
-  fadeInBottom,
-  fadeInBottomWithScaleX,
-  fadeInBottomWithScaleY,
-} from '@/lib/framer-motion/fade-in-bottom';
+import { fadeInBottom } from '@/lib/framer-motion/fade-in-bottom';
 import placeholder from '@/assets/images/placeholders/product.svg';
-import ProductReviews from '@/components/review/product-reviews';
-import AverageRatings from '@/components/review/average-ratings';
-import ProductQuestions from '@/components/questions/product-questions';
 import isEmpty from 'lodash/isEmpty';
 import invariant from 'tiny-invariant';
+
+import ProductRecommended from '@/components/product/product-recommended';
+import ProductOwnerOverview from '@/components/product/product-owner-overview';
+
+import {
+  Swiper,
+  SwiperSlide,
+  SwiperOptions,
+  Navigation,
+  Thumbs,
+} from '@/components/ui/slider';
+import { useRef, useState } from 'react';
+import { LabelIcon } from '@/components/icons/label-icon';
+import AnchorLink from '@/components/ui/links/anchor-link';
+import classNames from 'classnames';
+import { Tag } from '@/types';
+import routes from '@/config/routes';
+import Button from '@/components/ui/button';
+import { ThreeDotsIcon } from '@/components/icons/three-dots-icon';
 
 // This function gets called at build time
 type ParsedQueryParams = {
@@ -85,6 +92,11 @@ function getPreviews(gallery: any[], image: any) {
   return [{}, {}];
 }
 
+const swiperParams: SwiperOptions = {
+  slidesPerView: 1,
+  spaceBetween: 0,
+};
+
 const ProductPage: NextPageWithLayout<
   InferGetStaticPropsType<typeof getStaticProps>
 > = ({ product }) => {
@@ -92,106 +104,142 @@ const ProductPage: NextPageWithLayout<
   const {
     id,
     name,
+    description,
     slug,
     image,
-    gallery,
-    description,
-    created_at,
+    shop,
     updated_at,
-    ratings,
-    rating_count,
-    total_reviews,
+    created_at,
+    gallery,
+    orders_count,
+    total_downloads,
     tags,
+    preview_url,
     type,
+    price,
+    sale_price,
   } = product;
-  const router = useRouter();
-  const previews = getPreviews(gallery, image);
+
+  let [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
 
   return (
     <div className="relative">
-      <div className="h-full min-h-screen p-4 md:px-6 lg:px-8 lg:pt-6">
-        <div className="sticky top-0 z-20 -mx-4 mb-1 -mt-2 flex items-center bg-light-300 p-4 dark:bg-dark-100 sm:static sm:top-auto sm:z-0 sm:m-0 sm:mb-4 sm:bg-transparent sm:p-0 sm:dark:bg-transparent">
-          <button
-            onClick={() => router.back()}
-            className="group inline-flex items-center gap-1.5 font-medium text-dark/70 hover:text-dark rtl:flex-row-reverse dark:text-light/70 hover:dark:text-light lg:mb-6"
-          >
-            <LongArrowIcon className="h-4 w-4" />
-            {t('text-back')}
-          </button>
-        </div>
-        <motion.div
-          variants={staggerTransition()}
-          className="grid gap-4 sm:grid-cols-2 lg:gap-6"
-        >
-          {previews?.map((img) => (
-            <motion.div
-              key={img.id}
-              variants={fadeInBottomWithScaleX()}
-              className="relative aspect-[3/2]"
-            >
-              <Image
-                alt={name}
-                layout="fill"
-                quality={100}
-                objectFit="cover"
-                src={img?.original ?? placeholder}
-                className="bg-light-500 dark:bg-dark-300"
-              />
-            </motion.div>
-          ))}
-        </motion.div>
-        <motion.div
-          variants={fadeInBottom()}
-          className="justify-center py-6 lg:flex lg:flex-col lg:py-10"
-        >
-          <ProductDetailsPaper product={product} className="lg:hidden" />
-          <div className="lg:mx-auto 3xl:max-w-[1200px]">
-            <div className="w-full rtl:space-x-reverse lg:flex lg:space-x-14 lg:pb-3 xl:space-x-20 3xl:space-x-28">
-              <div className="hidden lg:block 3xl:max-w-[600px]">
-                <div className="pb-5 leading-[1.9em] dark:text-light-600">
-                  {description}
-                </div>
-                <ProductSocialShare
-                  productSlug={slug}
-                  className="border-t border-light-500 pt-5 dark:border-dark-400 md:pt-7"
-                />
+      <div className="h-full">
+        <motion.div variants={fadeInBottom()} className="justify-center">
+          <div className="flex flex-col p-2 rtl:space-x-reverse">
+            <div className="mb-4 w-full items-center justify-center overflow-hidden md:mb-6 lg:mb-auto">
+              <div className="relative z-0 mb-3 w-full xl:mb-5">
+                <Swiper
+                  id="productGallery"
+                  speed={400}
+                  allowTouchMove={false}
+                  thumbs={{ swiper: thumbsSwiper }}
+                  modules={[Navigation, Thumbs]}
+                  {...swiperParams}
+                >
+                  {gallery?.map((item: any) => (
+                    <SwiperSlide
+                      key={`product-gallery-${item.id}`}
+                      className="flex aspect-[1629/583] items-center justify-center rounded-[10px] bg-light-200 dark:bg-dark-200"
+                    >
+                      <Image
+                        layout="fill"
+                        objectFit="cover"
+                        className="rounded-[10px]"
+                        src={item?.original ?? placeholder}
+                        alt={`Product gallery ${item.id}`}
+                      />
+                    </SwiperSlide>
+                  ))}
+                  <div className="absolute inset-0 z-10 flex h-full w-full items-end justify-center ">
+                    <div className="h-2/3 w-full rounded-[10px] bg-gradient-to-t from-black to-transparent" />
+                  </div>
+                </Swiper>
+                <ProductOwnerOverview owner={{ ...shop, product_name: name }} />
               </div>
-              <ProductInformation
-                tags={tags}
-                created_at={created_at}
-                updated_at={updated_at}
-                layoutType={type.name}
-                //@ts-ignore
-                icon={type?.icon}
-                className="flex-shrink-0 pb-6 pt-2.5 lg:min-w-[350px] lg:max-w-[470px] lg:pb-0"
-              />
-            </div>
-            <div className="mt-4 w-full md:mt-8 md:space-y-10 lg:mt-12 lg:flex lg:flex-col lg:space-y-12">
-              <AverageRatings
-                ratingCount={rating_count}
-                totalReviews={total_reviews}
-                ratings={ratings}
-              />
-              <ProductReviews productId={id} />
-              <ProductQuestions
-                productId={product?.id}
-                shopId={product?.shop?.id}
-              />
+
+              <motion.div
+                variants={fadeInBottom()}
+                className="justify-betwee flex w-full flex-col md:flex-row"
+              >
+                <div className="flex-shrink-0 md:w-6/12 lg:w-7/12 2xl:w-8/12">
+                  <div className="lg:mx-auto 3xl:max-w-[1200px]">
+                    {!!tags?.length && (
+                      <div className="flex items-start text-dark dark:text-light">
+                        <div className="flex flex-wrap gap-2">
+                          {tags.map((tag: Tag) => (
+                            <AnchorLink
+                              key={tag.id}
+                              href={routes.tagUrl(tag.slug)}
+                              className="inline-flex items-center justify-center rounded-full border border-light-600 px-4 py-2 font-medium text-light-base transition-all hover:bg-light-200 hover:text-dark-300 dark:border-dark-500 dark:text-light-600 dark:hover:bg-dark-400 hover:dark:text-light"
+                            >
+                              {tag.name}
+                            </AnchorLink>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="pt-6 pb-5 leading-[1.9em] rtl:text-right dark:text-light-600 xl:pb-6 3xl:pb-8">
+                    {description}
+                  </div>
+
+                  <div className="flex-shrink-0">
+                    <Swiper
+                      id="productGalleryThumbs"
+                      freeMode={true}
+                      observer={true}
+                      slidesPerView={4}
+                      onSwiper={setThumbsSwiper}
+                      observeParents={true}
+                      watchSlidesProgress={true}
+                    >
+                      {gallery?.map((item: any) => (
+                        <SwiperSlide
+                          key={`product-thumb-gallery-${item.id}`}
+                          className="flex aspect-[3/2] cursor-pointer items-center justify-center border border-light-500 transition hover:opacity-75 dark:border-dark-500"
+                        >
+                          <Image
+                            layout="fill"
+                            objectFit="cover"
+                            src={item?.thumbnail ?? placeholder}
+                            alt={`Product thumb gallery ${item.id}`}
+                          />
+                        </SwiperSlide>
+                      ))}
+                    </Swiper>
+                  </div>
+                </div>
+
+                <div className="mt-7 w-full rounded-md p-2 md:ml-7 md:mt-0">
+                  <div className="flex w-full flex-col items-center justify-center">
+                    <div className="flex w-full flex-row items-center justify-between p-2">
+                      <div className="text-[20px] font-semibold text-dark-600 dark:text-light-600">
+                        Recommended
+                      </div>
+                      <Button
+                        variant="icon"
+                        className="inline-flex hover:opacity-40"
+                      >
+                        <ThreeDotsIcon className="h-[32px] w-[32px] text-dark-600 dark:text-light-600" />
+                      </Button>
+                    </div>
+
+                    <div className="mt-4 flex w-full flex-col items-start justify-center gap-4">
+                      {gallery?.map((item, index) => (
+                        <ProductRecommended
+                          key={index}
+                          product={{ ...item, shop, name }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
             </div>
           </div>
-
-          <ProductSocialShare
-            productSlug={slug}
-            className="border-t border-light-500 pt-5 dark:border-dark-400 md:pt-7 lg:hidden"
-          />
         </motion.div>
       </div>
-      <motion.div
-        variants={fadeInBottomWithScaleY()}
-        className="sticky bottom-0 right-0 z-10 hidden h-[100px] w-full border-t border-light-500 bg-light-100 px-8 py-5 dark:border-dark-400 dark:bg-dark-200 lg:flex 3xl:h-[120px]"
-      >
-        <ProductDetailsPaper product={product} />
-      </motion.div>
     </div>
   );
 };

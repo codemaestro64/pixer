@@ -27,6 +27,9 @@ import '@/assets/css/globals.css';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { getDirection } from '@/lib/constants';
+import { useMe } from '@/data/user';
+import ChatContext from '@/lib/chat-context';
+import { Channel, MessageResponse } from 'stream-chat';
 
 const PrivateRoute = dynamic(() => import('@/layouts/_private-route'), {
   ssr: false,
@@ -48,6 +51,19 @@ function CustomApp({ Component, pageProps }: AppPropsWithLayout) {
     document.documentElement.dir = dir;
   }, [dir]);
   const authenticationRequired = Component.authorization ?? false;
+
+  const [unread_messages_cnt, setUnreadMessagesCnt] = useState<number>(0);
+  const [unread_channels_cnt, setUnreadChannelsCnt] = useState<number>(0);
+  const [got_new_channel, setGotNewChannel] = useState<boolean>(false);
+  const [selected_channel, setSelectedChannel] = useState<Channel | null>(null);
+  const [new_created_channel_id, setNewCreatedChannelID] = useState<string>('');
+  const [selected_channel_update, setSelectedChannelUpdate] =
+    useState<boolean>(false);
+  const [new_message_info, setNewMessageInfo] = useState<{
+    gotNew: boolean;
+    message: MessageResponse | null;
+  }>({ gotNew: false, message: null });
+
   return (
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}>
@@ -56,34 +72,53 @@ function CustomApp({ Component, pageProps }: AppPropsWithLayout) {
           defaultTheme="dark"
           enableSystem={false}
         >
-          <SearchProvider>
-            <CartProvider>
-              <ModalProvider>
-                <AnimatePresence
-                  exitBeforeEnter
-                  initial={false}
-                  onExitComplete={() => window.scrollTo(0, 0)}
-                >
-                  <>
-                    <DefaultSeo />
-                    {authenticationRequired ? (
-                      <PrivateRoute>
-                        {getLayout(<Component {...pageProps} />)}
-                      </PrivateRoute>
-                    ) : (
-                      getLayout(<Component {...pageProps} />)
-                    )}
-                    <SearchView />
-                    <ModalsContainer />
-                    <DrawersContainer />
-                    <Portal>
-                      <Toaster containerClassName="!top-16 sm:!top-3.5 !bottom-16 sm:!bottom-3.5" />
-                    </Portal>
-                  </>
-                </AnimatePresence>
-              </ModalProvider>
-            </CartProvider>
-          </SearchProvider>
+          <ChatContext.Provider
+            value={{
+              unread_channels_cnt,
+              setUnreadChannelsCnt,
+              unread_messages_cnt,
+              setUnreadMessagesCnt,
+              got_new_channel,
+              setGotNewChannel,
+              selected_channel,
+              setSelectedChannel,
+              new_created_channel_id,
+              setNewCreatedChannelID,
+              selected_channel_update,
+              setSelectedChannelUpdate,
+              new_message_info,
+              setNewMessageInfo,
+            }}
+          >
+            <SearchProvider>
+              <CartProvider>
+                <ModalProvider>
+                  <AnimatePresence
+                    exitBeforeEnter
+                    initial={false}
+                    onExitComplete={() => window.scrollTo(0, 0)}
+                  >
+                    <>
+                      <DefaultSeo />
+                      {authenticationRequired ? (
+                        <PrivateRoute>
+                          {getLayout(<Component {...pageProps} />)}
+                        </PrivateRoute>
+                      ) : (
+                        getLayout(<Component {...pageProps} />)
+                      )}
+                      <SearchView />
+                      <ModalsContainer />
+                      <DrawersContainer />
+                      <Portal>
+                        <Toaster containerClassName="!top-16 sm:!top-3.5 !bottom-16 sm:!bottom-3.5" />
+                      </Portal>
+                    </>
+                  </AnimatePresence>
+                </ModalProvider>
+              </CartProvider>
+            </SearchProvider>
+          </ChatContext.Provider>
         </ThemeProvider>
       </Hydrate>
       <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />

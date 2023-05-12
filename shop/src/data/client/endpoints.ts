@@ -18,6 +18,7 @@ export const API_ENDPOINTS = {
   USERS: '/users',
   USERS_ME: '/me',
   USERS_LOGIN: '/token',
+  GENERATE_CHAT_TOKEN: '/generate-token',
   USERS_REGISTER: '/register',
   USERS_FORGOT_PASSWORD: '/forget-password',
   USERS_VERIFY_FORGOT_PASSWORD_TOKEN: '/verify-forget-password-token',

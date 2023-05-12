@@ -3,6 +3,7 @@ import useAuth from '@/components/auth/use-auth';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import client from './client';
 import { API_ENDPOINTS } from './client/endpoints';
+import { disconnectStream } from './chat';
 
 export function useMe() {
   const { isAuthorized } = useAuth();
@@ -27,6 +28,7 @@ export function useLogout() {
   return useMutation(client.users.logout, {
     onSuccess: () => {
       unauthorize();
+      disconnectStream();
       queryClient.resetQueries(API_ENDPOINTS.USERS_ME);
     },
   });

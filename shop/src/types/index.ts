@@ -184,6 +184,7 @@ export interface Shop {
 }
 
 export interface User {
+  email: string;
   id: string;
   name: string;
   profile: {
@@ -221,6 +222,11 @@ export interface ContactInput {
   message: string;
 }
 
+export interface ChatTokenInput {
+  email: string;
+  name: string;
+}
+
 export interface LoginUserInput {
   email: string;
   password: string;
@@ -252,6 +258,11 @@ export interface PasswordChangeResponse {
   message: string;
 }
 
+export interface ChatTokenResponse {
+  token: string;
+  user_id: string;
+  user_name: string;
+}
 export interface AuthResponse {
   token: string;
   permissions: string[];
@@ -556,4 +567,17 @@ export interface CreateQuestionInput {
   question: string;
   product_id: string;
   shop_id: string;
+}
+
+export interface ChatUser {
+  id: string;
+  created_at?: string;
+  updated_at?: string;
+  banned?: boolean;
+  online?: boolean;
+  role?: string;
+  name?: string;
+  shadow_banned?: boolean;
+  last_active?: string;
+  avatar?: string;
 }

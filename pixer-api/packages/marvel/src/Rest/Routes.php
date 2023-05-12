@@ -11,6 +11,7 @@ use Marvel\Http\Controllers\AttributeController;
 use Marvel\Http\Controllers\AttributeValueController;
 use Marvel\Http\Controllers\AuthorController;
 use Marvel\Http\Controllers\CategoryController;
+use Marvel\Http\Controllers\ChatController;
 use Marvel\Http\Controllers\CheckoutController;
 use Marvel\Http\Controllers\CouponController;
 use Marvel\Http\Controllers\DownloadController;
@@ -35,8 +36,6 @@ use Marvel\Http\Controllers\DeliveryTimeController;
 use Marvel\Http\Controllers\LanguageController;
 use Marvel\Http\Controllers\ResourceController;
 
-
-
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/token', [UserController::class, 'token']);
 Route::post('/logout', [UserController::class, 'logout']);
@@ -53,6 +52,7 @@ Route::get('top-manufacturers', [ManufacturerController::class, 'topManufacturer
 Route::get('popular-products', [ProductController::class, 'popularProducts']);
 Route::get('check-availability', [ProductController::class, 'checkAvailability']);
 
+Route::post('/generate-token', [UserController::class, 'generateToken']);
 
 Route::get("products/calculate-rental-price", [ProductController::class, 'calculateRentalPrice']);
 

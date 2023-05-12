@@ -42,6 +42,7 @@
     "react-avatar": "4.0.0",
     "react-confetti": "6.0.1",
     "react-content-loader": "6.1.0",
+    "react-cssfx-loading": "^2.1.0",
     "react-dom": "17.0.2",
     "react-dropzone": "12.0.4",
     "react-hook-form": "7.27.1",
@@ -52,8 +53,10 @@
     "react-share": "4.4.0",
     "react-use": "17.3.2",
     "sharp": "0.30.1",
+    "stream-chat": "^8.6.0",
     "swiper": "8.0.6",
     "tiny-invariant": "1.2.0",
+    "wavesurfer.js": "^6.6.3",
     "yup": "0.32.11"
   },
   "devDependencies": {

@@ -1,13 +1,12 @@
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useTranslation } from 'next-i18next';
 import type {
   GetStaticPaths,
   GetStaticProps,
   InferGetStaticPropsType,
 } from 'next';
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
 import type { NextPageWithLayout, Product } from '@/types';
-import { motion } from 'framer-motion';
+// import { motion } from 'framer-motion';
 import Layout from '@/layouts/_layout';
 import client from '@/data/client';
 import Image from '@/components/ui/image';
@@ -15,6 +14,31 @@ import { fadeInBottom } from '@/lib/framer-motion/fade-in-bottom';
 import placeholder from '@/assets/images/placeholders/product.svg';
 import isEmpty from 'lodash/isEmpty';
 import invariant from 'tiny-invariant';
+import { VerifiedIcon } from '@/components/icons/verified-icon';
+import { EllipsisVerticalIcon } from '@/components/icons/ellipsis-vertical-icon';
+// import ProductSocialShare from '@/components/product/product-social-share';
+// import ProductInformation from '@/components/product/product-information';
+// import ProductDetailsPaper from '@/components/product/product-details-paper';
+// import { LongArrowIcon } from '@/components/icons/long-arrow-icon';
+// import { staggerTransition } from '@/lib/framer-motion/stagger-transition';
+// import {
+//   fadeInBottom,
+//   fadeInBottomWithScaleX,
+//   fadeInBottomWithScaleY,
+// } from '@/lib/framer-motion/fade-in-bottom';
+// import placeholder from '@/assets/images/placeholders/product.svg';
+// import ProductReviews from '@/components/review/product-reviews';
+// import AverageRatings from '@/components/review/average-ratings';
+// import ProductQuestions from '@/components/questions/product-questions';
+// import isEmpty from 'lodash/isEmpty';
+
+import ProductBannerImage from '@/components/product/product-banner-image';
+import ProductBanner from '@/components/product/product-banner';
+import ProductDownloadRating from '@/components/product/product-download-rating';
+import ProductInteractions from '@/components/product/product-interactions';
+import ProductTags from '@/components/product/product-tags';
+import ProductGallery from '@/components/product/product-gallery';
+import ProductRecommended from '@/components/product/product-recommended';
 
 import ProductRecommended from '@/components/product/product-recommended';
 import ProductOwnerOverview from '@/components/product/product-owner-overview';
@@ -89,11 +113,11 @@ export const getStaticProps: GetStaticProps<
   }
 };
 
-function getPreviews(gallery: any[], image: any) {
-  if (!isEmpty(gallery) && Array.isArray(gallery)) return gallery;
-  if (!isEmpty(image)) return [image, {}];
-  return [{}, {}];
-}
+// function getPreviews(gallery: any[], image: any) {
+//   if (!isEmpty(gallery) && Array.isArray(gallery)) return gallery;
+//   if (!isEmpty(image)) return [image, {}];
+//   return [{}, {}];
+// }
 
 const swiperParams: SwiperOptions = {
   slidesPerView: 1,
@@ -103,9 +127,8 @@ const swiperParams: SwiperOptions = {
 const ProductPage: NextPageWithLayout<
   InferGetStaticPropsType<typeof getStaticProps>
 > = ({ product }) => {
-  const { t } = useTranslation('common');
   const {
-    id,
+    // id,
     name,
     description,
     slug,

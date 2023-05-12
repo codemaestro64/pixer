@@ -9,7 +9,7 @@ import routes from '@/config/routes';
 import { useTopShops } from '@/data/shop';
 import ButtonGroup from '@/components/ui/button-group';
 import { SearchIcon } from '@/components/icons/search-icon';
-import { useTranslation } from 'next-i18next';
+// import { useTranslation } from 'next-i18next';
 
 const MAP_RANGE_FILTER = [
   {
@@ -35,26 +35,26 @@ function Shops() {
       range: selected.range,
       name: searchText,
     });
-  const { t } = useTranslation('common');
   return (
-    <div className="flex flex-grow flex-col px-4 pt-6 pb-10 md:px-6 lg:px-7 lg:pb-12 3xl:px-8">
-      <div className="mb-2 -mt-4 flex flex-col-reverse flex-wrap items-center justify-between bg-light-200 py-4 dark:bg-dark-100 md:mt-0 md:mb-5 md:flex-row md:space-x-4 md:bg-transparent md:py-0 md:dark:bg-transparent lg:mb-7">
-        <div className="relative mt-3 w-full max-w-xs sm:mt-0">
-          <SearchIcon className="absolute left-1 top-1/2 -mt-2 h-4 w-4" />
-          <input
-            type="search"
-            onChange={(e) => setSearchText(e.target.value)}
-            autoFocus={true}
-            placeholder={t('text-placeholder-search')}
-            className="border-dark-30 h-11 w-full border-0 border-b border-b-light-600 bg-transparent pl-8 text-13px outline-none focus:border-b-light-800 focus:ring-0 dark:border-b-dark-400 dark:focus:border-b-dark-500"
-          />
+    <>
+      <div className="flex flex-col px-[16px] pb-[35px] xs:flex-row">
+        <div className='mt-[32px] px-[24px]'>
+          <div className='relative'>
+            <input
+              type="search"
+              onChange={(e) => setSearchText(e.target.value)}
+              autoFocus={true}
+              placeholder="Search"
+              className="peer text-dark-300 dark:text-white h-[48px] w-full pl-[70px] pr-[16px] text-[14px] bg-white dark:bg-dark-100 border border-[#bababa] dark:border-[#434343] font-poppins font-semibold rounded-[100px] placeholder-dark-850 dark:placeholder-[#434343]"
+            />
+            <SearchIcon className="absolute left-[30px] top-1/2 -translate-y-1/2 h-[24px] w-[24px] text-dark-850 dark:text-[#434343] peer-focus:text-dark-300 dark:peer-focus:text-white" />
+          </div>
         </div>
-        <ButtonGroup
-          items={MAP_RANGE_FILTER}
-          selectedValue={selected}
-          onChange={setRange}
-        />
+        <div className='mt-[20px]'>
+          <ButtonGroup items={MAP_RANGE_FILTER} selectedValue={selected} onChange={setRange} />
+        </div>
       </div>
+      
       <Grid
         shops={shops}
         onLoadMore={loadMore}
@@ -62,7 +62,7 @@ function Shops() {
         isLoadingMore={isLoadingMore}
         isLoading={isLoading}
       />
-    </div>
+    </>
   );
 }
 

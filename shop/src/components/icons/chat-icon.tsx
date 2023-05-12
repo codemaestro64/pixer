@@ -27,3 +27,4 @@ export const ChatIcon: React.FC<React.SVGAttributes<{}>> = (props) => {
     </svg>
   );
 };
+

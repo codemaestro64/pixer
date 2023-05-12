@@ -159,6 +159,8 @@ export interface Shop {
   description: string;
   orders_count: number;
   products_count: number;
+  users_count: number;
+  wishlists_count: number;
   logo: Attachment;
   cover_image: Attachment;
   settings: {

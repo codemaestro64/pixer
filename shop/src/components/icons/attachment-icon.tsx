@@ -13,3 +13,4 @@ export const AttachmentIcon: React.FC<React.SVGAttributes<{}>> = (props) => {
     </svg>
   );
 };
+

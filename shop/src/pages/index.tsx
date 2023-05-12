@@ -16,6 +16,7 @@ import { dehydrate, QueryClient } from 'react-query';
 import { API_ENDPOINTS } from '@/data/client/endpoints';
 import CategoryFilter from '@/components/product/category-filter';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import HeroSection from '@/components/ui/hero-section';
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   const queryClient = new QueryClient();
@@ -80,6 +81,7 @@ const Home: NextPageWithLayout = () => {
         description="Fastest digital download template built with React, NextJS, TypeScript, React-Query and Tailwind CSS."
         url={routes.home}
       />
+      <HeroSection />
       <CategoryFilter />
       <Products />
     </>

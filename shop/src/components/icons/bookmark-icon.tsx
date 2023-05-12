@@ -13,3 +13,4 @@ export const BookmarkIcon: React.FC<React.SVGAttributes<{}>> = (props) => {
     </svg>
   );
 };
+

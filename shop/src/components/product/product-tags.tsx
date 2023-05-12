@@ -30,3 +30,4 @@ const ProductTags: React.FC<ProductTagsProps> = ({ tags }) => {
 };
 
 export default ProductTags;
+

@@ -37,7 +37,7 @@ export default function FollowButton({ shop_id }: { shop_id: string }) {
         <Button
           onClick={handleToggleFollow}
           variant={isShopFollowed ? 'solidDanger' : 'outline'}
-          className={`followButton h-9 min-h-[36px] rounded-md p-2 px-3 text-xs sm:h-11 sm:min-h-[44px] md:px-4 ${
+          className={`followButton h-9 min-h-[36px] rounded-full p-2 px-3 text-xs sm:h-11 sm:min-h-[44px] md:px-4 ${
             !isShopFollowed && 'text-brand dark:text-brand'
           }`}
           isLoading={isFollowLoading}

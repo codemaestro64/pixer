@@ -265,8 +265,9 @@ html.dark .StripeElement {
 }
 .author-tile {
   background-size: 100% 100%;
-  background-image: url("../images/author_tile_bg.jpg");
+  /* background-image: url("../images/author_tile_bg.jpg"); */
+  background-image: url("../images/author_tile_bg_correct.jpg");
   background-repeat: no-repeat;
-  background-blend-mode: multiply;
-  background-color: gray;
+  /* background-blend-mode: multiply;
+  background-color: gray; */
 }

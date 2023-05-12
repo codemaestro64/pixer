@@ -45,12 +45,12 @@ function Shops() {
               onChange={(e) => setSearchText(e.target.value)}
               autoFocus={true}
               placeholder="Search"
-              className="peer text-dark-300 dark:text-white h-[48px] w-full pl-[70px] pr-[16px] text-[14px] bg-white dark:bg-dark-100 border border-[#bababa] dark:border-[#434343] font-poppins font-semibold rounded-[100px] placeholder-dark-850 dark:placeholder-[#434343]"
+              className="peer text-dark-300 dark:text-white h-[48px] w-full pl-[70px] pr-[16px] text-[14px] bg-white dark:bg-dark-100 border border-[#bababa] dark:border-[#434343] font-poppins font-semibold rounded-[100px] placeholder-dark-850 dark:placeholder-[#434343] bg-transparent"
             />
             <SearchIcon className="absolute left-[30px] top-1/2 -translate-y-1/2 h-[24px] w-[24px] text-dark-850 dark:text-[#434343] peer-focus:text-dark-300 dark:peer-focus:text-white" />
           </div>
         </div>
-        <div className='mt-[20px]'>
+        <div className='mt-[20px] px-[24px]'>
           <ButtonGroup items={MAP_RANGE_FILTER} selectedValue={selected} onChange={setRange} />
         </div>
       </div>

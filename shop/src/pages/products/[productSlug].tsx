@@ -18,6 +18,8 @@ import invariant from 'tiny-invariant';
 
 import ProductRecommended from '@/components/product/product-recommended';
 import ProductOwnerOverview from '@/components/product/product-owner-overview';
+import ProductGalleryThumbnail from '@/components/product/product-gallery-thumbnail';
+import ProductGalleryThumbs from '@/components/product/product-gallery-thumbs';
 
 import {
   Swiper,
@@ -34,6 +36,7 @@ import { Tag } from '@/types';
 import routes from '@/config/routes';
 import Button from '@/components/ui/button';
 import { ThreeDotsIcon } from '@/components/icons/three-dots-icon';
+import ProductTags from '@/components/product/product-tags';
 
 // This function gets called at build time
 type ParsedQueryParams = {
@@ -129,33 +132,11 @@ const ProductPage: NextPageWithLayout<
           <div className="flex flex-col p-2 rtl:space-x-reverse">
             <div className="mb-4 w-full items-center justify-center overflow-hidden md:mb-6 lg:mb-auto">
               <div className="relative z-0 mb-3 w-full xl:mb-5">
-                <Swiper
-                  id="productGallery"
-                  speed={400}
-                  allowTouchMove={false}
-                  thumbs={{ swiper: thumbsSwiper }}
-                  className="rounded-[10px]"
-                  modules={[Navigation, Thumbs]}
-                  {...swiperParams}
-                >
-                  {gallery?.map((item: any) => (
-                    <SwiperSlide
-                      key={`product-gallery-${item.id}`}
-                      className="flex aspect-[1629/583] items-center justify-center rounded-[10px] bg-light-200 dark:bg-dark-200"
-                    >
-                      <Image
-                        layout="fill"
-                        objectFit="cover"
-                        className="rounded-[10px]"
-                        src={item?.original ?? placeholder}
-                        alt={`Product gallery ${item.id}`}
-                      />
-                    </SwiperSlide>
-                  ))}
-                  <div className="absolute inset-0 z-10 flex h-full w-full items-end justify-center ">
-                    <div className="h-2/3 w-full rounded-[10px] bg-gradient-to-t from-black to-transparent" />
-                  </div>
-                </Swiper>
+                <ProductGalleryThumbnail
+                  gallery={gallery}
+                  thumbsSwiper={thumbsSwiper}
+                  swiperParams={swiperParams}
+                />
                 <ProductOwnerOverview
                   owner={{ ...shop, product_name: name, price }}
                 />
@@ -163,81 +144,22 @@ const ProductPage: NextPageWithLayout<
 
               <motion.div
                 variants={fadeInBottom()}
-                className="justify-betwee flex w-full flex-col md:flex-row"
+                className="flex w-full flex-col justify-between md:flex-row"
               >
-                <div className="flex-shrink-0 md:w-6/12 lg:w-7/12 2xl:w-8/12">
-                  <div className="lg:mx-auto 3xl:max-w-[1200px]">
-                    {!!tags?.length && (
-                      <div className="flex items-start text-dark dark:text-light">
-                        <div className="flex flex-wrap gap-2">
-                          {tags.map((tag: Tag) => (
-                            <AnchorLink
-                              key={tag.id}
-                              href={routes.tagUrl(tag.slug)}
-                              className="inline-flex items-center justify-center rounded-full border border-light-600 px-4 py-2 font-medium text-light-base transition-all hover:bg-light-200 hover:text-dark-300 dark:border-dark-500 dark:text-light-600 dark:hover:bg-dark-400 hover:dark:text-light"
-                            >
-                              {tag.name}
-                            </AnchorLink>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                <div className="z-30 flex-shrink-0 md:w-6/12 lg:w-7/12 2xl:w-8/12">
+                  <ProductTags tags={tags} />
+
                   <div className="pt-6 pb-5 leading-[1.9em] rtl:text-right dark:text-light-600 xl:pb-6 3xl:pb-8">
                     {description}
                   </div>
 
-                  <div className="flex-shrink-0">
-                    <Swiper
-                      id="productGalleryThumbs"
-                      freeMode={true}
-                      observer={true}
-                      slidesPerView={4}
-                      onSwiper={setThumbsSwiper}
-                      observeParents={true}
-                      watchSlidesProgress={true}
-                    >
-                      {gallery?.map((item: any) => (
-                        <SwiperSlide
-                          key={`product-thumb-gallery-${item.id}`}
-                          className="flex aspect-[3/2] cursor-pointer items-center justify-center border border-light-500 transition hover:opacity-75 dark:border-dark-500"
-                        >
-                          <Image
-                            layout="fill"
-                            objectFit="cover"
-                            src={item?.thumbnail ?? placeholder}
-                            alt={`Product thumb gallery ${item.id}`}
-                          />
-                        </SwiperSlide>
-                      ))}
-                    </Swiper>
-                  </div>
+                  <ProductGalleryThumbs
+                    gallery={gallery}
+                    setThumbsSwiper={setThumbsSwiper}
+                  />
                 </div>
 
-                <div className="mt-7 w-full rounded-md p-2 md:ml-7 md:mt-0">
-                  <div className="flex w-full flex-col items-center justify-center">
-                    <div className="flex w-full flex-row items-center justify-between p-2">
-                      <div className="text-[20px] font-semibold text-dark-600 dark:text-light-600">
-                        Recommended
-                      </div>
-                      <Button
-                        variant="icon"
-                        className="inline-flex hover:opacity-40"
-                      >
-                        <ThreeDotsIcon className="h-[32px] w-[32px] text-dark-600 dark:text-light-600" />
-                      </Button>
-                    </div>
-
-                    <div className="mt-4 flex w-full flex-col items-start justify-center gap-4">
-                      {gallery?.map((item, index) => (
-                        <ProductRecommended
-                          key={index}
-                          product={{ ...item, shop, name }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                <ProductRecommended gallery={gallery} shop={shop} name={name} />
               </motion.div>
             </div>
           </div>

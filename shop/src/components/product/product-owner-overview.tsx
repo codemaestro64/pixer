@@ -59,7 +59,7 @@ const ProductOwnerOverview: React.FC<ProductOwnerOverviewProps> = ({
                       layout="fill"
                       quality={100}
                       objectFit="cover"
-                      src={publisherLogo}
+                      src={owner.logo.thumbnail ?? placeholder}
                       className="rounded-full"
                     />
                   </div>

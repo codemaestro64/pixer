@@ -11,7 +11,7 @@ const ProductTags: React.FC<ProductTagsProps> = ({ tags }) => {
   const { t } = useTranslation('common');
 
   return (
-    <div className="overflow-hidden">
+    <div className="overflow-hidden py-2 sm:py-0">
       {!!tags?.length && (
         <div className="scrollbar-hide flex gap-2 overflow-auto xl:flex-wrap">
           {tags.map((tag: Tag) => (

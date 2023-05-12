@@ -10,6 +10,9 @@ import type { NextPageWithLayout, Product } from '@/types';
 import Layout from '@/layouts/_layout';
 import client from '@/data/client';
 import Image from '@/components/ui/image';
+import { fadeInBottom } from '@/lib/framer-motion/fade-in-bottom';
+import placeholder from '@/assets/images/placeholders/product.svg';
+import isEmpty from 'lodash/isEmpty';
 import invariant from 'tiny-invariant';
 import { VerifiedIcon } from '@/components/icons/verified-icon';
 import { EllipsisVerticalIcon } from '@/components/icons/ellipsis-vertical-icon';
@@ -36,6 +39,28 @@ import ProductInteractions from '@/components/product/product-interactions';
 import ProductTags from '@/components/product/product-tags';
 import ProductGallery from '@/components/product/product-gallery';
 import ProductRecommended from '@/components/product/product-recommended';
+
+import ProductRecommended from '@/components/product/product-recommended';
+import ProductOwnerOverview from '@/components/product/product-owner-overview';
+import ProductGalleryThumbnail from '@/components/product/product-gallery-thumbnail';
+import ProductGalleryThumbs from '@/components/product/product-gallery-thumbs';
+
+import {
+  Swiper,
+  SwiperSlide,
+  SwiperOptions,
+  Navigation,
+  Thumbs,
+} from '@/components/ui/slider';
+import { useRef, useState } from 'react';
+import { LabelIcon } from '@/components/icons/label-icon';
+import AnchorLink from '@/components/ui/links/anchor-link';
+import classNames from 'classnames';
+import { Tag } from '@/types';
+import routes from '@/config/routes';
+import Button from '@/components/ui/button';
+import { ThreeDotsIcon } from '@/components/icons/three-dots-icon';
+import ProductTags from '@/components/product/product-tags';
 
 // This function gets called at build time
 type ParsedQueryParams = {
@@ -94,53 +119,74 @@ export const getStaticProps: GetStaticProps<
 //   return [{}, {}];
 // }
 
+const swiperParams: SwiperOptions = {
+  slidesPerView: 1,
+  spaceBetween: 0,
+};
+
 const ProductPage: NextPageWithLayout<
   InferGetStaticPropsType<typeof getStaticProps>
 > = ({ product }) => {
   const {
     // id,
     name,
-    // slug,
-    image,
-    gallery,
     description,
-    // created_at,
-    // updated_at,
-    ratings,
-    // rating_count,
-    // total_reviews,
+    slug,
+    image,
+    shop,
+    updated_at,
+    created_at,
+    gallery,
+    orders_count,
     total_downloads,
     tags,
-    // type,
-    shop,
+    preview_url,
+    type,
+    price,
     sale_price,
   } = product;
-  // const router = useRouter();
-  // const previews = getPreviews(gallery, image);
+
+  let [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
 
   return (
-    <div className="relative xl:ml-[22px] xl:mr-[31.8px] xl:mt-[22px]">
-      <ProductBannerImage bannerImage={image.original} alt={name} />
-      <div className='relative z-[3] pt-[89px] xl:pt-[150px] 2xl:pt-[330px] grid grid-cols-[65%_35%]'>
-        <ProductBanner name={name} shopName={shop.name} shopLogo={shop.logo.original} />
-        <ProductDownloadRating totalDownloads={total_downloads} ratings={ratings} />
-        <ProductInteractions salePrice={sale_price} />
-      </div>
-      <div className='mt-[42px] xl:mt-[57px] 2xl:grid 2xl:grid-cols-[auto_555px]'>
-        <div className='2xl:pr-[39px]'>
-          <ProductTags tags={tags} />
-          {/* description */}
-          <div className='px-[15.5px] xl:px-[5px] mt-[26px] 2xl:mt-[51px]'>
-            <p className='text-[14px] xl:text-[18px] text-dark-300 dark:text-white font-medium'>{description}</p>
+    <div className="relative">
+      <div className="h-full">
+        <motion.div variants={fadeInBottom()} className="justify-center">
+          <div className="flex flex-col p-2 rtl:space-x-reverse">
+            <div className="mb-4 w-full items-center justify-center overflow-hidden md:mb-6 lg:mb-auto">
+              <div className="relative z-0 mb-3 w-full xl:mb-5">
+                <ProductGalleryThumbnail
+                  gallery={gallery}
+                  thumbsSwiper={thumbsSwiper}
+                  swiperParams={swiperParams}
+                />
+                <ProductOwnerOverview
+                  owner={{ ...shop, product_name: name, price }}
+                />
+              </div>
+
+              <motion.div
+                variants={fadeInBottom()}
+                className="flex w-full flex-col justify-between md:flex-row"
+              >
+                <div className="z-30 flex-shrink-0 md:w-6/12 lg:w-7/12 2xl:w-8/12">
+                  <ProductTags tags={tags} />
+
+                  <div className="pt-6 pb-5 leading-[1.9em] rtl:text-right dark:text-light-600 xl:pb-6 3xl:pb-8">
+                    {description}
+                  </div>
+
+                  <ProductGalleryThumbs
+                    gallery={gallery}
+                    setThumbsSwiper={setThumbsSwiper}
+                  />
+                </div>
+
+                <ProductRecommended gallery={gallery} shop={shop} name={name} />
+              </motion.div>
+            </div>
           </div>
-          {/* gallery */}
-          <div className='overflow-hidden mt-[26px] mb-[42px]'>
-            <ProductGallery gallery={gallery} />
-          </div>
-        </div>
-        <div className='hidden 2xl:block'>
-          <ProductRecommended product={product} />
-        </div>
+        </motion.div>
       </div>
     </div>
   );

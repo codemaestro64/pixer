@@ -1,74 +1,50 @@
-import { Product } from '@/types';
+import { useTranslation } from 'next-i18next';
 import Image from '@/components/ui/image';
-import { EllipsisVerticalIcon } from '../icons/ellipsis-vertical-icon';
-import { VerifiedIcon } from '../icons/verified-icon';
+import placeholder from '@/assets/images/placeholders/product.svg';
+import AnchorLink from '@/components/ui/links/anchor-link';
+import routes from '@/config/routes';
+import verifiedPublisherIcon from '@/assets/images/verified-publisher.png';
+import ProductRecommendedItem from './product-recommended-item';
+import Button from '@/components/ui/button';
+import { ThreeDotsIcon } from '@/components/icons/three-dots-icon';
+import { Attachment, Shop } from '@/types';
 
-interface Recommended {
-  product: Product
-}
+type ProductRecommendedProps = {
+  gallery: Attachment[];
+  shop: Shop;
+  name: string;
+};
 
-function Recommended({ product }: Recommended ) {
-  const { name, image, shop, created_at } = product;
-
-  const createdDate = new Date(created_at);
-	const currentDate = new Date();
-	const difference = currentDate.getTime() - createdDate.getTime();
-	const daysAgo = Math.floor(difference / (1000 * 60 * 60 * 24));
+const ProductRecommended: React.FC<ProductRecommendedProps> = ({
+  gallery,
+  shop,
+  name,
+}) => {
+  const { t } = useTranslation('common');
 
   return (
-    <div className='flex pr-[8px]'>
-      {/* product image */}
-      <div className='min-h-[180px] min-w-[200px] mr-[18px] rounded-[10px] overflow-hidden relative'>
-        <Image src={image.original} alt={shop.name} layout='fill' objectFit='cover' />
-      </div>
-      <div className='flex flex-col justify-center'>
-        {/* product name */}
-        <div>
-          <p className='text-[22px] text-dark-300 dark:text-white font-medium font-poppins'>{name}</p>
-        </div>
-        {/* shop */}
-        <div className='flex items-center mt-[14px]'>
-          <Image src={shop.logo.original} alt={shop.name} width={25.57} height={25.57} className='rounded-full overflow-hidden' />
-          <div className='ml-[7px] flex flex-col justify-center'>
-            <div className='mb-[2px] flex items-center'>
-              <span className='text-[14px] text-[#434343] dark:text-[#FDFDFD] font-poppins font-semibold'>{shop.name}</span>
-              <VerifiedIcon className='h-[16.05px] w-[16.05px] ml-[2px]' />
-            </div>
-            <span className='text-[8.52px] text-[#666] font-poppins font-medium'>20 Followers</span>
+    <div className="mt-7 w-full rounded-md p-2 md:ml-7 md:mt-0">
+      <div className="flex w-full flex-col items-center justify-center">
+        <div className="flex w-full flex-row items-center justify-between p-2">
+          <div className="text-[20px] font-semibold text-dark-600 dark:text-light-600">
+            Recommended
           </div>
+          <Button variant="icon" className="inline-flex hover:opacity-40">
+            <ThreeDotsIcon className="h-[32px] w-[32px] text-dark-600 dark:text-light-600" />
+          </Button>
         </div>
-        {/* days ago & view product */}
-        <div className='mt-[20px] text-[12px] text-dark-850 poppins font-medium flex items-center'>
-          <span>
-            {daysAgo} Day&#180;s Ago
-          </span>
-          <div className='h-[3px] w-[3px] mx-[14px] bg-[#D9D9D9] rounded-full'></div>
-          <span>View Product</span>
-        </div>
-      </div>
-    </div>
-  )
-}
 
-export default function ProductRecommended({ product }: Recommended) {
-  return (
-    <div className='pb-[26px]'>
-      <div className='flex px-[20px] py-[17.5px]'>
-        <div>
-          <p className='text-[23.64px] text-[#3a3a3a] dark:text-white font-semibold font-poppins'>Recommended</p>
+        <div className="mt-4 flex w-full flex-col items-start justify-center gap-4">
+          {gallery?.map((item, index) => (
+            <ProductRecommendedItem
+              key={index}
+              product={{ ...item, shop, name }}
+            />
+          ))}
         </div>
-        <div className='ml-auto'>
-          <button>
-            <EllipsisVerticalIcon className='h-[42px] w-[42px] text-[#3a3a3a] dark:text-white rotate-90' />
-          </button>
-        </div>
-      </div>
-      <div className='space-y-[26px]'>
-        {/* item */}
-        <Recommended product={product} />
-        <Recommended product={product} />
-        <Recommended product={product} />
       </div>
     </div>
-  )
-}
+  );
+};
+
+export default ProductRecommended;

@@ -4,6 +4,9 @@ import {
   getAuthToken,
   removeAuthToken,
   setAuthToken,
+  getAuthUserInfo,
+  setAuthUserInfo,
+  removeAuthUserInfo,
 } from '@/data/client/token.utils';
 
 const authorizationAtom = atom(checkHasAuthToken());
@@ -12,6 +15,8 @@ export default function useAuth() {
   return {
     setToken: setAuthToken,
     getToken: getAuthToken,
+    getCurrrentUser: getAuthUserInfo,
+    setCurrentUser: setAuthUserInfo,
     isAuthorized,
     authorize(token: string) {
       setAuthToken(token);
@@ -20,6 +25,7 @@ export default function useAuth() {
     unauthorize() {
       setAuthorized(false);
       removeAuthToken();
+      removeAuthUserInfo();
     },
   };
 }

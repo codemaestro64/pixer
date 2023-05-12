@@ -10,6 +10,7 @@ import { CloseIcon } from '@/components/icons/close-icon';
 import { useDrawer } from '@/components/drawer-views/context';
 import { ProductIcon } from '@/components/icons/product-icon';
 import { PeopleIcon } from '@/components/icons/people-icon';
+import { ChatIcon } from '@/components/icons/chat-icon';
 import { PaperPlaneIcon } from '@/components/icons/paper-plane-icon';
 import Scrollbar from '@/components/ui/scrollbar';
 import Copyright from '@/layouts/_copyright';
@@ -102,6 +103,13 @@ export function Sidebar({
               href={routes.feed}
               isCollapse={isCollapse}
               icon={<FeedIcon className="h-[17px] w-[17px] text-current" />}
+            />
+
+            <NavLink
+              title={t('text-chat')}
+              href={routes.chat}
+              isCollapse={isCollapse}
+              icon={<ChatIcon className="h-[17px] w-[17px] text-current" />}
             />
 
             <NavLink

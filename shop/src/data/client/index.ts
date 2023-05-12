@@ -4,6 +4,7 @@ import type {
   CategoryQueryOptions,
   ForgetPasswordInput,
   LoginUserInput,
+  ChatTokenInput,
   Order,
   OrderedFilePaginator,
   OrderPaginator,
@@ -54,6 +55,7 @@ import type {
   SettingsQueryOptions,
   TypeQueryOptions,
   Type,
+  ChatTokenResponse,
 } from '@/types';
 import { API_ENDPOINTS } from './endpoints';
 import { HttpClient } from './http-client';
@@ -180,6 +182,11 @@ class Client {
     changePassword: (input: ChangePasswordInput) =>
       HttpClient.post<PasswordChangeResponse>(
         API_ENDPOINTS.USERS_CHANGE_PASSWORD,
+        input
+      ),
+    generateChatToken: (input: ChatTokenInput) =>
+      HttpClient.post<ChatTokenResponse>(
+        API_ENDPOINTS.GENERATE_CHAT_TOKEN,
         input
       ),
     logout: () => HttpClient.post<boolean>(API_ENDPOINTS.USERS_LOGOUT, {}),

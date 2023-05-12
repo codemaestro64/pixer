@@ -1,21 +1,33 @@
-import { Tag } from "@/types";
+import { useTranslation } from 'next-i18next';
+import AnchorLink from '@/components/ui/links/anchor-link';
+import routes from '@/config/routes';
+import { Tag } from '@/types';
 
-function ProductTag({ name }: { name: string }) {
-  return (
-    <div className='px-[20px] py-[11px] xl:px-[32.2px] xl:py-[17.17px] border border-[#ececec] dark:border-dark-850 rounded-[66px] whitespace-nowrap'>
-      <span className='text-[11.98px] xl:text-[19.32px] text-dark-850 font-semibold'>{name}</span>
-    </div>
-  )
-}
+type ProductTagsProps = {
+  tags: Tag[];
+};
 
-export default function ProductTags({ tags }: { tags: Tag[]}) {
+const ProductTags: React.FC<ProductTagsProps> = ({ tags }) => {
+  const { t } = useTranslation('common');
+
   return (
-    <div className='overflow-hidden'>
-      <div className='flex xl:flex-wrap gap-[8.68px] xl:gap-[14px] px-[13px] xl:px-0 overflow-auto scrollbar-hide'>
-        {tags.map(({ id, name }) => (
-          <ProductTag key={id} name={name} />
-        ))}
-      </div>
+    <div className="overflow-hidden py-2 sm:py-0">
+      {!!tags?.length && (
+        <div className="scrollbar-hide flex gap-2 overflow-auto xl:flex-wrap">
+          {tags.map((tag: Tag) => (
+            <AnchorLink
+              key={tag.id}
+              href={routes.tagUrl(tag.slug)}
+              className="items-center justify-center whitespace-nowrap rounded-full border border-light-600 px-4 py-2 font-medium text-light-base transition-all hover:bg-light-200 hover:text-dark-300 dark:border-dark-500 dark:text-light-600 dark:hover:bg-dark-400 hover:dark:text-light"
+            >
+              {tag.name}
+            </AnchorLink>
+          ))}
+        </div>
+      )}
     </div>
-  )
-}
+  );
+};
+
+export default ProductTags;
+

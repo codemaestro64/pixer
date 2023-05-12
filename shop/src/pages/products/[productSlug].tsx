@@ -134,6 +134,7 @@ const ProductPage: NextPageWithLayout<
                   speed={400}
                   allowTouchMove={false}
                   thumbs={{ swiper: thumbsSwiper }}
+                  className="rounded-[10px]"
                   modules={[Navigation, Thumbs]}
                   {...swiperParams}
                 >
@@ -155,7 +156,9 @@ const ProductPage: NextPageWithLayout<
                     <div className="h-2/3 w-full rounded-[10px] bg-gradient-to-t from-black to-transparent" />
                   </div>
                 </Swiper>
-                <ProductOwnerOverview owner={{ ...shop, product_name: name }} />
+                <ProductOwnerOverview
+                  owner={{ ...shop, product_name: name, price }}
+                />
               </div>
 
               <motion.div

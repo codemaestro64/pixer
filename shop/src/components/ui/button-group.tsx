@@ -1,5 +1,5 @@
-import cn from 'classnames';
-import { motion } from 'framer-motion';
+// import cn from 'classnames';
+// import { motion } from 'framer-motion';
 import { RadioGroup } from '@headlessui/react';
 import { useTranslation } from 'next-i18next';
 
@@ -23,7 +23,7 @@ export default function ButtonGroup({
   return (
     <RadioGroup value={selectedValue} onChange={onChange}>
       <RadioGroup.Label className="sr-only">Button Group</RadioGroup.Label>
-      <div className="grid grid-cols-3 gap-[7.34px]">
+      <div className="grid grid-cols-3 md:flex gap-[7.34px]">
         {items.map((item) => (
           <RadioGroup.Option
             key={t(item.label)}
@@ -31,7 +31,7 @@ export default function ButtonGroup({
             className="outline-none"
           >
             {({ checked }) => (
-              <div className={`relative z-[1] cursor-pointer rounded-[56px] h-[35px] font-poppins text-[10.16px] font-medium capitalize flex items-center justify-center border ${ !checked ? 'text-[#6A6969] dark:text-[#6A6969] border-[#ddd] dark:border-[#404040]' : 'text-white bg-brand border-brand' }`}>
+              <div className={`h-[35px] lg:h-[42px] 2xl:h-[62px] md:min-w-[109.52px] xl:min-w-[194px] text-[10.16px] lg:text-[14px] 2xl:text-[18px] font-poppins font-medium capitalize flex items-center justify-center relative z-[1] cursor-pointer rounded-[56px] border ${ !checked ? 'text-[#6A6969] border-[#ddd] dark:border-[#404040]' : 'text-white bg-brand border-brand' }`}>
                 {/* <RadioGroup.Label
                   className={cn(
                     'cursor-pointer',

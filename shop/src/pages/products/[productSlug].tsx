@@ -6,7 +6,7 @@ import type {
 } from 'next';
 // import { useRouter } from 'next/router';
 import type { NextPageWithLayout, Product } from '@/types';
-// import { motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Layout from '@/layouts/_layout';
 import client from '@/data/client';
 import Image from '@/components/ui/image';
@@ -16,30 +16,7 @@ import isEmpty from 'lodash/isEmpty';
 import invariant from 'tiny-invariant';
 import { VerifiedIcon } from '@/components/icons/verified-icon';
 import { EllipsisVerticalIcon } from '@/components/icons/ellipsis-vertical-icon';
-// import ProductSocialShare from '@/components/product/product-social-share';
-// import ProductInformation from '@/components/product/product-information';
-// import ProductDetailsPaper from '@/components/product/product-details-paper';
-// import { LongArrowIcon } from '@/components/icons/long-arrow-icon';
-// import { staggerTransition } from '@/lib/framer-motion/stagger-transition';
-// import {
-//   fadeInBottom,
-//   fadeInBottomWithScaleX,
-//   fadeInBottomWithScaleY,
-// } from '@/lib/framer-motion/fade-in-bottom';
-// import placeholder from '@/assets/images/placeholders/product.svg';
-// import ProductReviews from '@/components/review/product-reviews';
-// import AverageRatings from '@/components/review/average-ratings';
-// import ProductQuestions from '@/components/questions/product-questions';
-// import isEmpty from 'lodash/isEmpty';
-
-import ProductBannerImage from '@/components/product/product-banner-image';
-import ProductBanner from '@/components/product/product-banner';
-import ProductDownloadRating from '@/components/product/product-download-rating';
-import ProductInteractions from '@/components/product/product-interactions';
 import ProductTags from '@/components/product/product-tags';
-import ProductGallery from '@/components/product/product-gallery';
-import ProductRecommended from '@/components/product/product-recommended';
-
 import ProductRecommended from '@/components/product/product-recommended';
 import ProductOwnerOverview from '@/components/product/product-owner-overview';
 import ProductGalleryThumbnail from '@/components/product/product-gallery-thumbnail';
@@ -60,7 +37,6 @@ import { Tag } from '@/types';
 import routes from '@/config/routes';
 import Button from '@/components/ui/button';
 import { ThreeDotsIcon } from '@/components/icons/three-dots-icon';
-import ProductTags from '@/components/product/product-tags';
 
 // This function gets called at build time
 type ParsedQueryParams = {

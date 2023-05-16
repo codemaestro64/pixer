@@ -13,7 +13,7 @@ function SocialButton({ label, icon }: { label: string, icon: React.ReactElement
   )
 }
 
-export default function ServiceSocial() {
+export default function ContentSocial() {
   return (
     <div className='flex gap-[18.85px] md:gap-[22.87px] 3xl:gap-[26px] ml-[4.25px] md:self-end md:mr-[8px]'>
       <SocialButton label='2.3k' icon={<LikeOutlineIcon />} />

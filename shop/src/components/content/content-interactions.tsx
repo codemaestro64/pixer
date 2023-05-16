@@ -17,7 +17,7 @@ function FollowButton() {
   )
 }
 
-export default function ServiceInteractions() {
+export default function ContentInteractions() {
   return (
     <>
       <div className='flex gap-[13.26px] md:gap-[20.62px] 3xl:gap-[24px]'>

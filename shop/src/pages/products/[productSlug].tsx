@@ -145,7 +145,7 @@ const ProductPage: NextPageWithLayout<
                 variants={fadeInBottom()}
                 className="flex w-full flex-col justify-between md:flex-row"
               >
-                <div className="z-30 flex-shrink-0 md:w-6/12 lg:w-7/12 2xl:w-8/12">
+                <div className="z-20 flex-shrink-0 md:w-6/12 lg:w-7/12 2xl:w-8/12">
                   <ProductTags tags={tags} />
 
                   <div className="pt-6 pb-5 leading-[1.9em] rtl:text-right dark:text-light-600 xl:pb-6 3xl:pb-8">

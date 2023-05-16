@@ -23,7 +23,7 @@ const ProductOwnerOverview: React.FC<ProductOwnerOverviewProps> = ({
   const { t } = useTranslation('common');
   console.log(owner);
   return (
-    <div className="relative -top-[74px] z-20 -mb-[70px] flex h-full w-full flex-col items-center justify-end gap-2 px-2 py-4 sm:px-4 md:absolute md:inset-0 md:px-8">
+    <div className="relative -top-[74px] z-10 -mb-[70px] flex h-full w-full flex-col items-center justify-end gap-2 px-2 py-4 sm:px-4 md:absolute md:inset-0 md:px-8">
       <div className="flex w-full flex-row items-center justify-between gap-2">
         <div className="mb-4 h-full grow">
           <div className="flex flex-col items-start justify-center gap-2 md:flex-row md:items-center">

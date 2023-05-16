@@ -13,7 +13,7 @@ function PostImageBar({ active = false }: { active?: boolean }) {
 export default function PostImages() {
   return (
     <div>
-      <div className='relative pb-[59.67%] bg-red-700'>
+      <div className='relative pb-[59.67%]'>
         {/* image */}
         <div className='absolute inset-0 z-[1]'>
           <Image src={servicesPost} alt='Service' layout='fill' objectFit='cover' />

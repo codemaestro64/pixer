@@ -19,16 +19,16 @@ export default function ServicesSubmenu() {
   }
   
   return (
-    <div className='px-[11px] flex overflow-x-auto scrollbar-hide'>
+    <div className='px-[11px] xl:px-[42px] flex overflow-x-auto scrollbar-hide'>
       { submenuItems.map(({ name, active = false}, index) => (
-        <button key={index} className={`text-[12.13px] py-[14px] px-[7.58px] font-poppins flex items-center ${
-            active ?
-              'text-[#58F9BC] italic font-semibold space-x-[9.1px]' :
-              'text-[#656565] font-medium space-x-[7.58px]'
-          }`}>
+        <button key={index} className={`text-[12.13px] xl:text-[16px] py-[14px] xl:py-[19px] px-[7.58px] xl:px-[10px] font-poppins flex items-center ${
+          active ?
+            'text-brand italic font-semibold space-x-[9.1px] xl:space-x-[12px]' :
+            'text-[#656565] font-medium space-x-[7.58px] xl:space-x-[10px]'
+        }`}>
           <div className='whitespace-nowrap'>{ name }</div>
           { index !== lastIndex ? React.cloneElement(getIcon(active), {
-            className: `h-[18.19px] w-[18.19px] ${
+            className: `h-[18.19px] xl:h-[24px] w-[18.19px] xl:w-[24px] ${
               active ? 'text-brand' : 'text-[#434343]'
             }`
           }) : null }

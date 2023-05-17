@@ -10,6 +10,7 @@ import ServicesSubmenu from '@/components/services/services-submenu';
 import PostTitle from '@/components/services/post-title';
 import PostImages from '@/components/services/post-images';
 import ProfileInfo from '@/components/services/profile-info';
+import Packages from '@/components/services/packages';
 
 const ServicesPage: NextPageWithLayout = () => {
   return (
@@ -20,31 +21,35 @@ const ServicesPage: NextPageWithLayout = () => {
         url={}
       /> */}
       <div>
-        <div className='py-[16px] border-b border-b-[#393939]'>
+        <div className='py-[16px] xl:py-[26px] border-b border-b-[#393939] xl:border-b-[#DEDEDE] xl:dark:border-[#393939]'>
           <Categories />
         </div>
-        <div className='py-[8px] pl-[15px] pr-[10px] flex justify-between'>
+        <div className='py-[8px] xl:pt-[26px] xl:pb-0 pl-[15px] xl:pl-[32px] pr-[10px] xl:pr-[38px] flex items-center justify-between'>
           <SocialmediaAdbanner />
           <ServicesInput />
         </div>
-        <div className='mt-[16px] mb-[8px]'>
+        <div className='mt-[16px] xl:mt-[19px]'>
           <ServicesSubmenu />
         </div>
-        <div>
+        <div className='mt-[8px] xl:mt-[27px] 3xl:mb-[42px] 3xl:mr-[14px] 3xl:grid 3xl:grid-cols-2'>
           {/* left */}
-          <div>
+          <div className='xl:px-[24px]'>
             <div className='mt-[8px] px-[18px]'>
               <PostTitle title='I will design professional Graphic Design for Social Media Post' />
             </div>
-            <div className='mt-[14.49px]'>
+            <div className='mt-[14.49px] xl:mt-[20px]'>
               <PostImages />
             </div>
-            <div className='mt-[15.49px] px-[7.5px]'>
+            <div className='mt-[15.49px] xl:mt-[35px] px-[7.5px]'>
               <ProfileInfo />
             </div>
           </div>
           {/* right */}
-          <div className='mt-[27px]'></div>
+          <div className='mt-[27px] mb-[16px] xl:px-[24px]'>
+            <div className='p-[7px] xl:p-[10px]'>
+              <Packages />
+            </div>
+          </div>
         </div>
       </div>
     </>

@@ -17,15 +17,15 @@ export default function Caregories() {
   ]
 
   return (
-    <div className='px-[8.14px] space-x-[15.35px] flex overflow-x-auto scrollbar-hide'>
+    <div className='px-[8.14px] xl:px-[12px] space-x-[15.35px] xl:space-x-[25px] flex overflow-x-auto scrollbar-hide'>
       { categories.map(({ name, icon, active = false }, index) => (
-        <button key={index} className={`px-[14px] py-[11.67px] text-[8.6px] font-poppins font-medium whitespace-nowrap border rounded-[6.14px] flex items-center ${
-          active ? 'text-brand dark:text-[#FEFEFE] border-brand' : 'text-[#898989] dark:text-[#656565] border-[#454545]'
+        <button key={index} className={`px-[14px] xl:px-[21.5px] py-[11.67px] xl:py-[20.5px] text-[8.6px] xl:text-[14px] font-poppins font-medium whitespace-nowrap border rounded-[6.14px] flex items-center ${
+          active ? 'text-brand dark:text-[#FEFEFE] border-brand' : 'text-[#898989] dark:text-[#656565] border-[#454545] xl:border-[#D4D4D4] xl:dark:border-[#454545]'
         }`}>
           { React.cloneElement(icon, { 
-            className: 'w-[14.74px] h-[14.74px]' 
+            className: 'w-[14.74px] h-[14.74px] xl:w-[24px] xl:h-[24px]' 
           }) }
-          <div className='ml-[6.14px]'>{ name }</div>
+          <div className='ml-[6.14px] xl:ml-[10px]'>{ name }</div>
         </button>
       )) }
     </div>

@@ -12,7 +12,7 @@ function PostImageBar({ active = false }: { active?: boolean }) {
 
 export default function PostImages() {
   return (
-    <div className='max-w-[687px] 3xl:max-w-none mx-auto'>
+    <div className='max-w-[687px] 2xl:max-w-none mx-auto'>
       <div className='relative pb-[59.67%]'>
         {/* image */}
         <div className='absolute inset-0 z-[1]'>

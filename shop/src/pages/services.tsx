@@ -31,7 +31,7 @@ const ServicesPage: NextPageWithLayout = () => {
         <div className='mt-[16px] xl:mt-[19px]'>
           <ServicesSubmenu />
         </div>
-        <div className='mt-[8px] xl:mt-[27px] 3xl:mb-[42px] 3xl:mr-[14px] 3xl:grid 3xl:grid-cols-2'>
+        <div className='mt-[8px] xl:mt-[27px] 2xl:mb-[42px] 2xl:mr-[14px] 2xl:grid 2xl:grid-cols-2'>
           {/* left */}
           <div className='xl:px-[24px]'>
             <div className='mt-[8px] px-[18px]'>

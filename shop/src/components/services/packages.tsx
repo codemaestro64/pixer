@@ -26,9 +26,9 @@ function PackageButton({ label, primary = false }: { label: string, primary?: bo
 function PackageTitle({ title, active = false }: { title: string, active?: boolean }) {
   return (
     <div className={`px-[13.82px] py-[9.43px] ${
-      !active ? 'hidden 3xl:block 3xl:text-[#BFBFBF] 3xl:dark:text-[#767676]' : 'text-brand'
+      !active ? 'hidden 2xl:block 2xl:text-[#BFBFBF] 2xl:dark:text-[#767676]' : 'text-brand'
     }`}>
-      <div className='text-[16px] xl:text-[18px] font-bold 3xl:font-medium xl:font-medium font-poppins tracking-wider uppercase 3xl:flex 3xl:justify-center'>
+      <div className='text-[16px] xl:text-[18px] font-bold 2xl:font-medium xl:font-medium font-poppins tracking-wider uppercase 2xl:flex 2xl:justify-center'>
         { title }
       </div>
     </div>
@@ -38,7 +38,7 @@ function PackageTitle({ title, active = false }: { title: string, active?: boole
 export default function Package() {
   return (
     <div className='space-y-[17px] xl:space-y-[24px]'>
-      <div className='grid grid-cols-3 py-[10px] border-b 3xl:border-0 border-b-[#EBEBEB] dark:border-b-[#353535] 3xl:divide-x 3xl:divide-[#DDDDDD] 3xl:dark:divide-[#2E2E2E]'>
+      <div className='grid grid-cols-3 py-[10px] border-b 2xl:border-0 border-b-[#EBEBEB] dark:border-b-[#353535] 2xl:divide-x 2xl:divide-[#DDDDDD] 2xl:dark:divide-[#2E2E2E]'>
         <PackageTitle title='Basic' active />
         <PackageTitle title='Standard' />
         <PackageTitle title='Premium' />
@@ -46,7 +46,7 @@ export default function Package() {
       <div>
         <PackageMidSection />
       </div>
-      <div className='space-y-[10px] xl:space-y-0 3xl:space-y-[14px] xl:flex 3xl:block xl:space-x-[14px] 3xl:space-x-0'>
+      <div className='space-y-[10px] xl:space-y-0 2xl:space-y-[14px] xl:flex 2xl:block xl:space-x-[14px] 2xl:space-x-0'>
         <PackageButton label='Continue' primary />
         <PackageButton label='Compare Package' />
       </div>

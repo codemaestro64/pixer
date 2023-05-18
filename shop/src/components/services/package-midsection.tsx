@@ -67,7 +67,7 @@ export default function PackageMidSection() {
       <div>
         <InfoMenu />
       </div>
-      <div className='space-y-[10px] xl:space-y-[14px] 3xl:mx-[-10px]'>
+      <div className='space-y-[10px] xl:space-y-[14px] 2xl:mx-[-10px]'>
         <FeatureItem feature='1 Banner' included />
         <FeatureItem feature='Included Sources File' />
       </div>

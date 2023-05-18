@@ -24,6 +24,7 @@
         "messagebird/php-rest-api": "^2.0",
         "omnipay/common": "dev-main",
         "omnipay/stripe": "dev-main",
+        "php-ffmpeg/php-ffmpeg": "^0.19.0",
         "twilio/sdk": "^6.25"
     },
     "require-dev": {

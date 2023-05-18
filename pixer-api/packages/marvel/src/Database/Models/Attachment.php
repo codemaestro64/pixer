@@ -27,5 +27,11 @@ class Attachment extends Model implements HasMedia
             ->width(368)
             ->height(232)
             ->nonQueued();
+
+        $this->addMediaConversion('video_thumbnail')
+            ->width(368)
+            ->height(232)
+            ->extractVideoFrameAtSecond(2)
+            ->nonQueued();
     }
 }

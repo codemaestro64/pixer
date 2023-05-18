@@ -54,6 +54,12 @@ class AttachmentController extends CoreController
                         'original' => $media->getUrl(),
                         'id' => $attachment->id
                     ];
+                } else if (strpos($media->mime_type, 'video/') !== false) {
+                    $converted_url = [
+                        'thumbnail' => $media->getUrl('video_thumbnail'),
+                        'original' => $media->getUrl(),
+                        'id' => $attachment->id
+                    ];
                 } else {
                     $converted_url = [
                         'thumbnail' => '',

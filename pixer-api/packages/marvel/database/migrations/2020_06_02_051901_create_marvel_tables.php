@@ -269,6 +269,31 @@ class CreateMarvelTables extends Migration
             $table->string('url')->default('');
             $table->timestamps();
         });
+
+        Schema::create('feeds', function (Blueprint $table) {
+            $table->id('id');
+            $table->unsignedBigInteger('user_id');
+            $table->string('type');
+            $table->string('descr');
+            $table->longText('content');
+            $table->timestamps();
+        });
+
+        Schema::create('comments', function (Blueprint $table) {
+            $table->id('id');
+            $table->unsignedBigInteger('feed_id');
+            $table->unsignedBigInteger('user_id');
+            $table->string('reply');
+            $table->timestamps();
+        });
+
+        Schema::create('feed_likes', function (Blueprint $table) {
+            $table->id('id');
+            $table->unsignedBigInteger('feed_id');
+            $table->unsignedBigInteger('user_id');
+            $table->boolean('status');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -298,5 +323,7 @@ class CreateMarvelTables extends Migration
         Schema::dropIfExists('attachments');
         Schema::dropIfExists('authors');
         Schema::dropIfExists('manufacturers');
+        Schema::dropIfExists('comments');
+        Schema::dropIfExists('feeds');
     }
 }

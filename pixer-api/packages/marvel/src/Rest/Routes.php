@@ -35,6 +35,9 @@ use Marvel\Http\Controllers\WithdrawController;
 use Marvel\Http\Controllers\DeliveryTimeController;
 use Marvel\Http\Controllers\LanguageController;
 use Marvel\Http\Controllers\ResourceController;
+use Marvel\Http\Controllers\FeedController;
+use Marvel\Http\Controllers\CommentController;
+use Marvel\Http\Controllers\FeedLikeController;
 
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/token', [UserController::class, 'token']);
@@ -128,8 +131,17 @@ Route::apiResource('orders', OrderController::class, [
 
 Route::post('free-downloads/digital-file', [DownloadController::class, 'generateFreeDigitalDownloadableUrl']);
 
-
 Route::group(['middleware' => ['can:' . Permission::CUSTOMER, 'auth:sanctum']], function () {
+    Route::apiResource('feeds', FeedController::class, [
+        'only' => ['index', 'store', 'show'],
+    ]);
+    Route::apiResource('comments', CommentController::class, [
+        'only' => ['index', 'store', 'show'],
+    ]);
+    Route::apiResource('feedlikes', FeedLikeController::class, [
+        'only' => ['store', 'update'],
+    ]);
+
     Route::apiResource('orders', OrderController::class, [
         'only' => ['index'],
     ]);
@@ -189,6 +201,7 @@ Route::group(
         Route::apiResource('products', ProductController::class, [
             'only' => ['store', 'update', 'destroy'],
         ]);
+
         Route::apiResource('resources', ResourceController::class, [
             'only' => ['store']
         ]);

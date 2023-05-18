@@ -1,0 +1,36 @@
+extend type Query {
+    feedLikes(descr: String @where(operator: "LIKE")): [FeedLike!]!
+        @all
+        @can(ability: "super_admin")
+    singleFeedLike(id: ID @eq): FeedLike @find @can(ability: "super_admin")
+}
+
+type FeedLike {
+    id: ID!
+    user_id: ID
+    feed_id: ID
+    status: Boolean
+}
+
+input CreateFeedLikeInput {
+    user_id: ID
+    feed_id: ID
+    status: Boolean
+}
+
+input UpdateFeedLikeInput {
+    id: ID!
+    user_id: ID
+    feed_id: ID
+    status: Boolean
+}
+
+extend type Mutation {
+    createFeedLike(input: CreateFeedLikeInput! @spread): FeedLike
+        @create
+        @can(ability: "super_admin")
+    updateFeedLike(input: UpdateFeedLikeInput! @spread): FeedLike
+        @update
+        @can(ability: "super_admin")
+    deleteFeedLike(id: ID!): Feed @delete @can(ability: "super_admin")
+}

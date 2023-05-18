@@ -581,3 +581,101 @@ export interface ChatUser {
   last_active?: string;
   avatar?: string;
 }
+
+export interface Feed {
+  user_id: string;
+  id: string;
+  type: string;
+  customer: {
+    id: string;
+    name: string;
+    email: string;
+  };
+  profile: {
+    id: string;
+    avatar?: Attachment;
+    bio: string;
+  };
+  descr: string;
+  content: Attachment[];
+  created_at: string;
+  updated_at: string;
+  comments_count: number;
+  likes_count: number;
+  comments?: [
+    {
+      id: string;
+      feed_id: string;
+      user_id: string;
+      reply: string;
+      created_at: string;
+      updated_at: string;
+    }
+  ];
+  likes?: [
+    {
+      id: string;
+      feed_id: string;
+      user_id: string;
+      status: number;
+      created_at: string;
+      updated_at: string;
+    }
+  ];
+}
+
+export interface ListFeedInput {
+  user_id: string;
+}
+export interface CreateFeedInput {
+  user_id: string;
+  descr: string;
+  type: string;
+  content: Attachment[];
+}
+
+export interface UpdateFeedInput {
+  id: string;
+  user_id: string;
+  descr: string;
+  type: string;
+  content: Attachment;
+}
+
+export interface Comment {
+  feed_id: string;
+  user_id: string;
+  id: string;
+  reply: string;
+  customer: {
+    id: string;
+    name: string;
+    email: string;
+  };
+  profile: {
+    id: string;
+    avatar?: Attachment;
+    bio: string;
+  };
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CreateCommentInput {
+  user_id: string;
+  feed_id: string;
+  reply: string;
+}
+
+export interface FeedLike {
+  id: string;
+  feed_id: string;
+  user_id: string;
+  status: number;
+  created_at: string;
+  updated_at: string;
+}
+export interface CreateLikeInput {
+  user_id: string;
+  feed_id: string;
+}

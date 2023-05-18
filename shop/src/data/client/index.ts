@@ -56,6 +56,14 @@ import type {
   TypeQueryOptions,
   Type,
   ChatTokenResponse,
+  Feed,
+  CreateFeedInput,
+  UpdateFeedInput,
+  ListFeedInput,
+  Comment,
+  CreateCommentInput,
+  CreateLikeInput,
+  FeedLike,
 } from '@/types';
 import { API_ENDPOINTS } from './endpoints';
 import { HttpClient } from './http-client';
@@ -303,6 +311,23 @@ class Client {
         },
       });
     },
+  };
+  feeds = {
+    all: () => HttpClient.get<Feed[]>(API_ENDPOINTS.FEEDS),
+    get: ({ id }: { id: string }) =>
+      HttpClient.get<Feed>(`${API_ENDPOINTS.FEEDS}/${id}`),
+    create: (input: CreateFeedInput) =>
+      HttpClient.post<Feed>(API_ENDPOINTS.FEEDS, input),
+    update: (input: UpdateFeedInput) =>
+      HttpClient.post<Feed>(API_ENDPOINTS.FEEDS, input),
+    like: (input: CreateLikeInput) =>
+      HttpClient.post<FeedLike>(API_ENDPOINTS.LIKES, input),
+  };
+  comments = {
+    get: ({ feed_id }: { feed_id: string }) =>
+      HttpClient.get<Comment[]>(`${API_ENDPOINTS.COMMENTS}/${feed_id}`),
+    create: (input: CreateCommentInput) =>
+      HttpClient.post<Comment>(API_ENDPOINTS.COMMENTS, input),
   };
 }
 

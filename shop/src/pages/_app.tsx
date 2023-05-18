@@ -19,6 +19,7 @@ import { SearchProvider } from '@/components/search/search.context';
 import { Portal } from 'react-portal';
 
 // base css file
+import '@/assets/css/inputfile.css';
 import '@/assets/css/scrollbar.css';
 import '@/assets/css/swiper-carousel.css';
 import '@/assets/css/pagination.css';

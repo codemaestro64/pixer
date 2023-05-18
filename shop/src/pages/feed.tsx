@@ -69,17 +69,17 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
 // }
 
 const Feed: NextPageWithLayout = () => {
-  const [is2xl, setIs2xl] = useState(false)
+  const [is2xl, setIs2xl] = useState(false);
 
   function updateIs2xlOnResize() {
-    setIs2xl(window.innerWidth >= 1440)
+    setIs2xl(window.innerWidth >= 1440);
   }
-  
+
   useEffect(() => {
-    updateIs2xlOnResize()
-    window.addEventListener('resize', updateIs2xlOnResize)
-    return () => window.removeEventListener('resize', updateIs2xlOnResize)
-  }, [])
+    updateIs2xlOnResize();
+    window.addEventListener('resize', updateIs2xlOnResize);
+    return () => window.removeEventListener('resize', updateIs2xlOnResize);
+  }, []);
 
   return (
     <>
@@ -89,11 +89,11 @@ const Feed: NextPageWithLayout = () => {
         url={routes.feed}
       />
       <FeedMainSection is2xl={is2xl} />
-      { is2xl ? (
-        <div className='fixed top-[69px] bottom-0 right-0 w-[482px]'>
+      {is2xl ? (
+        <div className="fixed top-[69px] bottom-0 right-0 w-[482px]">
           <FeedFixedSection />
         </div>
-      ) : null }
+      ) : null}
       {/* <Products /> */}
     </>
   );

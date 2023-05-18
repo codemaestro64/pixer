@@ -1,0 +1,38 @@
+extend type Query {
+    feeds(descr: String @where(operator: "LIKE")): [Feed!]!
+        @all
+        @can(ability: "super_admin")
+    singleFeed(id: ID @eq): Feed @find @can(ability: "super_admin")
+}
+
+type Feed {
+    id: ID!
+    user_id: ID
+    content: [Attachment]
+    type: String
+    descr: String
+}
+input CreateFeedInput {
+    user_id: ID
+    content: [Attachment]
+    type: String
+    descr: String
+}
+
+input UpdateFeedInput {
+    id: ID!
+    user_id: ID
+    content: [Attachment]
+    type: String
+    descr: String
+}
+
+extend type Mutation {
+    createFeed(input: CreateFeedInput! @spread): Feed
+        @create
+        @can(ability: "super_admin")
+    updateFeed(input: UpdateFeedInput! @spread): Feed
+        @update
+        @can(ability: "super_admin")
+    deleteFeed(id: ID!): Feed @delete @can(ability: "super_admin")
+}

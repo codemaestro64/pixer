@@ -1,0 +1,35 @@
+extend type Query {
+    comments(reply: String @where(operator: "LIKE")): [Comment!]!
+        @all
+        @can(ability: "super_admin")
+    singleComment(id: ID @eq): Comment @find @can(ability: "super_admin")
+}
+
+type Comment {
+    id: ID!
+    feed_id: ID
+    user_id: ID
+    reply: String
+}
+input CreateCommentInput {
+    feed_id: ID
+    user_id: ID
+    reply: String
+}
+
+input UpdateCommentInput {
+    id: ID!
+    feed_id: ID
+    user_id: ID
+    reply: String
+}
+
+extend type Mutation {
+    createComment(input: CreateCommentInput! @spread): Comment
+        @create
+        @can(ability: "super_admin")
+    updateComment(input: UpdateCommentInput! @spread): Comment
+        @update
+        @can(ability: "super_admin")
+    deleteComment(id: ID!): Comment @delete @can(ability: "super_admin")
+}

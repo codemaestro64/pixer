@@ -10,26 +10,33 @@ import type {
   InferGetStaticPropsType,
 } from 'next';
 import { dehydrate, QueryClient } from 'react-query';
-import { motion } from 'framer-motion';
-import cn from 'classnames';
+// import { motion } from 'framer-motion';
+// import cn from 'classnames';
 import client from '@/data/client';
 import Layout from '@/layouts/_layout';
-import Image from '@/components/ui/image';
-import { Tab } from '@/components/ui/tab';
-import Grid from '@/components/product/grid';
-import { MapPinIcon } from '@/components/icons/map-pin-icon';
-import { AtIcon } from '@/components/icons/at-icon';
-import { getIcon } from '@/lib/get-icon';
-import * as socialIcons from '@/components/icons/social';
-import { fadeInBottom } from '@/lib/framer-motion/fade-in-bottom';
-import { useProducts } from '@/data/product';
+// import Image from '@/components/ui/image';
+// import { Tab } from '@/components/ui/tab';
+// import Grid from '@/components/product/grid';
+// import { MapPinIcon } from '@/components/icons/map-pin-icon';
+// import { AtIcon } from '@/components/icons/at-icon';
+// import { getIcon } from '@/lib/get-icon';
+// import * as socialIcons from '@/components/icons/social';
+// import { fadeInBottom } from '@/lib/framer-motion/fade-in-bottom';
+// import { useProducts } from '@/data/product';
 import { API_ENDPOINTS } from '@/data/client/endpoints';
-import placeholder from '@/assets/images/placeholders/product.svg';
-import { formatAddress } from '@/lib/format-address';
-import FollowButton from '@/components/follow/follow-button';
-import { useTranslation } from 'next-i18next';
+// import placeholder from '@/assets/images/placeholders/product.svg';
+// import { formatAddress } from '@/lib/format-address';
+// import FollowButton from '@/components/follow/follow-button';
+// import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import invariant from 'tiny-invariant';
+
+import AuthorsBackground from '@/components/authors/authors-background';
+import AuthorsLogo from '@/components/authors/authors-logo';
+import AuthorsProfile from '@/components/authors/authors-profile';
+import AtuhorsInteractions from '@/components/authors/authors-interactions';
+import AuthorsSkills from '@/components/authors/authors-skills';
+import AuthorsContactInfo from '@/components/authors/authors-contactinfo';
 
 // This function gets called at build time
 type ParsedQueryParams = {
@@ -89,109 +96,132 @@ export const getStaticProps: GetStaticProps<
   }
 };
 
-function AboutShop({ shop }: { shop: Shop }) {
-  const {
-    description,
-    name,
-    address,
-    owner,
-    orders_count,
-    products_count,
-    settings: { socials },
-  } = shop;
-  const { t } = useTranslation('common');
-  return (
-    <motion.div
-      variants={fadeInBottom()}
-      className="mx-auto flex max-w-[480px] flex-col justify-between md:max-w-[1000px] md:flex-row 2xl:max-w-[1280px]"
-    >
-      <div className="flex-shrink-0 md:w-6/12 lg:w-7/12 xl:w-5/12">
-        <h2 className="mb-3 text-sm font-medium text-dark dark:text-light lg:text-15px">
-          {name}
-        </h2>
-        <p className="leading-6">{description}</p>
-        <div className="space-y-3.5 pt-4 text-dark/80 dark:text-light/80 md:pt-6 xl:pt-7">
-          <address className="flex max-w-sm items-start not-italic leading-[1.8]">
-            <span className="mt-[3px] w-7 shrink-0 text-dark-800 dark:text-light-900">
-              <MapPinIcon className="h-4 w-4" />
-            </span>
-            {formatAddress(address)}
-          </address>
-          <div className="flex items-center">
-            <span className="w-7 shrink-0 text-dark-800 dark:text-light-900">
-              <AtIcon className="h-4 w-4" />
-            </span>
-            <a href={`mailto:${owner?.email}`} className="hover:text-brand">
-              {owner?.email}
-            </a>
-          </div>
-        </div>
-      </div>
-      <div className="mt-7 flex-shrink-0 rounded-md bg-light p-6 shadow-card dark:bg-dark-250 md:mt-0 md:w-72 lg:p-8">
-        <div className="-mx-2 flex pb-6 lg:pb-7">
-          <div className="flex flex-shrink-0 flex-col px-2 pr-10 text-13px capitalize text-dark-500 dark:text-light-900 lg:w-1/2 lg:pr-0">
-            <span className="mb-0.5 text-2xl text-dark dark:text-light">
-              {orders_count}
-            </span>
-            {t('text-total-sales')}
-          </div>
-          <div className="flex flex-shrink-0 flex-col px-2 pr-10 text-13px capitalize text-dark-500 dark:text-light-900 xl:w-1/2 xl:pr-0">
-            <span className="mb-0.5 text-2xl text-dark dark:text-light">
-              {products_count}
-            </span>
-            {t('text-products')}
-          </div>
-        </div>
-        <div className="space-y-3 border-t border-light-300 pt-5 dark:border-dark-500">
-          {socials.map(({ icon, url }, idx) => (
-            <a
-              key={idx}
-              href={url}
-              target="_blank"
-              rel="noreferrer"
-              className="group flex items-center"
-            >
-              {getIcon({
-                iconList: socialIcons,
-                iconName: icon,
-                className:
-                  'w-3.5 h-3.5 text-dark-800 dark:text-light-900 shrink-0',
-              })}
-              <span className="transition-colors group-hover:text-dark ltr:pl-2 rtl:pr-2 dark:group-hover:text-light">
-                {url.slice(12, -1).split('/').slice(0, 1)}
-              </span>
-            </a>
-          ))}
-        </div>
-      </div>
-    </motion.div>
-  );
-}
+// function AboutShop({ shop }: { shop: Shop }) {
+//   const {
+//     description,
+//     name,
+//     address,
+//     owner,
+//     orders_count,
+//     products_count,
+//     settings: { socials },
+//   } = shop;
+//   const { t } = useTranslation('common');
+//   return (
+//     <motion.div
+//       variants={fadeInBottom()}
+//       className="mx-auto flex max-w-[480px] flex-col justify-between md:max-w-[1000px] md:flex-row 2xl:max-w-[1280px]"
+//     >
+//       <div className="flex-shrink-0 md:w-6/12 lg:w-7/12 xl:w-5/12">
+//         <h2 className="mb-3 text-sm font-medium text-dark dark:text-light lg:text-15px">
+//           {name}
+//         </h2>
+//         <p className="leading-6">{description}</p>
+//         <div className="space-y-3.5 pt-4 text-dark/80 dark:text-light/80 md:pt-6 xl:pt-7">
+//           <address className="flex max-w-sm items-start not-italic leading-[1.8]">
+//             <span className="mt-[3px] w-7 shrink-0 text-dark-800 dark:text-light-900">
+//               <MapPinIcon className="h-4 w-4" />
+//             </span>
+//             {formatAddress(address)}
+//           </address>
+//           <div className="flex items-center">
+//             <span className="w-7 shrink-0 text-dark-800 dark:text-light-900">
+//               <AtIcon className="h-4 w-4" />
+//             </span>
+//             <a href={`mailto:${owner?.email}`} className="hover:text-brand">
+//               {owner?.email}
+//             </a>
+//           </div>
+//         </div>
+//       </div>
+//       <div className="mt-7 flex-shrink-0 rounded-md bg-light p-6 shadow-card dark:bg-dark-250 md:mt-0 md:w-72 lg:p-8">
+//         <div className="-mx-2 flex pb-6 lg:pb-7">
+//           <div className="flex flex-shrink-0 flex-col px-2 pr-10 text-13px capitalize text-dark-500 dark:text-light-900 lg:w-1/2 lg:pr-0">
+//             <span className="mb-0.5 text-2xl text-dark dark:text-light">
+//               {orders_count}
+//             </span>
+//             {t('text-total-sales')}
+//           </div>
+//           <div className="flex flex-shrink-0 flex-col px-2 pr-10 text-13px capitalize text-dark-500 dark:text-light-900 xl:w-1/2 xl:pr-0">
+//             <span className="mb-0.5 text-2xl text-dark dark:text-light">
+//               {products_count}
+//             </span>
+//             {t('text-products')}
+//           </div>
+//         </div>
+//         <div className="space-y-3 border-t border-light-300 pt-5 dark:border-dark-500">
+//           {socials.map(({ icon, url }, idx) => (
+//             <a
+//               key={idx}
+//               href={url}
+//               target="_blank"
+//               rel="noreferrer"
+//               className="group flex items-center"
+//             >
+//               {getIcon({
+//                 iconList: socialIcons,
+//                 iconName: icon,
+//                 className:
+//                   'w-3.5 h-3.5 text-dark-800 dark:text-light-900 shrink-0',
+//               })}
+//               <span className="transition-colors group-hover:text-dark ltr:pl-2 rtl:pr-2 dark:group-hover:text-light">
+//                 {url.slice(12, -1).split('/').slice(0, 1)}
+//               </span>
+//             </a>
+//           ))}
+//         </div>
+//       </div>
+//     </motion.div>
+//   );
+// }
 
-function ShopProducts({ shopId }: { shopId: string }) {
-  const { products, isLoading, loadMore, isLoadingMore, hasNextPage } =
-    useProducts({
-      shop_id: shopId,
-    });
-  return (
-    <Grid
-      products={products}
-      isLoading={isLoading}
-      onLoadMore={loadMore}
-      isLoadingMore={isLoadingMore}
-      hasNextPage={hasNextPage}
-    />
-  );
-}
+// function ShopProducts({ shopId }: { shopId: string }) {
+//   const { products, isLoading, loadMore, isLoadingMore, hasNextPage } =
+//     useProducts({
+//       shop_id: shopId,
+//     });
+//   return (
+//     <Grid
+//       products={products}
+//       isLoading={isLoading}
+//       onLoadMore={loadMore}
+//       isLoadingMore={isLoadingMore}
+//       hasNextPage={hasNextPage}
+//     />
+//   );
+// }
 
 const ShopPage: NextPageWithLayout<
   InferGetStaticPropsType<typeof getStaticProps>
 > = ({ shop }) => {
   const { name, logo, cover_image } = shop;
-  const { t } = useTranslation('common');
+  // const { t } = useTranslation('common');
   return (
     <>
-      <div className="shopBanner relative w-full">
+      <div className='p-[25px]'>
+        {/* first section */}
+        <div>
+          <AuthorsBackground background={cover_image.original} />
+          <div className='pl-[69px] pr-[42px] flex'>
+            <AuthorsLogo logo={logo.original} />
+            <div className='pt-[11px] pl-[21px] flex justify-between items-center w-full'>
+              <AuthorsProfile name={name} slug={shop.slug} rating={4.6} />
+              <AtuhorsInteractions />
+            </div>
+          </div>
+        </div>
+        {/* second section */}
+        <div className='mt-[24px] grid grid-cols-[328.81px_1fr] gap-[16.19px]'>
+          {/* left */}
+          <div className='space-y-[11px]'>
+            <AuthorsSkills />
+            <AuthorsContactInfo email={shop.owner.email} address={shop.address} />
+          </div>
+          {/* right */}
+          <div></div>
+        </div>
+      </div>
+      {/* <div className="shopBanner relative w-full">
         <div className="absolute top-0 left-0 h-full w-full">
           <Image
             alt={name}
@@ -257,7 +287,7 @@ const ShopPage: NextPageWithLayout<
             <AboutShop shop={shop} />
           </Tab.Panel>
         </Tab.Panels>
-      </Tab.Group>
+      </Tab.Group> */}
     </>
   );
 };

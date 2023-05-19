@@ -37,6 +37,8 @@ import AuthorsProfile from '@/components/authors/authors-profile';
 import AtuhorsInteractions from '@/components/authors/authors-interactions';
 import AuthorsSkills from '@/components/authors/authors-skills';
 import AuthorsContactInfo from '@/components/authors/authors-contactinfo';
+import AuthorsAnalytics from '@/components/authors/authors-analytics';
+import AuthorsProducts from '@/components/authors/authors-products';
 
 // This function gets called at build time
 type ParsedQueryParams = {
@@ -204,7 +206,7 @@ const ShopPage: NextPageWithLayout<
           <AuthorsBackground background={cover_image.original} />
           <div className='pl-[69px] pr-[42px] flex'>
             <AuthorsLogo logo={logo.original} />
-            <div className='pt-[11px] pl-[21px] flex justify-between items-center w-full'>
+            <div className='pt-[11px] pl-[21px] flex-1 flex justify-between items-center'>
               <AuthorsProfile name={name} slug={shop.slug} rating={4.6} />
               <AtuhorsInteractions />
             </div>
@@ -218,7 +220,10 @@ const ShopPage: NextPageWithLayout<
             <AuthorsContactInfo email={shop.owner.email} address={shop.address} />
           </div>
           {/* right */}
-          <div></div>
+          <div className='space-y-[19px] overflow-hidden'>
+            <AuthorsAnalytics />
+            <AuthorsProducts />
+          </div>
         </div>
       </div>
       {/* <div className="shopBanner relative w-full">

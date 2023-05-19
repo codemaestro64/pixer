@@ -6,16 +6,15 @@ export default function AuthorsRating({ rating, stars = 5 }: { rating: number, s
   return (
     <div className='py-[6.1px] px-[12.2px] flex items-center'>
       <div className='space-x-[7.32px] mr-[7.32px] flex'>
-        { stars_array.map((icon, index) => 
-          <>
+        { stars_array.map((icon, index) => (
+          <span key={index}>
             { React.cloneElement(icon, {
-              key: index,
-              className: 'h-[12.84px] w-[12.84px] text-[#FF8A00]',
+              className: 'h-[12.84px] w-[12.84px] text-[#FFB03A]',
             }) }
-          </>
-        )}
+          </span>
+        ))}
       </div>
-      <div className='text-[9.91px] font-poppins font-semibold text-dark-300 dark:text-[#FFB03A]'>
+      <div className='text-[9.91px] font-poppins font-semibold text-[#FFB03A]'>
         { rating }
       </div>
     </div>

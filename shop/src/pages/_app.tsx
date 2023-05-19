@@ -30,6 +30,7 @@ import { useRouter } from 'next/router';
 import { getDirection } from '@/lib/constants';
 import { useMe } from '@/data/user';
 import ChatContext from '@/lib/chat-context';
+import FeedContext from '@/lib/feed-context';
 import { Channel, MessageResponse } from 'stream-chat';
 
 const PrivateRoute = dynamic(() => import('@/layouts/_private-route'), {
@@ -52,6 +53,9 @@ function CustomApp({ Component, pageProps }: AppPropsWithLayout) {
     document.documentElement.dir = dir;
   }, [dir]);
   const authenticationRequired = Component.authorization ?? false;
+
+  const [triggerFeeds, setTriggerFeeds] = useState<boolean>(false);
+  const [selectedFeedID, setSelectedFeedID] = useState<string>('-1');
 
   const [unread_messages_cnt, setUnreadMessagesCnt] = useState<number>(0);
   const [unread_channels_cnt, setUnreadChannelsCnt] = useState<number>(0);
@@ -91,34 +95,43 @@ function CustomApp({ Component, pageProps }: AppPropsWithLayout) {
               setNewMessageInfo,
             }}
           >
-            <SearchProvider>
-              <CartProvider>
-                <ModalProvider>
-                  <AnimatePresence
-                    exitBeforeEnter
-                    initial={false}
-                    onExitComplete={() => window.scrollTo(0, 0)}
-                  >
-                    <>
-                      <DefaultSeo />
-                      {authenticationRequired ? (
-                        <PrivateRoute>
-                          {getLayout(<Component {...pageProps} />)}
-                        </PrivateRoute>
-                      ) : (
-                        getLayout(<Component {...pageProps} />)
-                      )}
-                      <SearchView />
-                      <ModalsContainer />
-                      <DrawersContainer />
-                      <Portal>
-                        <Toaster containerClassName="!top-16 sm:!top-3.5 !bottom-16 sm:!bottom-3.5" />
-                      </Portal>
-                    </>
-                  </AnimatePresence>
-                </ModalProvider>
-              </CartProvider>
-            </SearchProvider>
+            <FeedContext.Provider
+              value={{
+                triggerFeeds,
+                setTriggerFeeds,
+                selectedFeedID,
+                setSelectedFeedID,
+              }}
+            >
+              <SearchProvider>
+                <CartProvider>
+                  <ModalProvider>
+                    <AnimatePresence
+                      exitBeforeEnter
+                      initial={false}
+                      onExitComplete={() => window.scrollTo(0, 0)}
+                    >
+                      <>
+                        <DefaultSeo />
+                        {authenticationRequired ? (
+                          <PrivateRoute>
+                            {getLayout(<Component {...pageProps} />)}
+                          </PrivateRoute>
+                        ) : (
+                          getLayout(<Component {...pageProps} />)
+                        )}
+                        <SearchView />
+                        <ModalsContainer />
+                        <DrawersContainer />
+                        <Portal>
+                          <Toaster containerClassName="!top-16 sm:!top-3.5 !bottom-16 sm:!bottom-3.5" />
+                        </Portal>
+                      </>
+                    </AnimatePresence>
+                  </ModalProvider>
+                </CartProvider>
+              </SearchProvider>
+            </FeedContext.Provider>
           </ChatContext.Provider>
         </ThemeProvider>
       </Hydrate>

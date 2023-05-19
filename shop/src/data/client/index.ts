@@ -324,8 +324,8 @@ class Client {
       HttpClient.post<FeedLike>(API_ENDPOINTS.LIKES, input),
   };
   comments = {
-    get: ({ feed_id }: { feed_id: string }) =>
-      HttpClient.get<Comment[]>(`${API_ENDPOINTS.COMMENTS}/${feed_id}`),
+    get: ({ id }: { id: string }) =>
+      HttpClient.get<Comment>(`${API_ENDPOINTS.COMMENTS}/${id}`),
     create: (input: CreateCommentInput) =>
       HttpClient.post<Comment>(API_ENDPOINTS.COMMENTS, input),
   };

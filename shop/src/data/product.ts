@@ -4,6 +4,7 @@ import type {
   Product,
   ProductPaginator,
   ProductQueryOptions,
+  Feed,
 } from '@/types';
 import type { UseInfiniteQueryOptions } from 'react-query';
 import {
@@ -16,6 +17,7 @@ import { API_ENDPOINTS } from '@/data/client/endpoints';
 import client from '@/data/client';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 export function useProducts(
   options?: Partial<ProductQueryOptions>,
@@ -78,6 +80,24 @@ export function useProduct(slug: string) {
     product: data,
     isLoading,
     error,
+  };
+}
+
+export function useFeed(slug: string) {
+  const [data, setData] = useState<Feed | null>(null);
+  const { mutate, isLoading, error } = useMutation(client.feeds.get, {
+    onSuccess: (res) => {
+      setData(res);
+    },
+  });
+
+  useEffect(() => {
+    mutate({ id: slug });
+  }, [slug]);
+
+  return {
+    feed: data,
+    isLoading,
   };
 }
 

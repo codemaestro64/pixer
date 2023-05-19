@@ -6,17 +6,24 @@ import FeedActions from '@/components/feed/feed-actions';
 import FeedTrendLatest from '@/components/feed/feed-trend-latest';
 import FeedGrid from '@/components/feed/feed-grid';
 import FeedCard from '@/components/feed/feed-card';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useMutation } from 'react-query';
 import toast from 'react-hot-toast';
 import client from '@/data/client';
 import { useMe } from '@/data/user';
 import { Feed } from '@/types';
+import FeedContext from '@/lib/feed-context';
 
 export default function FeedMainSection({ is2xl = false }: { is2xl: boolean }) {
   const [feedDescr, setFeedDescr] = useState<string>('');
-  const [triggerFeeds, setTriggerFeeds] = useState<boolean>(false);
+  const { triggerFeeds } = useContext(FeedContext);
   const [feeds, setFeeds] = useState<Feed[] | []>([]);
+
+  useEffect(() => {
+    if (!me) return;
+
+    mutateFeeds();
+  }, [triggerFeeds]);
 
   const { me } = useMe();
 
@@ -28,12 +35,6 @@ export default function FeedMainSection({ is2xl = false }: { is2xl: boolean }) {
       console.log(err.response.data, 'error');
     },
   });
-
-  useEffect(() => {
-    if (!me) return;
-
-    mutateFeeds();
-  }, [triggerFeeds]);
 
   return (
     <div className="2xl:mr-[482px]">
@@ -47,12 +48,7 @@ export default function FeedMainSection({ is2xl = false }: { is2xl: boolean }) {
           <FeedInput feedDescr={feedDescr} setFeedDescr={setFeedDescr} />
         </div>
         <div className="mt-[6px] md:mt-[7px]">
-          <FeedActions
-            feedDescr={feedDescr}
-            setFeedDescr={setFeedDescr}
-            triggerFeeds={triggerFeeds}
-            setTriggerFeeds={setTriggerFeeds}
-          />
+          <FeedActions feedDescr={feedDescr} setFeedDescr={setFeedDescr} />
         </div>
         <div className="mt-[14px] md:mt-[24px] 2xl:mt-[29px]">
           <FeedTrendLatest />

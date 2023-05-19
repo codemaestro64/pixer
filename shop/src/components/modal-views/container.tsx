@@ -15,6 +15,9 @@ const LoginUserForm = dynamic(() => import('@/components/auth/login-form'));
 const ProductPopupDetails = dynamic(
   () => import('@/components/product/product-popup')
 );
+const CommentPopupDetails = dynamic(
+  () => import('@/components/comment/comment-popup')
+);
 const RegisterUserForm = dynamic(
   () => import('@/components/auth/register-form')
 );
@@ -42,6 +45,8 @@ function renderModalContent(view: MODAL_VIEWS) {
       return <ForgotUserPassword />;
     case 'PRODUCT_DETAILS':
       return <ProductPopupDetails />;
+    case 'COMMENT_DETAILS':
+      return <CommentPopupDetails />;
     case 'REVIEW_IMAGE_POPOVER':
       return <ReviewImageModal />;
     case 'REVIEW_RATING':
@@ -109,13 +114,15 @@ export default function ModalsContainer() {
           >
             <div className="text-start relative z-50 inline-block min-h-screen w-full transform overflow-hidden align-middle transition-all xs:min-h-[auto] xs:w-auto">
               <div className="relative flex min-h-screen items-center overflow-hidden xs:block xs:min-h-[auto] xs:rounded-md">
-                <button
-                  onClick={closeModal}
-                  aria-label="Close panel"
-                  className="absolute top-5 z-10 text-dark-900 outline-none transition-all hover:text-dark focus-visible:outline-none ltr:right-4 rtl:left-4 dark:text-dark-800 hover:dark:text-light-200 md:top-6 ltr:md:right-5 rtl:md:left-5 lg:top-7 ltr:lg:right-7 rtl:lg:left-7"
-                >
-                  <CloseIcon className="h-4 w-4 focus-visible:outline-none lg:h-[18px] lg:w-[18px] 3xl:h-5 3xl:w-5" />
-                </button>
+                {view != 'COMMENT_DETAILS' && (
+                  <button
+                    onClick={closeModal}
+                    aria-label="Close panel"
+                    className="absolute top-5 z-10 text-dark-900 outline-none transition-all hover:text-dark focus-visible:outline-none ltr:right-4 rtl:left-4 dark:text-dark-800 hover:dark:text-light-200 md:top-6 ltr:md:right-5 rtl:md:left-5 lg:top-7 ltr:lg:right-7 rtl:lg:left-7"
+                  >
+                    <CloseIcon className="h-4 w-4 focus-visible:outline-none lg:h-[18px] lg:w-[18px] 3xl:h-5 3xl:w-5" />
+                  </button>
+                )}
                 <div className="h-full w-full">
                   {view && renderModalContent(view)}
                 </div>

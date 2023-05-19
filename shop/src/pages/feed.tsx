@@ -17,6 +17,7 @@ import { API_ENDPOINTS } from '@/data/client/endpoints';
 import client from '@/data/client';
 import FeedFixedSection from '@/components/feed/feed-fixed-section';
 import FeedMainSection from '@/components/feed/feed-main-section';
+import FeedContext from '@/lib/feed-context';
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   const queryClient = new QueryClient();
@@ -84,10 +85,11 @@ const Feed: NextPageWithLayout = () => {
   return (
     <>
       <Seo
-        title="Top Products"
+        title="Feed"
         description="Fastest digital download template built with React, NextJS, TypeScript, React-Query and Tailwind CSS."
         url={routes.feed}
       />
+
       <FeedMainSection is2xl={is2xl} />
       {is2xl ? (
         <div className="fixed top-[69px] bottom-0 right-0 w-[482px]">

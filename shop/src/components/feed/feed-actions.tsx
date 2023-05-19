@@ -5,27 +5,26 @@ import { ChatPullFillIcon } from '../icons/chat-pull-fill-icon';
 import Image from '@/components/ui/image';
 import { CloseIcon } from '@/components/icons/close-icon';
 import { AttachmentIcon } from '@/components/icons/chat/attachment-icon';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useContext } from 'react';
 import { useMutation } from 'react-query';
 import { useTranslation } from 'next-i18next';
 import toast from 'react-hot-toast';
 import client from '@/data/client';
 import Button from '@/components/ui/button';
 import { useMe } from '@/data/user';
+import FeedContext from '@/lib/feed-context';
 
 export default function FeedActions({
   feedDescr,
   setFeedDescr,
-  triggerFeeds,
-  setTriggerFeeds,
 }: {
   feedDescr: string;
   setFeedDescr: any;
-  triggerFeeds: boolean;
-  setTriggerFeeds: any;
 }) {
   const { t } = useTranslation('common');
   const { me } = useMe();
+
+  const { triggerFeeds, setTriggerFeeds } = useContext(FeedContext);
 
   const inputVideoRef = useRef<HTMLInputElement>(null);
   const inputImageRef = useRef<HTMLInputElement>(null);

@@ -10,10 +10,10 @@ import { useRef, useState } from 'react';
 import { ChevronLeft } from '@/components/icons/chevron-left';
 import { ChevronRight } from '@/components/icons/chevron-right';
 import placeholder from '@/assets/images/placeholders/product.svg';
+import { Attachment } from '@/types';
 
 interface Props {
   gallery: any[];
-  className?: string;
 }
 
 const swiperParams: SwiperOptions = {
@@ -21,15 +21,33 @@ const swiperParams: SwiperOptions = {
   spaceBetween: 0,
 };
 
-export default function ProductThumbnailGallery({
-  gallery,
-  className = 'w-full',
-}: Props) {
+export default function ProductThumbnailGallery({ gallery }: Props) {
   let [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
   const prevRef = useRef<HTMLDivElement>(null);
   const nextRef = useRef<HTMLDivElement>(null);
+
+  const isVideoItem = (item: Attachment) => {
+    if (item.original.match(/\.(jpg|jpeg|png|gif)$/i)) {
+      return false;
+    } else {
+      if (item.thumbnail) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  };
+
+  const getPreviewImage = (item: Attachment) => {
+    if (item.original.match(/\.(jpg|jpeg|png|gif)$/i)) {
+      return item.original.replace('localhost', 'localhost:8000');
+    } else {
+      return placeholder;
+    }
+  };
+
   return (
-    <div className={className}>
+    <div className="w-full">
       <div className="relative mb-3 w-full overflow-hidden xl:mb-5">
         <Swiper
           id="productGallery"
@@ -48,12 +66,22 @@ export default function ProductThumbnailGallery({
               key={`product-gallery-${item.id}`}
               className="flex aspect-[3/2] items-center justify-center bg-light-200 dark:bg-dark-200"
             >
-              <Image
-                layout="fill"
-                objectFit="cover"
-                src={item?.original ?? placeholder}
-                alt={`Product gallery ${item.id}`}
-              />
+              {isVideoItem(item) ? (
+                <video
+                  width="100%"
+                  height="100%"
+                  className="m-0 block"
+                  controls
+                  src={item.original.replace('localhost', 'localhost:8000')}
+                />
+              ) : (
+                <Image
+                  layout="fill"
+                  objectFit="cover"
+                  src={item ? getPreviewImage(item) : placeholder}
+                  alt={`Product gallery ${item.id}`}
+                />
+              )}
             </SwiperSlide>
           ))}
         </Swiper>
@@ -90,7 +118,10 @@ export default function ProductThumbnailGallery({
               <Image
                 layout="fill"
                 objectFit="cover"
-                src={item?.thumbnail ?? placeholder}
+                src={
+                  item?.thumbnail?.replace('localhost', 'localhost:8000') ??
+                  placeholder
+                }
                 alt={`Product thumb gallery ${item.id}`}
               />
             </SwiperSlide>

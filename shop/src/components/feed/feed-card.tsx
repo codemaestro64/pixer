@@ -9,12 +9,13 @@ import { EllipsisVerticalIcon } from '../icons/ellipsis-vertical-icon';
 import teamImage from '@/assets/images/omnico-team.png';
 import { Feed } from '@/types';
 import client from '@/data/client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useMutation } from 'react-query';
 import { useMe } from '@/data/user';
 import { useModalAction } from '@/components/modal-views/context';
 import FeedCardButton from './feed-card-button';
 import Avatar from 'react-avatar';
+import FeedContext from '@/lib/feed-context';
 
 interface FeedCardProps {
   feed: Feed;
@@ -22,8 +23,17 @@ interface FeedCardProps {
 
 export default function FeedCard({ feed }: FeedCardProps) {
   const [selectedFeed, setSelectedFeed] = useState<Feed>(feed);
+  const { triggerFeeds, selectedFeedID, setSelectedFeedID } =
+    useContext(FeedContext);
+
   const { me } = useMe();
   const { openModal } = useModalAction();
+
+  useEffect(() => {
+    if (!me) return;
+
+    if (selectedFeedID === selectedFeed.id) mutateFeed({ id: selectedFeed.id });
+  }, [triggerFeeds]);
 
   const { mutate: mutateFeed, isLoading } = useMutation(client.feeds.get, {
     onSuccess: (res) => {
@@ -48,12 +58,24 @@ export default function FeedCard({ feed }: FeedCardProps) {
     if (actionType === 'heart') {
       mutateLike({ user_id: me!.id, feed_id: selectedFeed.id });
     } else if (actionType === 'comment') {
+      setSelectedFeedID(selectedFeed.id);
+
       openModal('COMMENT_DETAILS', {
         slug: selectedFeed.id,
       });
     } else if (actionType === 'share') {
     } else {
       //more menu
+    }
+  };
+
+  const checkLikedByCurrentUser = () => {
+    if (selectedFeed.likes) {
+      return selectedFeed.likes!.find((eachLike) => eachLike.user_id === me?.id)
+        ? true
+        : false;
+    } else {
+      return false;
     }
   };
 
@@ -97,9 +119,7 @@ export default function FeedCard({ feed }: FeedCardProps) {
               type="heart"
               toogleClicked={onClickedAction}
               label={`${selectedFeed.likes_count}`}
-              activePossible={selectedFeed.likes?.find(
-                (eachLike) => eachLike.user_id === me?.id
-              )}
+              activePossible={checkLikedByCurrentUser()}
               icon={<HeartIcon />}
               fillIcon={<HeartFillIcon />}
             />

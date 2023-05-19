@@ -8,9 +8,10 @@ import { ShareIcon } from '../icons/share-icon';
 import { Comment, Feed } from '@/types';
 import Avatar from 'react-avatar';
 import client from '@/data/client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useMutation } from 'react-query';
 import { useMe } from '@/data/user';
+import FeedContext from '@/lib/feed-context';
 
 interface CommentOwnerInfoProps {
   feed: Feed;
@@ -19,7 +20,13 @@ interface CommentOwnerInfoProps {
 export default function CommentOwnerInfo({ feed }: CommentOwnerInfoProps) {
   const { t } = useTranslation('common');
   const [selectedFeed, setSelectedFeed] = useState<Feed>(feed);
+  const { triggerFeeds, setTriggerFeeds } = useContext(FeedContext);
+
   const { me } = useMe();
+
+  useEffect(() => {
+    setSelectedFeed(feed);
+  }, [feed]);
 
   const { mutate: mutateFeed, isLoading } = useMutation(client.feeds.get, {
     onSuccess: (res) => {
@@ -32,6 +39,7 @@ export default function CommentOwnerInfo({ feed }: CommentOwnerInfoProps) {
 
   const { mutate: mutateLike } = useMutation(client.feeds.like, {
     onSuccess: (res) => {
+      setTriggerFeeds(!triggerFeeds);
       mutateFeed({ id: selectedFeed.id });
     },
     onError: (err: any) => {
@@ -46,6 +54,16 @@ export default function CommentOwnerInfo({ feed }: CommentOwnerInfoProps) {
     } else if (actionType === 'share') {
     } else {
       //more menu
+    }
+  };
+
+  const checkLikedByCurrentUser = () => {
+    if (selectedFeed.likes) {
+      return selectedFeed.likes!.find((eachLike) => eachLike.user_id === me?.id)
+        ? true
+        : false;
+    } else {
+      return false;
     }
   };
 
@@ -72,13 +90,13 @@ export default function CommentOwnerInfo({ feed }: CommentOwnerInfoProps) {
           </div>
         </div>
         <div className="flex h-[40px] flex-shrink-0 items-center justify-center">
-          <Button className="max-h-[40px] min-h-[40px] w-full rounded-[10px]  text-sm">
+          <Button className="max-h-[40px] min-h-[40px] w-full rounded-[10px] text-sm  italic">
             Follow
           </Button>
         </div>
       </div>
       <div className="flex flex-col items-start justify-center gap-2 rounded-[10px] border-[1px] border-light-200 p-4 dark:border-dark-400">
-        <p className="text-[18px] font-medium text-dark dark:text-light">
+        <p className="text-[18px] font-medium italic text-dark dark:text-light">
           {selectedFeed.descr}
         </p>
         {/*
@@ -100,9 +118,7 @@ export default function CommentOwnerInfo({ feed }: CommentOwnerInfoProps) {
           type="heart"
           toogleClicked={onClickedAction}
           label={`${selectedFeed.likes_count}`}
-          activePossible={selectedFeed.likes?.find(
-            (eachLike) => eachLike.user_id === me?.id
-          )}
+          activePossible={checkLikedByCurrentUser()}
           icon={<HeartIcon />}
           fillIcon={<HeartFillIcon />}
         />

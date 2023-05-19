@@ -1,12 +1,12 @@
 import React from 'react';
 
 interface FeedCardButtonProps {
-  type: String;
+  type: string;
   icon: React.ReactElement;
-  activePossible?: Boolean;
-  label?: String;
+  activePossible?: boolean;
+  label?: string;
   fillIcon?: React.ReactElement;
-  menu?: Boolean;
+  menu?: boolean;
   toogleClicked?: any;
 }
 

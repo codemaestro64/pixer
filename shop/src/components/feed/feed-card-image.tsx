@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Image from '@/components/ui/image';
 import { SearchIcon } from '../icons/search-icon';
 import { DetailsIcon } from '../icons/details-icon';
 import { PlayFillIcon } from '../icons/play-fill-icon';
 import { useModalAction } from '../modal-views/context';
 import placeholder from '@/assets/images/placeholders/product.svg';
+import FeedContext from '@/lib/feed-context';
 
 function BackdropButton({
   icon,
@@ -33,8 +34,11 @@ export default function FeedCardImage({
   feedType: string;
 }) {
   const { openModal } = useModalAction();
+  const { setSelectedFeedID } = useContext(FeedContext);
 
   const onClickedPreview = () => {
+    setSelectedFeedID(feedID);
+
     openModal('COMMENT_DETAILS', {
       slug: feedID,
     });

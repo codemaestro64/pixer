@@ -33,7 +33,7 @@ class Feed extends Model
 
     public function comments(): HasMany
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class)->orderBy('updated_at', 'desc');
     }
 
     public function likes(): HasMany

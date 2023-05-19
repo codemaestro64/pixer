@@ -28,7 +28,7 @@ const ContentPage: NextPageWithLayout = () => {
         description=''
         url={}
       /> */}
-      <div className='grid grid-cols-1 2xl:grid-cols-[1fr_586.85px]'>
+      <div className='grid grid-cols-1 2xl:grid-cols-[1fr_460px] 3xl:grid-cols-[1fr_586.85px]'>
         <div>
           <div className='px-[13px] md:px-[30px] pt-[13px] md:pt-[18px] 2xl:hidden overflow-hidden'>
             <div>

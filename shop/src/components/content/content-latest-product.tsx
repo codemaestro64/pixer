@@ -23,7 +23,7 @@ export default function ContentLatestProduct() {
       </div>
       <div>
         <div>
-          <div className='text-[22px] text-dark dark:text-white font-medium font-poppins'>
+          <div className='text-[22px] text-dark dark:text-white font-medium font-poppins truncate-text-line-two'>
             RNB Modern Laravel React Rental System
           </div>
         </div>

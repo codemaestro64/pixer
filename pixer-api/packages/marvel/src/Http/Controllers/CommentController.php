@@ -66,7 +66,7 @@ class CommentController extends CoreController
     {
         {
             try {
-                return $this->repository->with(['customer', 'profile'])->where('feed_id', $id)->orderBy('updated_at', 'desc')->get();
+                return $this->repository->with(['customer', 'profile'])->findOrFail($id);
             } catch (Exception $e) {
                 throw new MarvelException(NOT_FOUND);
             }

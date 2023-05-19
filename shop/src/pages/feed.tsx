@@ -84,7 +84,7 @@ const Feed: NextPageWithLayout = () => {
   return (
     <>
       <Seo
-        title="Top Products"
+        title="Feed"
         description="Fastest digital download template built with React, NextJS, TypeScript, React-Query and Tailwind CSS."
         url={routes.feed}
       />

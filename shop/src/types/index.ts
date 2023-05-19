@@ -647,12 +647,12 @@ export interface Comment {
   user_id: string;
   id: string;
   reply: string;
-  customer: {
+  customer?: {
     id: string;
     name: string;
     email: string;
   };
-  profile: {
+  profile?: {
     id: string;
     avatar?: Attachment;
     bio: string;

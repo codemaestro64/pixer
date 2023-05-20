@@ -78,7 +78,7 @@ export default function Card({ shop }: { shop: Shop }) {
         </div>
         <div className="mt-[28px] xs:mt-[60px] md:mt-[28px] 2xl:mt-[60px]">
           {/* <FollowButton shop_id={shop.id} /> */}
-          <FollowButton />
+          <FollowButton shop_id={shop.id}/>
         </div>
       </div>
     </motion.div>

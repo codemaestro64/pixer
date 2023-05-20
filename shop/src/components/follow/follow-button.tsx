@@ -6,8 +6,13 @@ import { API_ENDPOINTS } from '@/data/client/endpoints';
 import client from '@/data/client';
 import { CloseCircleIcon } from '../icons/close-circle-icon';
 import { useTranslation } from 'next-i18next';
+import { StringDecoder } from 'string_decoder';
 
-export default function FollowButton({ shop_id }: { shop_id: string }) {
+export default function FollowButton({ 
+  shop_id, additionalClasses = "" }: { 
+  shop_id: string,
+  additionalClasses: string 
+}) {
   const queryClient = useQueryClient();
   const { isAuthorized, isLoading, me } = useMe();
   const { data: isShopFollowed, isLoading: isFollowLoading } = useQuery(
@@ -25,21 +30,23 @@ export default function FollowButton({ shop_id }: { shop_id: string }) {
     },
   });
 
-  function handleToggleFollow() {
+  function handleToggleFollow(e: any) {
+    e.stopPropagation()
     toggleFollow({
       shop_id,
     });
   }
   const { t } = useTranslation('common');
+  const classnames = `followButton h-9 min-h-[36px] rounded-full p-2 px-3 text-xs sm:h-11 sm:min-h-[44px] md:px-4 ${
+            !isShopFollowed && 'text-brand dark:text-brand'
+  } ${additionalClasses}`
   return (
     <>
       {isAuthorized && me && !isLoading && (
         <Button
           onClick={handleToggleFollow}
           variant={isShopFollowed ? 'solidDanger' : 'outline'}
-          className={`followButton h-9 min-h-[36px] rounded-full p-2 px-3 text-xs sm:h-11 sm:min-h-[44px] md:px-4 ${
-            !isShopFollowed && 'text-brand dark:text-brand'
-          }`}
+          className={classnames}
           isLoading={isFollowLoading}
         >
           {!isFollowLoading && (

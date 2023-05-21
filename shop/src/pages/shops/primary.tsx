@@ -29,7 +29,7 @@ export default function PrimaryPage() {
           <div className='mt-[101px]'>
             <PrimaryCarousel />
           </div>
-          <div className='mt-[62px]'></div>
+          <div className='mt-[62px] pt-[82px]'></div>
         </div>
       </div>
     </>

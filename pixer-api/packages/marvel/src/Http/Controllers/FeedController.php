@@ -26,7 +26,7 @@ class FeedController extends CoreController
      */
     public function index(Request $request)
     {
-        return $this->repository->with(['customer', 'profile', 'likes'])->withCount(['comments', 'likes'])->orderBy('updated_at', 'desc')->get();
+        return $this->repository->with(['customer', 'profile', 'likes'])->withCount(['comments', 'likes'])->where('user_id', $request->user()->id)->orderBy('updated_at', 'desc')->get();
     }
 
     /**

@@ -77,7 +77,7 @@ export default function CommentOwnerInfo({ feed }: CommentOwnerInfoProps) {
               round={true}
               name={selectedFeed.customer.name}
               textSizeRatio={2}
-              src={selectedFeed.profile.avatar?.thumbnail}
+              src={selectedFeed.profile?.avatar?.thumbnail}
             />
           </div>
           <div className="flex min-w-0 flex-col">

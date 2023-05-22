@@ -17,6 +17,7 @@
     "@stripe/stripe-js": "1.23.0",
     "@tailwindcss/forms": "0.4.0",
     "@tailwindcss/typography": "0.5.2",
+    "@yaireo/tagify": "^4.17.8",
     "axios": "0.26.0",
     "camelcase-keys": "7.0.2",
     "classnames": "2.3.1",
@@ -26,6 +27,7 @@
     "js-cookie": "3.0.1",
     "little-state-machine": "4.2.1",
     "lodash": "4.17.21",
+    "moment": "2.29.4",
     "next": "12.1.0",
     "next-i18next": "^11.0.0",
     "next-pwa": "5.4.4",
@@ -57,8 +59,7 @@
     "swiper": "8.0.6",
     "tiny-invariant": "1.2.0",
     "wavesurfer.js": "^6.6.3",
-    "yup": "0.32.11",
-    "moment": "2.29.4"
+    "yup": "0.32.11"
   },
   "devDependencies": {
     "@types/js-cookie": "3.0.1",

@@ -83,24 +83,6 @@ export function useProduct(slug: string) {
   };
 }
 
-export function useFeed(slug: string) {
-  const [data, setData] = useState<Feed | null>(null);
-  const { mutate, isLoading, error } = useMutation(client.feeds.get, {
-    onSuccess: (res) => {
-      setData(res);
-    },
-  });
-
-  useEffect(() => {
-    mutate({ id: slug });
-  }, [slug]);
-
-  return {
-    feed: data,
-    isLoading,
-  };
-}
-
 export function usePopularProducts(
   options?: Partial<PopularProductsQueryOptions>
 ) {

@@ -1,0 +1,86 @@
+.tags-input,
+.tagify {
+  @apply w-full;
+}
+
+.tags-input .tagify {
+  @apply rounded-[10px] border border-light-500 bg-transparent px-4 py-2 font-poppins text-13px text-dark ring-[0.5px] ring-light-500 hover:border-brand focus:ring-[0.5px] focus:ring-brand dark:border-dark-600 dark:text-light dark:ring-dark-600 dark:hover:border-brand dark:focus:ring-brand lg:px-5;
+}
+
+.dark .tags-input .tagify {
+  --tags-disabled-bg: #f1f1f1;
+  --tags-border-color: #282828;
+  --tags-hover-border-color: #24b47e;
+  --tags-focus-border-color: #24b47e;
+  --tag-border-radius: 20px;
+  --tag-bg: #282828;
+  --tag-hover: #282828;
+  --tag-text-color: #d3e2e2;
+  --tag-text-color--edit: black;
+  --tag-pad: 0.5em 1em;
+  --tag-inset-shadow-size: 2em;
+  --tag-invalid-color: #24b47e;
+  --tag-invalid-bg: rgba(36, 180, 126, 0.5);
+  --tag-remove-bg: rgba(36, 180, 126, 0.3);
+  --tag-remove-btn-color: #767676;
+  --tag-remove-btn-bg: none;
+  --tag-remove-btn-bg--hover: #24b47e;
+  --input-color: inherit;
+  --tag--min-width: 1ch;
+  --tag--max-width: auto;
+  --tag-hide-transition: 0.3s;
+  --placeholder-color: #767676;
+  --placeholder-color-focus: #767676;
+  --loader-size: 0.8em;
+  --readonly-striped: 1;
+  display: inline-flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  border: 1px solid var(--tags-border-color);
+  padding: 10px;
+  line-height: 0;
+  cursor: text;
+  outline: 0;
+  position: relative;
+  box-sizing: border-box;
+  transition: 0.1s;
+}
+
+.tags-input .tagify {
+  --tags-disabled-bg: #f1f1f1;
+  --tags-border-color: #dcdcdc;
+  --tags-hover-border-color: #24b47e;
+  --tags-focus-border-color: #24b47e;
+  --tag-border-radius: 20px;
+  --tag-bg: #dcdcdc;
+  --tag-hover: #282828;
+  --tag-text-color: #8b8b8b;
+  --tag-text-color--edit: black;
+  --tag-pad: 0.5em 1em;
+  --tag-inset-shadow-size: 2em;
+  --tag-invalid-color: #24b47e;
+  --tag-invalid-bg: rgba(36, 180, 126, 0.5);
+  --tag-remove-bg: rgba(36, 180, 126, 0.3);
+  --tag-remove-btn-color: #767676;
+  --tag-remove-btn-bg: none;
+  --tag-remove-btn-bg--hover: #24b47e;
+  --input-color: inherit;
+  --tag--min-width: 1ch;
+  --tag--max-width: auto;
+  --tag-hide-transition: 0.3s;
+  --placeholder-color: rgba(0, 0, 0, 0.4);
+  --placeholder-color-focus: rgba(0, 0, 0, 0.25);
+  --loader-size: 0.8em;
+  --readonly-striped: 1;
+  display: inline-flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  border: 1px solid var(--tags-border-color);
+  padding: 10px;
+  line-height: 0;
+  cursor: text;
+  outline: 0;
+  position: relative;
+  box-sizing: border-box;
+  transition: 0.1s;
+}

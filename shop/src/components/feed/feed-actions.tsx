@@ -268,7 +268,7 @@ export default function FeedActions({
         </div>
       )}
       <div className="mt-[6px] rounded-[18px] bg-[#fdfdfd] px-[23px] py-[17.5px] dark:bg-[#262626] md:px-[16px]">
-        <div className="flex items-center">
+        <div className="flex items-center py-4">
           <ul className="flex flex-wrap gap-[12px]">
             <li>
               <FeedButtonAlt
@@ -299,9 +299,9 @@ export default function FeedActions({
               />
             </li>
           </ul>
-          <div className="ml-auto">
+          <div className="ml-auto ">
             <Button
-              className="!mt-5 w-full rounded-full text-sm tracking-[0.2px] lg:!mt-7"
+              className="w-full justify-center rounded-full text-sm tracking-[0.2px]"
               onClick={postFeed}
               isLoading={isUploading || isLoading}
             >

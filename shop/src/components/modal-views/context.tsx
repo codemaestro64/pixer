@@ -9,6 +9,7 @@ export type MODAL_VIEWS =
   | 'ABUSE_REPORT'
   | 'QUESTION_FORM'
   | 'REVIEW_RATING'
+  | 'POST_SUCCESS_VIEW'
   | 'REVIEW_IMAGE_POPOVER';
 
 interface State {

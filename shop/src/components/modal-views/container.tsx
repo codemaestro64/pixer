@@ -34,6 +34,9 @@ const AbuseReportForm = dynamic(
 const QuestionForm = dynamic(
   () => import('@/components/questions/question-form')
 );
+const PostSuccessView = dynamic(
+  () => import('@/components/post/create-post-success')
+);
 
 function renderModalContent(view: MODAL_VIEWS) {
   switch (view) {
@@ -55,6 +58,8 @@ function renderModalContent(view: MODAL_VIEWS) {
       return <AbuseReportForm />;
     case 'QUESTION_FORM':
       return <QuestionForm />;
+    case 'POST_SUCCESS_VIEW':
+      return <PostSuccessView />;
     default:
       return null;
   }
@@ -79,7 +84,7 @@ export default function ModalsContainer() {
       <Dialog
         as="div"
         className="fixed inset-0 z-50 overflow-y-auto overflow-x-hidden xs:p-4"
-        onClose={closeModal}
+        onClose={view === 'POST_SUCCESS_VIEW' ? () => {} : closeModal}
         dir={dir}
       >
         <div className="min-h-screen text-center">
@@ -114,7 +119,7 @@ export default function ModalsContainer() {
           >
             <div className="text-start relative z-50 inline-block min-h-screen w-full transform overflow-hidden align-middle transition-all xs:min-h-[auto] xs:w-auto">
               <div className="relative flex min-h-screen items-center overflow-hidden xs:block xs:min-h-[auto] xs:rounded-md">
-                {view != 'COMMENT_DETAILS' && (
+                {view && !['COMMENT_DETAILS', 'POST_SUCCESS_VIEW'].includes(view) && (
                   <button
                     onClick={closeModal}
                     aria-label="Close panel"

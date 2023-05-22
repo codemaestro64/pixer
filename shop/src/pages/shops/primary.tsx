@@ -1,15 +1,19 @@
 // import Seo from '@/layouts/_seo';
-import DigishopLogo from "@/components/shops/digishop-logo";
-import PrimaryButton from "@/components/shops/primary/primary-button";
-import PrimaryCarousel from "@/components/shops/primary/primary-carousel";
-import PrimaryTitle from "@/components/shops/primary/primary-title";
+import DigishopLogo from '@/components/shops/digishop-logo';
+import PrimaryButton from '@/components/shops/primary/primary-button';
+import PrimaryCarousel from '@/components/shops/primary/primary-carousel';
+import PrimaryTitle from '@/components/shops/primary/primary-title';
+import Banner from '@/components/shops/banner';
+import BannerAlt from '@/components/shops/banner-alt';
+import AllProduct from '@/components/shops/all-product';
+import PrimaryProducts from '@/components/shops/primary/primary-products';
 
 export default function PrimaryPage() {
   return (
     <>
       {/* <Seo
-        title=""
-        description=""
+        title=''
+        description=''
         url={}
       /> */}
       <div className='min-h-full bg-[#7B5BD7] overflow-hidden'>
@@ -29,7 +33,16 @@ export default function PrimaryPage() {
           <div className='mt-[101px]'>
             <PrimaryCarousel />
           </div>
-          <div className='mt-[62px] pt-[82px]'></div>
+          <div className='mt-[62px] pt-[82px] px-[38px] grid gap-[20px] grid-cols-[1fr_553px]'>
+            <Banner />
+            <BannerAlt />
+          </div>
+          <div className='mt-[50px]'>
+            <AllProduct />
+          </div>
+          <div className='mt-[60px] pb-[60px] px-[10px]'>
+            <PrimaryProducts />
+          </div>
         </div>
       </div>
     </>

@@ -1,4 +1,4 @@
-import { useState , useRef, useEffect, useCallback } from 'react';
+import { useState , useRef, useEffect } from 'react';
 
 import Image from '@/components/ui/image';
 import centerImage from '@/assets/images/shops/image-1.png';
@@ -8,6 +8,7 @@ import imageFour from '@/assets/images/shops/image-4.png';
 import { ArrowLeftLineIcon } from '@/components/icons/arrow-left-line-icon';
 import { StarIcon } from '@/components/icons/star-icon';
 import { DownloadAltIcon } from '@/components/icons/download-alt-icon';
+import { ShoppingBagFillIcon } from '@/components/icons/shopping-bag-fill-icon';
 
 interface CarouselItemProps {
   data: {
@@ -15,11 +16,13 @@ interface CarouselItemProps {
     rating: string;
     downloads: string;
     image: StaticImageData;
+    price: string;
   };
-  showItems: number[];
-  active: boolean;
   index: number;
+  active: boolean;
   centralItem: number;
+  carouselIndexPositions: number[];
+  updateCentralItemOnClick: (value: number) => void;
 }
 
 function CarouselButton({ rotate, active, left, onClick }: { rotate?: boolean, active: boolean, left?: boolean, onClick: () => void }) {
@@ -27,7 +30,7 @@ function CarouselButton({ rotate, active, left, onClick }: { rotate?: boolean, a
     <button
       onClick={onClick}
       className={`absolute z-[4] top-1/2 -translate-y-1/2 -translate-x-1/2 transition-opacity duration-500 ${
-        left ? 'left-[calc(50%-800px)]' : 'left-[calc(50%+800px)]'
+        left ? 'left-[calc(50%_-_800px)]' : 'left-[calc(50%_+_800px)]'
       } ${
         !active ? 'opacity-0' : 'opacity-100 delay-300'
       }`}
@@ -39,17 +42,26 @@ function CarouselButton({ rotate, active, left, onClick }: { rotate?: boolean, a
   )
 }
 
-function CarouselItem({ data, showItems, index, centralItem, active }: CarouselItemProps) {
-  const { name, downloads, image, rating } = data;
+function CarouselItem({
+  index,
+  data,
+  centralItem,
+  active,
+  carouselIndexPositions,
+  updateCentralItemOnClick,
+}: CarouselItemProps) {
+  const { name, downloads, image, rating, price } = data;
   const isCentral = index === centralItem;
   
   function getClasses() {
-    const itemIndex = showItems.indexOf(index);
+    const itemIndex = carouselIndexPositions.indexOf(index);
     
+    // [] [] [x] [] []
     if (isCentral) {
       const style = !active ? 'w-[1013.17px] h-[675.87px]' : 'w-[860.26px] h-[573.87px]';
-      return `left-1/2 z-[3] duration-1000 ${ style }`;
-    } else if (itemIndex === 1 || itemIndex === showItems.length - 2) {
+      return `left-1/2 z-[5] duration-1000 ${ style }`;
+    } else if (itemIndex === 1 || itemIndex === 3) {
+      // [] [x] [] [x] []
       let style = '';
       const left = itemIndex === 1;
 
@@ -61,21 +73,35 @@ function CarouselItem({ data, showItems, index, centralItem, active }: CarouselI
         style += left ? 'left-[calc(50%_-_390px)]' : 'left-[calc(50%_+_390px)]';
       }
 
-      return `z-[2] duration-1000 ${ style }`;
-    } else if (itemIndex === 0 || itemIndex === showItems.length - 1) {
+      return `z-[3] duration-1000 ${ style }`;
+    } else if (itemIndex === 0 || itemIndex === 4) {
+      // [x] [] [] [] [x]
       const animation = !active ? 'opacity-0' : 'opacity-100';
       const side = itemIndex === 0 ? 'left-[calc(50%_-_566px)]' : 'left-[calc(50%_+_566px)]';
 
       return `w-[398.46px] h-[265.81px] duration-500 z-[1] ${ side } ${ animation }`;
     } else return '';
   }
+
+  const subItemsClasses = 'transition-opacity duration-500 ' + (!active ? 'invisible opacity-0' : isCentral ? 'delay-[700ms] visible opacity-100' : 'invisible opacity-0');
   
   return (
-    <div className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 transition-all ${getClasses()}`}>
+    <div
+      onClick={() => !isCentral ? updateCentralItemOnClick(index) : '' }
+      className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 transition-all ${ getClasses() }`}
+    >
       <Image src={image} alt={name} layout='fill' objectFit='cover' />
-      <div className={`absolute top-full left-0 right-0 py-[20px] px-[10px] transition-opacity duration-500 ${
-        !active ? 'invisible opacity-0' : isCentral ? 'delay-[700ms] visible opacity-100' : 'invisible opacity-0'
-      }`}>
+      {/* side */}
+      <div className='absolute top-1/2 -translate-y-1/2 left-0 -translate-x-1/2 bg-[#7B5BD7] blur-[15px] z-[-1] h-4/5 w-[18px]'></div>
+      <div className='absolute top-1/2 -translate-y-1/2 right-0 translate-x-1/2 bg-[#7B5BD7] blur-[15px] z-[-1] h-4/5 w-[18px]'></div>
+      {/* price */}
+      <div className='absolute bottom-[24.38px] right-[56.26px]'>
+        <button className={`text-[19.19px] text-white font-poppins font-bold bg-[#7B5BD7] rounded-full py-[15px] px-[22px] min-w-[160px] ${ subItemsClasses }`}>
+          $ { price }
+        </button>
+      </div>
+      {/* bottom content */}
+      <div className={`absolute top-full left-0 right-0 py-[20px] px-[10px] ${ subItemsClasses } flex items-center`}>
         <div className='space-y-[16px]'>
           <div className='text-[28px] font-bold text-white font-poppins'>
             { name }
@@ -95,7 +121,11 @@ function CarouselItem({ data, showItems, index, centralItem, active }: CarouselI
             </div>
           </div>
         </div>
-        <div></div>
+        <div className='ml-auto pr-[8px]'>
+          <button className='flex items-center justify-center w-[156px] h-[85px] bg-[#FFBB38] rounded-[125.68px]'>
+            <ShoppingBagFillIcon className='w-[42.29px] h-[42.29px] text-white' />
+          </button>
+        </div>
       </div>
     </div>
   )
@@ -104,82 +134,80 @@ function CarouselItem({ data, showItems, index, centralItem, active }: CarouselI
 export default function PrimaryCarousel() {
   const [active, setActive] = useState(false);
   const [centralItem, setCentralItem] = useState(0);
-  const [showItems, setShowItems] = useState<number[]>([]);
   const elRef = useRef<HTMLDivElement>(null);
-
-  const dataArray = [
+  const carouselIndexPositions: number[] = [];
+  const sidewaysPositions = 2;
+  let backward = 0;
+  let forward = 0;
+  const data = [
     {
       name: 'Estrella Motion Picture Poster and Walls',
       rating: '4.8',
       downloads: '2.6k',
+      price: '45.00',
       image: centerImage,
     },
     {
       name: 'Estrella Motion Picture Poster and Walls',
       rating: '4.8',
       downloads: '2.6k',
+      price: '45.00',
       image: imageTwo,
     },
     {
       name: 'Estrella Motion Picture Poster and Walls',
       rating: '4.8',
       downloads: '2.6k',
+      price: '45.00',
       image: imageThree,
     },
     {
       name: 'Estrella Motion Picture Poster and Walls',
       rating: '4.8',
       downloads: '2.6k',
+      price: '45.00',
       image: imageTwo,
     },
     {
       name: 'Estrella Motion Picture Poster and Walls',
       rating: '4.8',
       downloads: '2.6k',
+      price: '45.00',
       image: imageFour,
     }
   ];
 
-  const updateSideItems = useCallback(() => {
-    const array: number[] = [];
-    const amount = 2;
-    let negative = 0;
-    let positive = 0;
-
-    for (let i = 1; i <= amount; i++) {
-      if (centralItem - i >= 0) {
-        array.unshift(centralItem - i);
-      } else {
-        array.unshift(dataArray.length - (negative + 1));
-        negative++;
-      }
+  for (let i = 1; i <= sidewaysPositions; i++) {
+    if (centralItem - i >= 0) {
+      carouselIndexPositions.unshift(centralItem - i);
+    } else {
+      carouselIndexPositions.unshift(data.length - (backward + 1));
+      backward++;
     }
+  }
 
-    array.push(centralItem);
+  carouselIndexPositions.push(centralItem);
 
-    for (let i = 1; i <= amount; i++) {
-      if (centralItem + i <= dataArray.length - 1) {
-        array.push(centralItem + i);
-      } else {
-        array.push(positive);
-        positive++;
-      }
+  for (let i = 1; i <= sidewaysPositions; i++) {
+    if (centralItem + i <= data.length - 1) {
+      carouselIndexPositions.push(centralItem + i);
+    } else {
+      carouselIndexPositions.push(forward);
+      forward++;
     }
+  }
 
-    setShowItems(array);
-  }, [centralItem, dataArray.length]);
-
-  const updateCentralItem = useCallback((value) => {
+  function updateCentralItem(value: number) {
     setCentralItem((current) => {
-      if (current + value < 0) return dataArray.length - 1;
-      else if (current + value >= dataArray.length) return 0;
+      if (current + value < 0) return data.length - 1;
+      else if (current + value >= data.length) return 0;
       return current + value;
     });
+  }
 
-    updateSideItems();
-  }, [centralItem, updateSideItems, dataArray.length]);
-
-  useEffect(updateSideItems, [updateSideItems]);
+  function updateCentralItemOnClick(value: number) {
+    setCentralItem(value);
+  }
 
   useEffect(() => {
     function onUserScroll() {
@@ -187,7 +215,7 @@ export default function PrimaryCarousel() {
       const { current: el } = elRef;
       const triggerHeight = window.innerHeight / 2;
       const { top: topOfElement } = el.getBoundingClientRect();
-      setActive(topOfElement < triggerHeight ? true : false);
+      setActive(topOfElement < triggerHeight);
     }
     
     window.addEventListener('scroll', onUserScroll)
@@ -196,12 +224,13 @@ export default function PrimaryCarousel() {
   
   return (
     <div className='relative h-[675.87px]' ref={elRef}>
-      { dataArray.map((data, index) => (
+      { data.map((item, index) => (
         <CarouselItem
           key={index}
           index={index}
-          data={data}
-          showItems={showItems}
+          data={item}
+          carouselIndexPositions={carouselIndexPositions}
+          updateCentralItemOnClick={updateCentralItemOnClick}
           centralItem={centralItem}
           active={active}
         />

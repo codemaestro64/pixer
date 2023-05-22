@@ -1349,6 +1349,11 @@
   resolved "https://registry.npmjs.org/@xobotyi/scrollbar-width/-/scrollbar-width-1.9.5.tgz"
   integrity sha512-N8tkAACJx2ww8vFMneJmaAgmjAG1tnVBZJRLRcx061tmsLRZHSEZSLuGWnwPtunsSLvSqXQ2wfp7Mgqg1I+2dQ==
 
+"@yaireo/tagify@^4.17.8":
+  version "4.17.8"
+  resolved "https://registry.yarnpkg.com/@yaireo/tagify/-/tagify-4.17.8.tgz#2696570843e3cd14318f305e80699d457aad918a"
+  integrity sha512-MqU3JhE/35r8qZPgfLshXfOkTkgtFEXh2Ja8J3Nn1rPuut28yorJLtxH67jbrbanE1gFH2vCvxe6meqM6oZ8rA==
+
 acorn-jsx@^5.3.2:
   version "5.3.2"
   resolved "https://registry.npmjs.org/acorn-jsx/-/acorn-jsx-5.3.2.tgz"

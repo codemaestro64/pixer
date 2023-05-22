@@ -19,6 +19,8 @@ const routes = {
   privacy: '/privacy',
   password: '/password',
   feed: '/feed',
+  post: '/post',
+  createPost: 'post/create',
   followedShop: '/followed-authors',
   orderUrl: (tracking_number: string) => `/orders/${tracking_number}`,
   productUrl: (slug: string) => `/products/${slug}`,

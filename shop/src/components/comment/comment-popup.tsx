@@ -98,8 +98,9 @@ export default function CommentPopupDetails() {
             </div>
           </div>
 
+          <div className="-mb-8 h-[1px] w-full border-t-[1px] border-light-400 dark:border-dark-400" />
           <Scrollbar className="relative h-full w-full">
-            <div className="flex flex-col items-center justify-center border-t-[1px] border-light-400 dark:border-dark-400">
+            <div className="flex flex-col items-center justify-center">
               {selectedFeed!.comments?.map((comment, index) => (
                 <CommentCard key={index} comment_id={comment.id} />
               ))}

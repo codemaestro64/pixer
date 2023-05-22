@@ -64,6 +64,10 @@ import type {
   CreateCommentInput,
   CreateLikeInput,
   FeedLike,
+  Post,
+  CreatePostInput,
+  PostResponse,
+  Package,
 } from '@/types';
 import { API_ENDPOINTS } from './endpoints';
 import { HttpClient } from './http-client';
@@ -328,6 +332,17 @@ class Client {
       HttpClient.get<Comment>(`${API_ENDPOINTS.COMMENTS}/${id}`),
     create: (input: CreateCommentInput) =>
       HttpClient.post<Comment>(API_ENDPOINTS.COMMENTS, input),
+  };
+  posts = {
+    all: () => HttpClient.get<Post[]>(API_ENDPOINTS.POSTS),
+    get: ({ id }: { id: string }) =>
+      HttpClient.get<Post>(`${API_ENDPOINTS.POSTS}/${id}`),
+    create: (input: CreatePostInput) =>
+      HttpClient.post<PostResponse>(API_ENDPOINTS.POSTS, input),
+  };
+  packages = {
+    get: ({ id }: { id: string }) =>
+      HttpClient.get<Package>(`${API_ENDPOINTS.PACKAGES}/${id}`),
   };
 }
 

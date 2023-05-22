@@ -679,3 +679,81 @@ export interface CreateLikeInput {
   user_id: string;
   feed_id: string;
 }
+
+//
+export interface Post {
+  id: string;
+  user_id: string;
+  title: string;
+  categories: string;
+  sub_categories: string;
+  descr: string;
+  keywords: string;
+  attachments: Attachment[];
+  created_at: string;
+  updated_at: string;
+  customer: {
+    id: string;
+    name: string;
+    email: string;
+  };
+  profile: {
+    id: string;
+    avatar?: Attachment;
+    bio: string;
+  };
+  packages?: [
+    {
+      id: string;
+      post_id: string;
+      name: string;
+      price: string;
+      descr: string;
+      keywords: string;
+      created_at: string;
+      updated_at: string;
+    }
+  ];
+}
+
+export interface PostResponse {
+  id: string;
+  user_id: string;
+  title: string;
+  categories: string;
+  sub_categories: string;
+  descr: string;
+  keywords: string;
+  attachments: Attachment[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CreatePostInput {
+  title: string;
+  categories: string;
+  sub_categories: string;
+  descr: string;
+  keywords: string;
+  attachments: Attachment[];
+  packages: [
+    {
+      name: string;
+      price: string;
+      descr: string;
+      keywords: string;
+    }
+  ];
+}
+
+export interface Package {
+  id: string;
+  post_id: string;
+  name: string;
+  price: string;
+  descr: string;
+  keywords: string;
+  created_at: string;
+  updated_at: string;
+  post: PostResponse;
+}

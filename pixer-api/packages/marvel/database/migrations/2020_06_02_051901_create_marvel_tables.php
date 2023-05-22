@@ -294,6 +294,28 @@ class CreateMarvelTables extends Migration
             $table->boolean('status');
             $table->timestamps();
         });
+
+        Schema::create('posts', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->string('title');
+            $table->string('categories');
+            $table->string('sub_categories');
+            $table->string('descr');
+            $table->string('keywords');
+            $table->longText('attachments');
+            $table->timestamps();
+        });
+
+        Schema::create('packages', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('post_id');
+            $table->string('name');
+            $table->string('price');
+            $table->string('descr');
+            $table->string('keywords');
+            $table->timestamps();
+        });
     }
 
     /**

@@ -38,6 +38,8 @@ use Marvel\Http\Controllers\ResourceController;
 use Marvel\Http\Controllers\FeedController;
 use Marvel\Http\Controllers\CommentController;
 use Marvel\Http\Controllers\FeedLikeController;
+use Marvel\Http\Controllers\PostController;
+use Marvel\Http\Controllers\PackageController;
 
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/token', [UserController::class, 'token']);
@@ -140,6 +142,12 @@ Route::group(['middleware' => ['can:' . Permission::CUSTOMER, 'auth:sanctum']], 
     ]);
     Route::apiResource('feedlikes', FeedLikeController::class, [
         'only' => ['store', 'update'],
+    ]);
+    Route::apiResource('posts', PostController::class, [
+        'only' => ['index', 'store', 'show'],
+    ]);
+    Route::apiResource('packages', PackageController::class, [
+        'only' => ['index', 'store', 'show'],
     ]);
 
     Route::apiResource('orders', OrderController::class, [

@@ -1,20 +1,70 @@
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState, useContext, useCallback, useRef } from 'react';
 import { StepIcon } from '../icons/post/step-icon';
+import CreatePostStep from './create-post-step';
 import CreatePostDetails from './create-post-details';
 import CreatePostPackage from './create-post-package';
 import { useModalAction } from '../modal-views/context';
+import { useMutation } from 'react-query';
+import { useMe } from '@/data/user';
+import toast from 'react-hot-toast';
+import client from '@/data/client';
 
 const CreatePostContainer = () => {
   const { openModal } = useModalAction();
   const [currentStep, setCurrentStep] = useState<number>(1);
+  const [details, setDetails] = useState<any>({});
+  const [packages, setPackages] = useState<any>([]);
 
-  const onContinue = () => {
-    if (currentStep == 2) {
+  const { me } = useMe();
+
+  const { mutate: postMutate, isLoading } = useMutation(client.posts.create, {
+    onSuccess: (res) => {
+      setCurrentStep(currentStep + 1);
       openModal('POST_SUCCESS_VIEW');
+    },
+    onError: (err: any) => {
+      console.log(err.response.data, 'error');
+
+      toast.error(<b>Something went wrong. Please try again!</b>, {
+        className: '-mt-10 xs:mt-0',
+      });
+    },
+  });
+
+  const { mutate: uploadMutate, isLoading: isUploading } = useMutation(
+    client.settings.upload,
+    {
+      onSuccess: (response) => {
+        postMutate({
+          title: details.title,
+          categories: details.categories,
+          sub_categories: details.sub_categories,
+          descr: details.descr,
+          keywords: details.keywords,
+          attachments: response,
+          packages,
+        });
+      },
+      onError: (error) => {
+        console.log(error);
+        toast.error(<b>Something went wrong. Please try again!</b>, {
+          className: '-mt-10 xs:mt-0',
+        });
+      },
+    }
+  );
+
+  const onContinue = (data: any) => {
+    if (currentStep == 1) {
+      setDetails(data);
+      setCurrentStep(currentStep + 1);
     }
 
-    setCurrentStep(currentStep + 1);
+    if (currentStep == 2) {
+      setPackages(data);
+      setTimeout(() => uploadMutate(details.files), 300);
+    }
   };
 
   const onSaveAsDraft = () => {};
@@ -29,45 +79,8 @@ const CreatePostContainer = () => {
         <p className="font-poppins text-[16px] text-dark-700">{`>`}</p>
         <p className="font-poppins text-[16px] text-brand">Create Post</p>
       </div>
-      <div className="mx-0 mt-4 flex flex-wrap items-start gap-2 md:mx-2 md:flex-row">
-        <div className="flex flex-row items-center justify-center gap-4">
-          <p
-            className={`${
-              currentStep == 1 ? 'italic text-brand' : 'text-dark-700'
-            } font-poppins text-[16px]`}
-          >
-            Post Details
-          </p>
-          <StepIcon
-            className={`${
-              currentStep == 1 ? 'text-brand' : 'text-dark-700'
-            } h-4 w-4  focus-visible:outline-none`}
-          />
-        </div>
-        <div className="flex flex-row items-center justify-center gap-4">
-          <p
-            className={`${
-              currentStep == 2 ? 'italic text-brand' : 'text-dark-700'
-            } font-poppins text-[16px]`}
-          >
-            Package
-          </p>
-          <StepIcon
-            className={`${
-              currentStep == 2 ? 'text-brand' : 'text-dark-700'
-            } h-4 w-4  focus-visible:outline-none`}
-          />
-        </div>
-        <div className="flex flex-row items-center justify-center gap-4">
-          <p
-            className={`${
-              currentStep == 3 ? 'italic text-brand' : 'text-dark-700'
-            } font-poppins text-[16px]`}
-          >
-            Confirmation
-          </p>
-        </div>
-      </div>
+
+      <CreatePostStep currentStep={currentStep} />
 
       {currentStep == 1 ? (
         <CreatePostDetails
@@ -78,6 +91,7 @@ const CreatePostContainer = () => {
         <CreatePostPackage
           onContinue={onContinue}
           onSaveAsDraft={onSaveAsDraft}
+          isLoading={isLoading || isUploading}
         />
       )}
     </div>

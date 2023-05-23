@@ -642,7 +642,7 @@ export interface UpdateFeedInput {
   content: Attachment;
 }
 
-export interface Comment {
+export interface FeedComment {
   feed_id: string;
   user_id: string;
   id: string;
@@ -661,7 +661,7 @@ export interface Comment {
   updated_at: string;
 }
 
-export interface CreateCommentInput {
+export interface CreateFeedCommentInput {
   user_id: string;
   feed_id: string;
   reply: string;

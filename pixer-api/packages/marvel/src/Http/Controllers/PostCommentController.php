@@ -6,16 +6,16 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Marvel\Database\Models\Language;
-use Marvel\Database\Repositories\CommentRepository;
+use Marvel\Database\Repositories\PostCommentRepository;
 use Marvel\Exceptions\MarvelException;
-use Marvel\Http\Requests\CommentRequest;
+use Marvel\Http\Requests\PostCommentRequest;
 use Prettus\Validator\Exceptions\ValidatorException;
 
-class CommentController extends CoreController
+class PostCommentController extends CoreController
 {
     public $repository;
 
-    public function __construct(CommentRepository $repository)
+    public function __construct(PostCommentRepository $repository)
     {
         $this->repository = $repository;
     }
@@ -46,7 +46,7 @@ class CommentController extends CoreController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CommentRequest $request)
+    public function store(PostCommentRequest $request)
     {
         if ($request->user()->id == $request->user_id) {
             return $this->repository->storeComment($request);

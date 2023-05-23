@@ -279,7 +279,7 @@ class CreateMarvelTables extends Migration
             $table->timestamps();
         });
 
-        Schema::create('comments', function (Blueprint $table) {
+        Schema::create('feed_comments', function (Blueprint $table) {
             $table->id('id');
             $table->unsignedBigInteger('feed_id');
             $table->unsignedBigInteger('user_id');
@@ -314,6 +314,30 @@ class CreateMarvelTables extends Migration
             $table->string('price');
             $table->string('descr');
             $table->string('keywords');
+            $table->timestamps();
+        });
+
+        Schema::create('post_likes', function (Blueprint $table) {
+            $table->id('id');
+            $table->unsignedBigInteger('post_id');
+            $table->unsignedBigInteger('user_id');
+            $table->boolean('status');
+            $table->timestamps();
+        });
+
+        Schema::create('post_comments', function (Blueprint $table) {
+            $table->id('id');
+            $table->unsignedBigInteger('post_id');
+            $table->unsignedBigInteger('user_id');
+            $table->string('reply');
+            $table->timestamps();
+        });
+
+        Schema::create('follows', function (Blueprint $table) {
+            $table->id('id');
+            $table->unsignedBigInteger('sender_user_id');
+            $table->unsignedBigInteger('receiver_user_id');
+            $table->boolean('status');
             $table->timestamps();
         });
     }

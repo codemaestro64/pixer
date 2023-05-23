@@ -37,8 +37,8 @@ export const API_ENDPOINTS = {
   FOLLOWED_SHOPS: 'followed-shops',
   FOLLOWED_SHOPS_PRODUCTS: 'followed-shops-popular-products',
   FEEDS: '/feeds',
-  COMMENTS: '/comments',
-  LIKES: '/feedlikes',
+  FEEDCOMMENTS: '/feedcomments',
+  FEEDLIKES: '/feedlikes',
   POSTS: '/posts',
   PACKAGES: '/packages',
 };

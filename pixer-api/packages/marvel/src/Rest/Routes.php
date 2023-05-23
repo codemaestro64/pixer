@@ -36,10 +36,13 @@ use Marvel\Http\Controllers\DeliveryTimeController;
 use Marvel\Http\Controllers\LanguageController;
 use Marvel\Http\Controllers\ResourceController;
 use Marvel\Http\Controllers\FeedController;
-use Marvel\Http\Controllers\CommentController;
+use Marvel\Http\Controllers\FeedCommentController;
 use Marvel\Http\Controllers\FeedLikeController;
 use Marvel\Http\Controllers\PostController;
+use Marvel\Http\Controllers\PostCommentController;
+use Marvel\Http\Controllers\PostLikeController;
 use Marvel\Http\Controllers\PackageController;
+use Marvel\Http\Controllers\FollowController;
 
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/token', [UserController::class, 'token']);
@@ -137,7 +140,7 @@ Route::group(['middleware' => ['can:' . Permission::CUSTOMER, 'auth:sanctum']], 
     Route::apiResource('feeds', FeedController::class, [
         'only' => ['index', 'store', 'show'],
     ]);
-    Route::apiResource('comments', CommentController::class, [
+    Route::apiResource('feedcomments', FeedCommentController::class, [
         'only' => ['index', 'store', 'show'],
     ]);
     Route::apiResource('feedlikes', FeedLikeController::class, [
@@ -146,8 +149,17 @@ Route::group(['middleware' => ['can:' . Permission::CUSTOMER, 'auth:sanctum']], 
     Route::apiResource('posts', PostController::class, [
         'only' => ['index', 'store', 'show'],
     ]);
+    Route::apiResource('postcomments', PostCommentController::class, [
+        'only' => ['index', 'store', 'show'],
+    ]);
+    Route::apiResource('postlikes', PostLikeController::class, [
+        'only' => ['store', 'update'],
+    ]);
     Route::apiResource('packages', PackageController::class, [
         'only' => ['index', 'store', 'show'],
+    ]);
+    Route::apiResource('follow', FollowController::class, [
+        'only' => ['index', 'store'],
     ]);
 
     Route::apiResource('orders', OrderController::class, [

@@ -60,8 +60,8 @@ import type {
   CreateFeedInput,
   UpdateFeedInput,
   ListFeedInput,
-  Comment,
-  CreateCommentInput,
+  FeedComment,
+  CreateFeedCommentInput,
   CreateLikeInput,
   FeedLike,
   Post,
@@ -325,13 +325,13 @@ class Client {
     update: (input: UpdateFeedInput) =>
       HttpClient.post<Feed>(API_ENDPOINTS.FEEDS, input),
     like: (input: CreateLikeInput) =>
-      HttpClient.post<FeedLike>(API_ENDPOINTS.LIKES, input),
+      HttpClient.post<FeedLike>(API_ENDPOINTS.FEEDLIKES, input),
   };
   comments = {
     get: ({ id }: { id: string }) =>
-      HttpClient.get<Comment>(`${API_ENDPOINTS.COMMENTS}/${id}`),
-    create: (input: CreateCommentInput) =>
-      HttpClient.post<Comment>(API_ENDPOINTS.COMMENTS, input),
+      HttpClient.get<FeedComment>(`${API_ENDPOINTS.FEEDCOMMENTS}/${id}`),
+    create: (input: CreateFeedCommentInput) =>
+      HttpClient.post<FeedComment>(API_ENDPOINTS.FEEDCOMMENTS, input),
   };
   posts = {
     all: () => HttpClient.get<Post[]>(API_ENDPOINTS.POSTS),

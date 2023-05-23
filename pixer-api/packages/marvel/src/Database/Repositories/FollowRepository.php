@@ -15,22 +15,18 @@ use Illuminate\Support\Facades\Mail;
 use Marvel\Database\Models\Address;
 use Marvel\Database\Models\Profile;
 use Marvel\Database\Models\Shop;
-use Marvel\Database\Models\Comment;
+use Marvel\Database\Models\Follow;
 use Marvel\Exceptions\MarvelException;
 
-class CommentRepository extends BaseRepository
+class FollowRepository extends BaseRepository
 {
     /**
      * @var array
      */
-    protected $fieldSearchable = [
-        'reply' => 'like',
-    ];
-
     protected $dataArray = [
-        'user_id',
-        'feed_id',
-        'reply',
+        'sender_user_id',
+        'receiver_user_id',
+        'status',
     ];
 
     /**
@@ -38,7 +34,7 @@ class CommentRepository extends BaseRepository
      **/
     public function model()
     {
-        return Comment::class;
+        return Follow::class;
     }
 
     public function boot()
@@ -49,17 +45,27 @@ class CommentRepository extends BaseRepository
         }
     }
 
-    public function storeComment($request)
+    public function storeFollow($request)
     {
         try {
             $data = $request->only($this->dataArray);
-            $comment = $this->create($data);
+            $followInfo = $this->create($data);
 
-            $comment->save();
-            return $comment;
+            $followInfo->save();
+            return $followInfo;
         } catch (ValidatorException $e) {
             throw new MarvelException(SOMETHING_WENT_WRONG);
         }
     }
 
+    public function updateFollow($request, $id) {
+        try {
+            $followInfo = $this->findOrFail($id);
+            $followInfo->update($request->only($this->dataArray));
+
+            return $followInfo;
+        } catch (ValidatorException $e) {
+            throw new MarvelException(SOMETHING_WENT_WRONG);
+        }
+    }
 }

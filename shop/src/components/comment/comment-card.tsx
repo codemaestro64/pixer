@@ -5,7 +5,7 @@ import { HeartIcon } from '../icons/heart-icon';
 import { HeartFillIcon } from '../icons/heart-fill';
 import { CommentIcon } from '../icons/comment-icon';
 import { ShareIcon } from '../icons/share-icon';
-import { Comment } from '@/types';
+import { FeedComment } from '@/types';
 import Avatar from 'react-avatar';
 import client from '@/data/client';
 import { useEffect, useState } from 'react';
@@ -18,7 +18,9 @@ interface CommentCardProps {
 
 export default function CommentCard({ comment_id }: CommentCardProps) {
   const { t } = useTranslation('common');
-  const [selectedComment, setSelectedComment] = useState<Comment | null>(null);
+  const [selectedComment, setSelectedComment] = useState<FeedComment | null>(
+    null
+  );
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
   const { me } = useMe();

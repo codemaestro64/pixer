@@ -147,7 +147,21 @@ export default function FeedActions({
   const postFeed = () => {
     if (isLoading || isUploading) return;
 
-    if (feedDescr.length == 0 || files.length == 0) return;
+    if (feedDescr.length == 0) {
+      toast.error(<b>Please input description!</b>, {
+        className: '-mt-10 xs:mt-0',
+      });
+
+      return;
+    }
+
+    if (files.length == 0) {
+      toast.error(<b>Please add one file at least!</b>, {
+        className: '-mt-10 xs:mt-0',
+      });
+
+      return;
+    }
 
     //mutate(data);
     if (!me) {

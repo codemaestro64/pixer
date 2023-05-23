@@ -4,15 +4,16 @@ namespace Marvel\Database\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Comment extends Model
+class PostLike extends Model
 {
-    protected $table = 'comments';
+    protected $table = 'post_likes';
 
     protected $fillable = [
-        'user_id', 'feed_id', 'reply'
+        'user_id', 'post_id', 'status'
     ];
 
     public function customer(): BelongsTo
@@ -25,8 +26,8 @@ class Comment extends Model
         return $this->hasOne(Profile::class, 'customer_id', 'user_id');
     }
 
-    public function feed(): BelongsTo
+    public function post(): BelongsTo
     {
-        return $this->belongsTo(Feed::class);
+        return $this->belongsTo(Feed::class, 'post_id');
     }
 }

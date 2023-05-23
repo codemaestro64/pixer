@@ -7,8 +7,9 @@ use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Marvel\Enums\WithdrawStatus;
 
-class CommentRequest extends FormRequest
+class FollowRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,9 +29,9 @@ class CommentRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id'     => ['nullable', 'exists:Marvel\Database\Models\User,id'],
-            'feed_id'     => ['nullable', 'exists:Marvel\Database\Models\Feed,id'],
-            'reply' => ['nullable', 'string'],
+            'sender_user_id'     => ['nullable', 'exists:Marvel\Database\Models\User,id'],
+            'receiver_user_id'     =>['nullable', 'exists:Marvel\Database\Models\User,id'],
+            'status'      => ['boolean'],
         ];
     }
 

@@ -43,7 +43,7 @@ export default function BannerAlt({ textDark, greenBanner }: BannerAltProps) {
       <div className='absolute z-[2] bottom-0 left-[-50px] w-[271px] h-[346px]'>
         <Image 
           src={pointingGirlImage}
-          alt='Happy guy'
+          alt='Pointing Girl'
           layout='fill'
           objectFit='contain'
         />

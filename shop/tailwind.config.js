@@ -93,6 +93,7 @@ module.exports = {
       fontFamily: {
         body: ["'Inter', sans-serif"],
         poppins: ["'Poppins', 'Inter', sans-serif"],
+        quicksand: ["'Quicksand', 'Poppins', sans-serif"],
       },
     },
   },

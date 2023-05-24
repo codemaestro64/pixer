@@ -11,6 +11,7 @@ import { useDrawer } from '@/components/drawer-views/context';
 import { ProductIcon } from '@/components/icons/product-icon';
 import { PeopleIcon } from '@/components/icons/people-icon';
 import { ChatIcon } from '@/components/icons/chat-icon';
+import { PostIcon } from '@/components/icons/post-icon';
 import { PaperPlaneIcon } from '@/components/icons/paper-plane-icon';
 import Scrollbar from '@/components/ui/scrollbar';
 import Copyright from '@/layouts/_copyright';
@@ -110,6 +111,13 @@ export function Sidebar({
               href={routes.chat}
               isCollapse={isCollapse}
               icon={<ChatIcon className="h-[17px] w-[17px] text-current" />}
+            />
+
+            <NavLink
+              title={t('text-post')}
+              href={routes.post}
+              isCollapse={isCollapse}
+              icon={<PostIcon className="h-[17px] w-[17px] text-current" />}
             />
 
             <NavLink

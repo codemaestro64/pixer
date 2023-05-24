@@ -35,4 +35,14 @@ class Post extends Model
     {
         return $this->hasMany(Package::class)->orderBy('updated_at', 'desc');
     }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(PostComment::class)->orderBy('updated_at', 'desc');
+    }
+
+    public function likes(): HasMany
+    {
+        return $this->hasMany(PostLike::class)->where('status', '=', 1);
+    }
 }

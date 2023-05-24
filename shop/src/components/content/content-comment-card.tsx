@@ -5,27 +5,29 @@ import { HeartIcon } from '../icons/heart-icon';
 import { HeartFillIcon } from '../icons/heart-fill';
 import { CommentIcon } from '../icons/comment-icon';
 import { ShareIcon } from '../icons/share-icon';
-import { FeedComment } from '@/types';
+import { PostComment } from '@/types';
 import Avatar from 'react-avatar';
 import client from '@/data/client';
 import { useEffect, useState } from 'react';
 import { useMutation } from 'react-query';
 import { useMe } from '@/data/user';
 
-interface CommentCardProps {
+interface ContentCommentCardProps {
   comment_id: string;
 }
 
-export default function CommentCard({ comment_id }: CommentCardProps) {
+export default function ContentCommentCard({
+  comment_id,
+}: ContentCommentCardProps) {
   const { t } = useTranslation('common');
-  const [selectedComment, setSelectedComment] = useState<FeedComment | null>(
+  const [selectedComment, setSelectedComment] = useState<PostComment | null>(
     null
   );
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
   const { me } = useMe();
 
-  const { mutate: mutate } = useMutation(client.feedcomments.get, {
+  const { mutate: mutate } = useMutation(client.postcomments.get, {
     onSuccess: (res) => {
       setSelectedComment(res);
     },

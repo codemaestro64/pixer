@@ -1,9 +1,9 @@
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import type { GetStaticProps } from 'next';
-import type { NextPageWithLayout } from '@/types';
-import { useState } from 'react';
+import type { NextPageWithLayout, Post, PostQueryOptions } from '@/types';
+import { useEffect, useState } from 'react';
 import Layout from '@/layouts/_layout';
-import Grid from '@/components/shop/grid';
+import Grid from '@/components/post/grid';
 import Seo from '@/layouts/_seo';
 import routes from '@/config/routes';
 import { useRouter } from 'next/router';
@@ -11,44 +11,54 @@ import { useTopShops } from '@/data/shop';
 import ButtonGroup from '@/components/ui/button-group';
 import { SearchIcon } from '@/components/icons/search-icon';
 import Button from '@/components/ui/button';
-
+import client from '@/data/client';
+import { useMutation } from 'react-query';
 // import { useTranslation } from 'next-i18next';
 
-const MAP_RANGE_FILTER = [
-  {
-    label: 'text-weekly',
-    range: 7,
-  },
-  {
-    label: 'text-monthly',
-    range: 30,
-  },
-  {
-    label: 'text-yearly',
-    range: 365,
-  },
-];
-
 // Every shop owner in an author here
-function Shops() {
+function Posts() {
   const router = useRouter();
 
-  let [selected, setRange] = useState(MAP_RANGE_FILTER[2]);
-  let [searchText, setSearchText] = useState('');
-  const { shops, loadMore, hasNextPage, isLoadingMore, isLoading } =
-    useTopShops({
-      range: selected.range,
-      name: searchText,
-    });
+  const [searchText, setSearchText] = useState('');
+  const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
+  const [hasNextPage, setHasNextPage] = useState<boolean>(false);
+  const [posts, setPosts] = useState<Post[] | []>([]);
+  const [params, setParams] = useState<PostQueryOptions>({
+    page: 1,
+    limit: 30,
+  });
+
+  const { mutate: mutatePosts, isLoading } = useMutation(client.posts.all, {
+    onSuccess: (res) => {
+      if (res.current_page === res.last_page) {
+        setHasNextPage(false);
+      } else {
+        setHasNextPage(true);
+        setParams({ ...params, page: params.page! + 1 });
+      }
+      setPosts([...posts, ...res.data]);
+    },
+    onError: (err: any) => {
+      console.log(err.response.data, 'error');
+    },
+  });
+
+  useEffect(() => {
+    mutatePosts(params);
+  }, []);
+
+  const loadMore = () => {
+    mutatePosts(params);
+  };
+
   return (
     <>
-      <div className="flex flex-col justify-between px-[16px] pb-[35px] md:flex-row md:items-center md:pt-[24px] 2xl:pb-[58px] 2xl:pt-[38px]">
-        <div className="mt-[32px] w-full px-[24px] md:mt-0">
+      <div className="sticky top-0 z-20 flex min-h-[64px] flex-col justify-between border-b border-light-400 bg-light-100 px-4 py-4 dark:border-dark-300 dark:bg-dark-100 sm:top-[70px] sm:min-h-[70px]  sm:px-5 sm:py-5 md:flex-row md:items-center md:px-6 lg:px-7 3xl:px-8">
+        <div className="w-full px-[24px]">
           <div className="relative">
             <input
               type="search"
               onChange={(e) => setSearchText(e.target.value)}
-              autoFocus={true}
               placeholder="Search"
               className="peer h-[48px] w-full rounded-[100px] border border-[#bababa] bg-white bg-transparent pl-[70px] pr-[16px] font-poppins text-[14px] font-semibold text-dark-300 placeholder-dark-850 dark:border-[#434343] dark:bg-dark-100 dark:text-white dark:placeholder-[#434343] xl:text-[16px]"
             />
@@ -66,10 +76,11 @@ function Shops() {
       </div>
 
       <Grid
-        shops={shops}
+        posts={posts}
+        limit={30}
         onLoadMore={loadMore}
         hasNextPage={hasNextPage}
-        isLoadingMore={isLoadingMore}
+        isLoadingMore={isLoading}
         isLoading={isLoading}
       />
     </>
@@ -84,11 +95,12 @@ const PostsPage: NextPageWithLayout = () => {
         description="Fastest digital download template built with React, NextJS, TypeScript, React-Query and Tailwind CSS."
         url={routes.post}
       />
-      <Shops />
+      <Posts />
     </>
   );
 };
 
+PostsPage.authorization = true;
 PostsPage.getLayout = function getLayout(page) {
   return <Layout>{page}</Layout>;
 };

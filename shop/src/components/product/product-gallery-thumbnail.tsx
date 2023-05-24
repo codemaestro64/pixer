@@ -50,13 +50,33 @@ const ProductGalleryThumbnail: React.FC<ProductGalleryThumbnailProps> = ({
 }) => {
   const { t } = useTranslation('common');
 
+  const getPreviewImage = (item: Attachment) => {
+    if (item.original.match(/\.(jpg|jpeg|png|gif)$/i)) {
+      return item.original.replace('localhost', 'localhost:8000');
+    } else {
+      return placeholder;
+    }
+  };
+
+  const isVideoItem = (item: Attachment) => {
+    if (item.original.match(/\.(jpg|jpeg|png|gif)$/i)) {
+      return false;
+    } else {
+      if (item.thumbnail) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  };
+
   return (
     <Swiper
       id="productGallery"
       speed={400}
       allowTouchMove={false}
       thumbs={{ swiper: thumbsSwiper }}
-      className="rounded-[10px]"
+      className="h-full w-full rounded-[10px]"
       modules={[Navigation, Thumbs]}
       {...swiperParams}
     >
@@ -65,18 +85,28 @@ const ProductGalleryThumbnail: React.FC<ProductGalleryThumbnailProps> = ({
           key={`product-gallery-${item.id}`}
           className="flex aspect-[1629/583] items-center justify-center rounded-[10px] bg-light-200 dark:bg-dark-200"
         >
-          <Image
-            layout="fill"
-            objectFit="cover"
-            className="rounded-[10px]"
-            src={item?.original ?? placeholder}
-            alt={`Product gallery ${item.id}`}
-          />
+          {isVideoItem(item) ? (
+            <video
+              className="m-0 block h-full w-full"
+              controls
+              src={item.original.replace('localhost', 'localhost:8000')}
+            />
+          ) : (
+            <Image
+              layout="fill"
+              objectFit="cover"
+              className="rounded-[10px]"
+              src={getPreviewImage(item)}
+              alt={`Product gallery ${item.id}`}
+            />
+          )}
+          {!isVideoItem(item) && (
+            <div className="absolute inset-0 z-10 flex h-full w-full items-end justify-center ">
+              <div className="h-2/3 w-full rounded-[10px] bg-gradient-to-t from-black to-transparent" />
+            </div>
+          )}
         </SwiperSlide>
       ))}
-      <div className="absolute inset-0 z-10 flex h-full w-full items-end justify-center ">
-        <div className="h-2/3 w-full rounded-[10px] bg-gradient-to-t from-black to-transparent" />
-      </div>
     </Swiper>
   );
 };

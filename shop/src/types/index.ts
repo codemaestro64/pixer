@@ -55,6 +55,8 @@ export interface MyReportsQueryOptions extends QueryOptions {}
 
 export interface MyQuestionQueryOptions extends QueryOptions {}
 
+export interface PostQueryOptions extends QueryOptions {}
+
 export interface ShopQueryOptions extends QueryOptions {
   is_active?: number;
 }
@@ -675,7 +677,7 @@ export interface FeedLike {
   created_at: string;
   updated_at: string;
 }
-export interface CreateLikeInput {
+export interface CreateFeedLikeInput {
   user_id: string;
   feed_id: string;
 }
@@ -714,7 +716,31 @@ export interface Post {
       updated_at: string;
     }
   ];
+  comments_count: number;
+  likes_count: number;
+  comments?: [
+    {
+      id: string;
+      feed_id: string;
+      user_id: string;
+      reply: string;
+      created_at: string;
+      updated_at: string;
+    }
+  ];
+  likes?: [
+    {
+      id: string;
+      feed_id: string;
+      user_id: string;
+      status: number;
+      created_at: string;
+      updated_at: string;
+    }
+  ];
 }
+
+export interface PostPaginator extends PaginatorInfo<Post> {}
 
 export interface PostResponse {
   id: string;
@@ -756,4 +782,54 @@ export interface Package {
   created_at: string;
   updated_at: string;
   post: PostResponse;
+}
+
+export interface PostComment {
+  post_id: string;
+  user_id: string;
+  id: string;
+  reply: string;
+  customer?: {
+    id: string;
+    name: string;
+    email: string;
+  };
+  profile?: {
+    id: string;
+    avatar?: Attachment;
+    bio: string;
+  };
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CreatePostCommentInput {
+  user_id: string;
+  post_id: string;
+  reply: string;
+}
+
+export interface PostLike {
+  id: string;
+  post_id: string;
+  user_id: string;
+  status: number;
+  created_at: string;
+  updated_at: string;
+}
+export interface CreatePostLikeInput {
+  user_id: string;
+  post_id: string;
+}
+
+export interface Follow {
+  id: string;
+  sender_user_id: string;
+  receiver_user_id: string;
+  status: boolean;
+}
+
+export interface CreateFollowInput {
+  sender_user_id: string;
+  receiver_user_id: string;
 }

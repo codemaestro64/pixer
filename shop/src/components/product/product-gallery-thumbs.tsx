@@ -48,6 +48,14 @@ const ProductGalleryThumbs: React.FC<ProductGalleryThumbsProps> = ({
 }) => {
   const { t } = useTranslation('common');
 
+  const getPreviewImage = (item: Attachment) => {
+    if (item.thumbnail.match(/\.(jpg|jpeg|png|gif)$/i)) {
+      return item.thumbnail.replace('localhost', 'localhost:8000');
+    } else {
+      return placeholder;
+    }
+  };
+
   return (
     <div className="flex-shrink-0">
       <Swiper
@@ -67,7 +75,7 @@ const ProductGalleryThumbs: React.FC<ProductGalleryThumbsProps> = ({
             <Image
               layout="fill"
               objectFit="cover"
-              src={item?.thumbnail ?? placeholder}
+              src={getPreviewImage(item)}
               alt={`Product thumb gallery ${item.id}`}
             />
           </SwiperSlide>

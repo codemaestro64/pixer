@@ -20,11 +20,11 @@ import { Portal } from 'react-portal';
 
 // base css file
 import '@/assets/css/inputfile.css';
-import '@/assets/css/scrollbar.css';
 import '@/assets/css/swiper-carousel.css';
 import '@/assets/css/pagination.css';
 import '@/assets/css/globals.css';
 import '@/assets/css/tagify.css';
+import '@/assets/css/scrollbar.css';
 
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
@@ -56,6 +56,7 @@ function CustomApp({ Component, pageProps }: AppPropsWithLayout) {
   const authenticationRequired = Component.authorization ?? false;
 
   const [triggerFeeds, setTriggerFeeds] = useState<boolean>(false);
+  const [triggerPost, setTriggerPost] = useState<boolean>(false);
   const [selectedFeedID, setSelectedFeedID] = useState<string>('-1');
 
   const [unread_messages_cnt, setUnreadMessagesCnt] = useState<number>(0);
@@ -100,6 +101,8 @@ function CustomApp({ Component, pageProps }: AppPropsWithLayout) {
               value={{
                 triggerFeeds,
                 setTriggerFeeds,
+                triggerPost,
+                setTriggerPost,
                 selectedFeedID,
                 setSelectedFeedID,
               }}

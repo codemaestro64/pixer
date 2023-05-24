@@ -16,6 +16,7 @@ import { useModalAction } from '@/components/modal-views/context';
 import FeedCardButton from './feed-card-button';
 import Avatar from 'react-avatar';
 import FeedContext from '@/lib/feed-context';
+import { getProfileAvatar } from '@/lib/constants';
 
 interface FeedCardProps {
   feed: Feed;
@@ -86,14 +87,14 @@ export default function FeedCard({ feed }: FeedCardProps) {
           <Avatar
             size="48"
             round={true}
-            name={me?.name}
+            name={selectedFeed.customer.name}
             textSizeRatio={2}
-            src={me?.profile ? me!.profile.avatar.thumbnail : undefined}
+            src={getProfileAvatar(selectedFeed.profile)}
           />
         </div>
         <div className="max-w-[224.13px] font-poppins">
           <p className="mb-[4px] truncate text-[14.88px] font-semibold text-dark-300 dark:text-white md:text-[13.91px] 2xl:text-[16px]">
-            {me?.name}
+            {selectedFeed.customer.name}
           </p>
           <p className="truncate text-[13.02px] font-medium italic text-dark-700 md:text-[12.17px] 2xl:text-[14px]">
             {selectedFeed.descr}

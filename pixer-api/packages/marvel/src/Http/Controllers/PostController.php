@@ -27,7 +27,10 @@ class PostController extends CoreController
      */
     public function index(Request $request)
     {
-        return $this->repository->with(['customer', 'profile', 'packages'])->where('user_id', $request->user()->id)->orderBy('updated_at', 'desc')->get();
+        //return $this->repository->with(['customer', 'profile', 'packages'])->where('user_id', $request->user()->id)->orderBy('updated_at', 'desc')->get();
+        $limit = $request->limit ?   $request->limit : 15;
+        return $this->repository->with(['customer', 'profile', 'packages', 'likes'])->withCount(['comments', 'likes'])->orderBy('updated_at', 'desc')->paginate($limit);
+
     }
 
     /**
@@ -70,7 +73,7 @@ class PostController extends CoreController
      */
     public function show($id)
     {
-        return $this->repository->with(['customer', 'profile', 'packages'])->findOrFail($id);
+        return $this->repository->with(['customer', 'profile', 'packages', 'likes', 'comments'])->withCount(['comments', 'likes'])->findOrFail($id);
 
     }
 

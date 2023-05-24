@@ -62,12 +62,20 @@ import type {
   ListFeedInput,
   FeedComment,
   CreateFeedCommentInput,
-  CreateLikeInput,
+  CreateFeedLikeInput,
   FeedLike,
   Post,
+  PostPaginator,
+  PostQueryOptions,
   CreatePostInput,
   PostResponse,
   Package,
+  PostComment,
+  CreatePostCommentInput,
+  CreatePostLikeInput,
+  PostLike,
+  CreateFollowInput,
+  Follow,
 } from '@/types';
 import { API_ENDPOINTS } from './endpoints';
 import { HttpClient } from './http-client';
@@ -324,25 +332,42 @@ class Client {
       HttpClient.post<Feed>(API_ENDPOINTS.FEEDS, input),
     update: (input: UpdateFeedInput) =>
       HttpClient.post<Feed>(API_ENDPOINTS.FEEDS, input),
-    like: (input: CreateLikeInput) =>
+    like: (input: CreateFeedLikeInput) =>
       HttpClient.post<FeedLike>(API_ENDPOINTS.FEEDLIKES, input),
   };
-  comments = {
+  feedcomments = {
     get: ({ id }: { id: string }) =>
       HttpClient.get<FeedComment>(`${API_ENDPOINTS.FEEDCOMMENTS}/${id}`),
     create: (input: CreateFeedCommentInput) =>
       HttpClient.post<FeedComment>(API_ENDPOINTS.FEEDCOMMENTS, input),
   };
   posts = {
-    all: () => HttpClient.get<Post[]>(API_ENDPOINTS.POSTS),
+    all: (params: PostQueryOptions) =>
+      HttpClient.get<PostPaginator>(API_ENDPOINTS.POSTS, {
+        ...params,
+      }),
     get: ({ id }: { id: string }) =>
       HttpClient.get<Post>(`${API_ENDPOINTS.POSTS}/${id}`),
     create: (input: CreatePostInput) =>
       HttpClient.post<PostResponse>(API_ENDPOINTS.POSTS, input),
+    like: (input: CreatePostLikeInput) =>
+      HttpClient.post<PostLike>(API_ENDPOINTS.POSTLIKES, input),
+  };
+  postcomments = {
+    get: ({ id }: { id: string }) =>
+      HttpClient.get<PostComment>(`${API_ENDPOINTS.POSTCOMMENTS}/${id}`),
+    create: (input: CreatePostCommentInput) =>
+      HttpClient.post<PostComment>(API_ENDPOINTS.POSTCOMMENTS, input),
   };
   packages = {
     get: ({ id }: { id: string }) =>
       HttpClient.get<Package>(`${API_ENDPOINTS.PACKAGES}/${id}`),
+  };
+  user_follows = {
+    get: (input: CreateFollowInput) =>
+      HttpClient.get<Follow>(API_ENDPOINTS.FOLLOW, input),
+    create: (input: CreateFollowInput) =>
+      HttpClient.post<Follow>(API_ENDPOINTS.FOLLOW, input),
   };
 }
 

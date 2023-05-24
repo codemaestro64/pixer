@@ -2,14 +2,22 @@
 
 namespace Marvel\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Marvel\Database\Models\Language;
-use Marvel\Database\Repositories\FeedRepository;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Marvel\Enums\Permission;
+use Marvel\Database\Models\Shop;
+use Marvel\Database\Models\User;
+use Marvel\Database\Models\Follow;
+use Illuminate\Support\Facades\Log;
+use Marvel\Database\Models\Balance;
+use Marvel\Database\Models\Product;
 use Marvel\Exceptions\MarvelException;
 use Marvel\Http\Requests\FeedRequest;
-use Prettus\Validator\Exceptions\ValidatorException;
+use Marvel\Database\Repositories\FeedRepository;
 
 class FeedController extends CoreController
 {
@@ -26,7 +34,14 @@ class FeedController extends CoreController
      */
     public function index(Request $request)
     {
-        return $this->repository->with(['customer', 'profile', 'likes'])->withCount(['comments', 'likes'])->where('user_id', $request->user()->id)->orderBy('updated_at', 'desc')->get();
+        $following_users = Follow::where('sender_user_id', $request->user()->id)->where('status', 1)->get();
+        $users = $following_users->pluck('receiver_user_id')->all();
+        $user_id = (int)$request->user()->id;
+        if (!in_array($user_id, $users)) {
+            array_push($users, $user_id);
+        }
+
+        return $this->repository->with(['customer', 'profile', 'likes'])->withCount(['comments', 'likes'])->whereIn('user_id', $users)->orderBy('updated_at', 'desc')->get();
     }
 
     /**

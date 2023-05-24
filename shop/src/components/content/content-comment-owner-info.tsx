@@ -32,11 +32,16 @@ export default function ContentCommentOwnerInfo({
   useEffect(() => {
     if (!me) return;
 
-    setSelectedPost(post);
     mutateFollowStatus({
       sender_user_id: me.id,
       receiver_user_id: post.customer.id,
     });
+  }, [me]);
+
+  useEffect(() => {
+    if (!me) return;
+
+    setSelectedPost(post);
   }, [post]);
 
   const { mutate: mutatePost } = useMutation(client.posts.get, {

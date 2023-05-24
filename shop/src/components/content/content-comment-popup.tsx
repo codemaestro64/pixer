@@ -99,9 +99,10 @@ export default function ContentCommentPopupDetails() {
           <div className="-mb-8 h-[1px] w-full border-t-[1px] border-light-400 dark:border-dark-400" />
           <Scrollbar className="relative h-full w-full">
             <div className="flex flex-col items-center justify-center">
-              {selectedPost!.comments?.map((comment, index) => (
-                <ContentCommentCard key={index} comment_id={comment.id} />
-              ))}
+              {selectedPost &&
+                selectedPost.comments?.map((comment, index) => (
+                  <ContentCommentCard key={index} comment_id={comment.id} />
+                ))}
             </div>
           </Scrollbar>
         </div>

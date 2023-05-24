@@ -44,4 +44,5 @@ export const API_ENDPOINTS = {
   POSTCOMMENTS: '/postcomments',
   PACKAGES: '/packages',
   FOLLOW: '/follow',
+  COMMENTLIKES: '/commentlikes',
 };

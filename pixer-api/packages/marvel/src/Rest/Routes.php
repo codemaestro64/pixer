@@ -43,6 +43,7 @@ use Marvel\Http\Controllers\PostCommentController;
 use Marvel\Http\Controllers\PostLikeController;
 use Marvel\Http\Controllers\PackageController;
 use Marvel\Http\Controllers\FollowController;
+use Marvel\Http\Controllers\CommentLikeController;
 
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/token', [UserController::class, 'token']);
@@ -161,7 +162,9 @@ Route::group(['middleware' => ['can:' . Permission::CUSTOMER, 'auth:sanctum']], 
     Route::apiResource('follow', FollowController::class, [
         'only' => ['index', 'store'],
     ]);
-
+    Route::apiResource('commentlikes', CommentLikeController::class, [
+        'only' => ['store'],
+    ]);
     Route::apiResource('orders', OrderController::class, [
         'only' => ['index'],
     ]);

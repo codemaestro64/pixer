@@ -76,6 +76,8 @@ import type {
   PostLike,
   CreateFollowInput,
   Follow,
+  CreateCommentLikeInput,
+  CommentLike,
 } from '@/types';
 import { API_ENDPOINTS } from './endpoints';
 import { HttpClient } from './http-client';
@@ -368,6 +370,10 @@ class Client {
       HttpClient.get<Follow>(API_ENDPOINTS.FOLLOW, input),
     create: (input: CreateFollowInput) =>
       HttpClient.post<Follow>(API_ENDPOINTS.FOLLOW, input),
+  };
+  commentlikes = {
+    create: (input: CreateCommentLikeInput) =>
+      HttpClient.post<CommentLike>(API_ENDPOINTS.COMMENTLIKES, input),
   };
 }
 

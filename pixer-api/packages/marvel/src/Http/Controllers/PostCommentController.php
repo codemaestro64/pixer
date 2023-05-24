@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Marvel\Database\Models\Language;
+use Marvel\Database\Models\CommentLike;
 use Marvel\Database\Repositories\PostCommentRepository;
 use Marvel\Exceptions\MarvelException;
 use Marvel\Http\Requests\PostCommentRequest;
@@ -66,7 +67,14 @@ class PostCommentController extends CoreController
     {
         {
             try {
-                return $this->repository->with(['customer', 'profile'])->findOrFail($id);
+                $comment = $this->repository->with(['customer', 'profile'])->findOrFail($id);
+
+                $matchThese = ['comment_id' => $comment->id, 'type' => 'post', 'status' => 1];
+                $likes = CommentLike::where($matchThese)->get();
+                $comment->likes_count = $likes->count();
+                $comment->likes = $likes;
+
+                return $comment;
             } catch (Exception $e) {
                 throw new MarvelException(NOT_FOUND);
             }

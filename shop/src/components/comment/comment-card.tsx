@@ -34,6 +34,29 @@ export default function CommentCard({ comment_id }: CommentCardProps) {
     },
   });
 
+  const { mutate: mutateCommentLike } = useMutation(
+    client.commentlikes.create,
+    {
+      onSuccess: (res) => {
+        let new_likes = selectedComment!.likes.filter(
+          (item) => item.user_id != me!.id
+        );
+        if (res.status) {
+          new_likes = [...new_likes, res];
+        }
+
+        setSelectedComment({
+          ...selectedComment,
+          likes_count: `${new_likes.length}`,
+          likes: new_likes,
+        } as FeedComment);
+      },
+      onError: (err: any) => {
+        console.log(err.response.data, 'error');
+      },
+    }
+  );
+
   useEffect(() => {
     updateWindowSize();
     window.addEventListener('resize', updateWindowSize);
@@ -47,6 +70,29 @@ export default function CommentCard({ comment_id }: CommentCardProps) {
   function updateWindowSize() {
     setIsMobile(window.innerWidth < 768 ? true : false);
   }
+
+  const checkLikedByCurrentUser = () => {
+    if (selectedComment?.likes) {
+      return selectedComment.likes!.find(
+        (eachLike) => eachLike.user_id === me?.id
+      )
+        ? true
+        : false;
+    } else {
+      return false;
+    }
+  };
+
+  const onClickedAction = (actionType: string) => {
+    if (!me) return;
+    if (actionType === 'heart') {
+      mutateCommentLike({
+        comment_id: selectedComment!.id,
+        user_id: me.id,
+        type: 'feed',
+      });
+    }
+  };
 
   return selectedComment ? (
     <div className="mt-4 flex w-full flex-col rounded-[22px] bg-light-200 p-4 dark:bg-dark-300">
@@ -76,7 +122,9 @@ export default function CommentCard({ comment_id }: CommentCardProps) {
         <div className="flex gap-6">
           <FeedCardButton
             type="heart"
-            label="10"
+            toogleClicked={onClickedAction}
+            activePossible={checkLikedByCurrentUser()}
+            label={`${selectedComment.likes_count}`}
             icon={<HeartIcon />}
             fillIcon={<HeartFillIcon />}
           />

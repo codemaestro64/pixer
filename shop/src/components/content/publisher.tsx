@@ -11,7 +11,7 @@ export default function Publisher({
 }: {
   logo: any;
   name: string;
-  followers: number;
+  followers: string;
   small?: boolean;
 }) {
   return (

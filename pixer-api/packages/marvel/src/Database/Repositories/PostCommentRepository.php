@@ -55,6 +55,7 @@ class PostCommentRepository extends BaseRepository
             $data = $request->only($this->dataArray);
             $comment = $this->create($data);
 
+            $comment->likes_count = 0;
             $comment->save();
             return $comment;
         } catch (ValidatorException $e) {

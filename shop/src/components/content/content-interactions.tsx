@@ -12,7 +12,7 @@ import FeedContext from '@/lib/feed-context';
 
 function InteractionButton({ icon }: { icon: React.ReactElement }) {
   return (
-    <button className="flex h-[34.27px] w-[34.27px] items-center justify-center rounded-full border border-[#ECECEC] text-[#2A2A2A] dark:border-[#4B4B4B] dark:text-[#d5d5d5] md:h-[53.28px] md:w-[53.28px] 3xl:h-[62px] 3xl:w-[62px]">
+    <button className="flex h-[34.27px] w-[34.27px] items-center justify-center rounded-full border border-[#ECECEC] text-[#2A2A2A] dark:border-[#4B4B4B] dark:text-[#d5d5d5] md:h-[44px] md:w-[44px] 3xl:h-[52px] 3xl:w-[52px]">
       {React.cloneElement(icon, {
         className:
           'w-[13.26px] md:w-[20.62px] 3xl:w-[24px] h-[13.26px] md:h-[20.62px] 3xl:h-[24px]',
@@ -35,8 +35,8 @@ function FollowButton({
       onClick={onAction}
       className={
         isFollow
-          ? '3xl:pd-[30px] h-[34.27px] rounded-[55px] bg-brand px-[16.58px] font-poppins text-[9.95px] font-medium text-white dark:bg-[#28C98C] md:h-[53.28px] md:px-[25.78px] md:text-[15.47px] 3xl:h-[62px] 3xl:text-[18px]'
-          : '3xl:pd-[30px] h-[34.27px] rounded-[55px] border border-brand bg-transparent px-[16.58px] font-poppins text-[9.95px] font-medium text-brand md:h-[53.28px] md:px-[25.78px] md:text-[15.47px] 3xl:h-[62px] 3xl:text-[18px]'
+          ? '3xl:pd-[30px] h-[34.27px] rounded-[55px] bg-brand px-[16.58px] font-poppins text-[9.95px] font-medium text-white dark:bg-[#28C98C] md:h-[44px] md:px-[25.78px] md:text-[15.47px] 3xl:h-[52px] 3xl:text-[18px]'
+          : '3xl:pd-[30px] h-[34.27px] rounded-[55px] border border-brand bg-transparent px-[16.58px] font-poppins text-[9.95px] font-medium text-brand md:h-[44px] md:px-[25.78px] md:text-[15.47px] 3xl:h-[52px] 3xl:text-[18px]'
       }
     >
       {isLoading && <SpinnerIcon className="h-auto w-5 animate-spin" />}
@@ -45,7 +45,13 @@ function FollowButton({
   );
 }
 
-export default function ContentInteractions({ post }: { post: Post }) {
+export default function ContentInteractions({
+  post,
+  followCallback,
+}: {
+  post: Post;
+  followCallback: any;
+}) {
   const { me } = useMe();
   const [followStatus, setFollowStatus] = useState<Follow | null>(null);
   const { triggerPost, setTriggerPost } = useContext(FeedContext);
@@ -55,6 +61,8 @@ export default function ContentInteractions({ post }: { post: Post }) {
     {
       onSuccess: (res) => {
         setFollowStatus(res);
+        console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@', res);
+        followCallback(res.followers_count);
       },
       onError: (err: any) => {
         console.log(err.response.data, 'error');
@@ -67,6 +75,7 @@ export default function ContentInteractions({ post }: { post: Post }) {
     {
       onSuccess: (res) => {
         setFollowStatus(res);
+        followCallback(res.followers_count);
       },
       onError: (err: any) => {
         console.log(err.response.data, 'error');

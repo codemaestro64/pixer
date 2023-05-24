@@ -15,22 +15,19 @@ use Illuminate\Support\Facades\Mail;
 use Marvel\Database\Models\Address;
 use Marvel\Database\Models\Profile;
 use Marvel\Database\Models\Shop;
-use Marvel\Database\Models\FeedComment;
+use Marvel\Database\Models\CommentLike;
 use Marvel\Exceptions\MarvelException;
 
-class FeedCommentRepository extends BaseRepository
+class CommentLikeRepository extends BaseRepository
 {
     /**
      * @var array
      */
-    protected $fieldSearchable = [
-        'reply' => 'like',
-    ];
-
     protected $dataArray = [
+        'type',
         'user_id',
-        'feed_id',
-        'reply',
+        'comment_id',
+        'status',
     ];
 
     /**
@@ -38,7 +35,7 @@ class FeedCommentRepository extends BaseRepository
      **/
     public function model()
     {
-        return FeedComment::class;
+        return CommentLike::class;
     }
 
     public function boot()
@@ -49,19 +46,27 @@ class FeedCommentRepository extends BaseRepository
         }
     }
 
-    public function storeComment($request)
+    public function storeLike($request)
     {
         try {
             $data = $request->only($this->dataArray);
-            $comment = $this->create($data);
+            $commentLike = $this->create($data);
 
-            $comment->save();
-
-            $comment->likes_count = 0;
-            return $comment;
+            $commentLike->save();
+            return $commentLike;
         } catch (ValidatorException $e) {
             throw new MarvelException(SOMETHING_WENT_WRONG);
         }
     }
 
+    public function updateLike($request, $id) {
+        try {
+            $commentLike = $this->findOrFail($id);
+            $commentLike->update($request->only($this->dataArray));
+
+            return $commentLike;
+        } catch (ValidatorException $e) {
+            throw new MarvelException(SOMETHING_WENT_WRONG);
+        }
+    }
 }

@@ -649,6 +649,16 @@ export interface FeedComment {
   user_id: string;
   id: string;
   reply: string;
+  likes_count: string;
+  likes: [
+    {
+      id: string;
+      user_id: string;
+      comment_id: string;
+      type: string;
+      status: boolean;
+    }
+  ];
   customer?: {
     id: string;
     name: string;
@@ -694,6 +704,7 @@ export interface Post {
   attachments: Attachment[];
   created_at: string;
   updated_at: string;
+  followers_count: string;
   customer: {
     id: string;
     name: string;
@@ -789,6 +800,16 @@ export interface PostComment {
   user_id: string;
   id: string;
   reply: string;
+  likes_count: string;
+  likes: [
+    {
+      id: string;
+      user_id: string;
+      comment_id: string;
+      type: string;
+      status: boolean;
+    }
+  ];
   customer?: {
     id: string;
     name: string;
@@ -826,10 +847,25 @@ export interface Follow {
   id: string;
   sender_user_id: string;
   receiver_user_id: string;
+  followers_count: string;
   status: boolean;
 }
 
 export interface CreateFollowInput {
   sender_user_id: string;
   receiver_user_id: string;
+}
+
+export interface CreateCommentLikeInput {
+  user_id: string;
+  type: string;
+  comment_id: string;
+}
+
+export interface CommentLike {
+  id: string;
+  user_id: string;
+  comment_id: string;
+  type: string;
+  status: boolean;
 }

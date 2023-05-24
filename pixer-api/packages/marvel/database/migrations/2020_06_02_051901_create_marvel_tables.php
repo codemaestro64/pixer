@@ -340,6 +340,15 @@ class CreateMarvelTables extends Migration
             $table->boolean('status');
             $table->timestamps();
         });
+
+        Schema::create('comment_likes', function (Blueprint $table) {
+            $table->id();
+            $table->string('type');
+            $table->unsignedBigInteger('comment_id');
+            $table->unsignedBigInteger('user_id');
+            $table->boolean('status');
+            $table->timestamps();
+        });
     }
 
     /**

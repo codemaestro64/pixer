@@ -6,18 +6,17 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Marvel\Database\Models\Language;
-use Marvel\Database\Models\Package;
-use Marvel\Database\Models\Follow;
-use Marvel\Database\Repositories\PostRepository;
+use Marvel\Database\Repositories\CommentLikeRepository;
 use Marvel\Exceptions\MarvelException;
-use Marvel\Http\Requests\PostRequest;
+use Marvel\Http\Requests\CommentLikeRequest;
 use Prettus\Validator\Exceptions\ValidatorException;
+use Marvel\Database\Models\CommentLike;
 
-class PostController extends CoreController
+class CommentLikeController extends CoreController
 {
     public $repository;
 
-    public function __construct(PostRepository $repository)
+    public function __construct(CommentLikeRepository $repository)
     {
         $this->repository = $repository;
     }
@@ -28,10 +27,6 @@ class PostController extends CoreController
      */
     public function index(Request $request)
     {
-        //return $this->repository->with(['customer', 'profile', 'packages'])->where('user_id', $request->user()->id)->orderBy('updated_at', 'desc')->get();
-        $limit = $request->limit ?   $request->limit : 15;
-        return $this->repository->with(['customer', 'profile', 'packages', 'likes'])->withCount(['comments', 'likes'])->orderBy('updated_at', 'desc')->paginate($limit);
-
     }
 
     /**
@@ -50,21 +45,30 @@ class PostController extends CoreController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PostRequest $request)
+    public function store(CommentLikeRequest $request)
     {
-        if ($request->user()) {
-            $new_post = $this->repository->storePost($request);
+        if ($request->user()->id == $request->user_id) {
+            $matchThese = ['comment_id' => $request->comment_id, 'user_id' => $request->user_id, 'type' => $request->type];
+            $commentLike = CommentLike::where($matchThese)->first();
 
-            foreach ($request->packages as $eachPackage) {
-                Package::create(['post_id' => $new_post->id, 'name' => $eachPackage['name'], 'price' => $eachPackage['price'], 'descr' => $eachPackage['descr'], 'keywords' => $eachPackage['keywords']]);
+            if ($commentLike) {
+                $commentLike->status = !$commentLike->status;
+                $commentLike->save();
+            } else {
+                $commentLike = $this->repository->create([
+                    'user_id'     => $request->user_id,
+                    'comment_id'    => $request->comment_id,
+                    'type' => $request->type,
+                    'status' => true,
+                ]);
             }
 
-            return $new_post;
+            return $commentLike;
         } else {
             throw new MarvelException(NOT_AUTHORIZED);
         }
-    }
 
+    }
 
     /**
      * Display the specified resource.
@@ -74,12 +78,6 @@ class PostController extends CoreController
      */
     public function show($id)
     {
-        $post = $this->repository->with(['customer', 'profile', 'packages', 'likes', 'comments'])->withCount(['comments', 'likes'])->findOrFail($id);
-
-        $followers_cnt = Follow::where('receiver_user_id', $post->user_id)->where('status', 1)->get()->count();
-        $post->followers_count = $followers_cnt;
-
-        return $post;
 
     }
 

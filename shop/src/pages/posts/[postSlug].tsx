@@ -37,6 +37,7 @@ import {
 } from '@/components/ui/slider';
 import { useMe } from '@/data/user';
 import { getProfileAvatar, getProfileAvatarImage } from '@/lib/constants';
+import ShowMoreLess from '@/components/ui/show-more-less';
 
 function TopAndLatestProductsButton({
   label,
@@ -83,6 +84,10 @@ const PostPage: NextPageWithLayout = () => {
     mutatePost({ id: postSlug });
   }, [postSlug]);
 
+  const onFollowCallback = (nCnt: string) => {
+    setPost({ ...post, followers_count: nCnt } as Post);
+  };
+
   let [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
 
   return post && me ? (
@@ -105,35 +110,38 @@ const PostPage: NextPageWithLayout = () => {
                 swiperParams={swiperParams}
               />
             </div>
-            <div className="md:grid md:grid-cols-2">
-              <div>
+            <div className="flex w-full flex-col items-start justify-between gap-12 md:flex-row">
+              <div className="w-full">
                 <div className="mt-[10.94px] md:mt-[13px] 2xl:mt-[15px]">
-                  <h1 className="truncate-text-line-two font-poppins text-[18px] font-semibold text-[#3a3a3a] dark:text-[#dedede] md:w-[334px] md:text-[22px] 2xl:w-[400px] 2xl:text-[32px] 3xl:w-[544px]">
+                  <h1 className="line-clamp-2 font-poppins text-[18px] font-semibold text-[#3a3a3a] dark:text-[#dedede] md:w-[334px] md:text-[22px] 2xl:w-[400px] 2xl:text-[32px] 3xl:w-[544px]">
                     {post.title}
                   </h1>
-                  <h1 className="md:text-[14px]2xl:text-[16px] break-words font-poppins text-[12px] text-[#3a3a3a] dark:text-[#dedede]">
-                    {post.descr}
-                  </h1>
-                  <div className="mt-4">
-                    <ProductGalleryThumbs
-                      gallery={post.attachments}
-                      setThumbsSwiper={setThumbsSwiper}
-                    />
+                  <div>
+                    <ShowMoreLess content={post.descr} />
                   </div>
                 </div>
                 <div className="mt-[10.56px] md:mt-[18.75px] 2xl:mt-[28px]">
                   <Publisher
                     name={post.customer.name}
-                    followers={20}
+                    followers={post.followers_count}
                     logo={post.profile}
                   />
                 </div>
+                <div className="mt-4">
+                  <ProductGalleryThumbs
+                    gallery={post.attachments}
+                    setThumbsSwiper={setThumbsSwiper}
+                  />
+                </div>
               </div>
-              <div className="mt-[20px] flex items-center px-[4px] md:mt-[32.8px] md:flex-col md:px-0 2xl:mt-[46px]">
+              <div className="mt-[20px] flex w-full items-center px-[4px] md:mt-[32.8px] md:w-auto md:flex-col md:px-0 2xl:mt-[46px]">
                 <ContentSocial post={post} me={me} />
                 <div className="relative ml-auto flex md:mt-[35.2px] 2xl:mt-[61.79px]">
-                  <div className="flex 2xl:absolute 2xl:right-0">
-                    <ContentInteractions post={post} />
+                  <div className="flex">
+                    <ContentInteractions
+                      post={post}
+                      followCallback={onFollowCallback}
+                    />
                   </div>
                 </div>
               </div>

@@ -31,13 +31,17 @@ class FollowController extends CoreController
             $matchThese = ['sender_user_id' => $request->sender_user_id, 'receiver_user_id' => $request->receiver_user_id];
             $followInfo = Follow::where($matchThese)->first();
 
+            $followers_cnt = Follow::where('receiver_user_id', $request->receiver_user_id)->where('status', 1)->get()->count();
+
             if ($followInfo) {
+                $followInfo->followers_count = $followers_cnt;
                 return $followInfo;
             } else {
                 return response()->json([
                     'sender_user_id' => $request->sender_user_id,
                     'receiver_user_id' => $request->receiver_user_id,
-                    'status' => false,
+                    'followers_count' => $followers_cnt,
+                    'status' => 0
                 ]);
             }
         } else {
@@ -66,6 +70,7 @@ class FollowController extends CoreController
         if ($request->user()->id == $request->sender_user_id) {
             $matchThese = ['sender_user_id' => $request->sender_user_id, 'receiver_user_id' => $request->receiver_user_id];
             $followInfo = Follow::where($matchThese)->first();
+
             if ($followInfo) {
                 $followInfo->status = !$followInfo->status;
                 $followInfo->save();
@@ -73,9 +78,12 @@ class FollowController extends CoreController
                 $followInfo = $this->repository->create([
                     'sender_user_id' => $request->sender_user_id,
                     'receiver_user_id' => $request->receiver_user_id,
-                    'status' => true,
+                    'status' => 1,
                 ]);
             }
+
+            $followers_cnt = Follow::where('receiver_user_id', $request->receiver_user_id)->where('status', 1)->get()->count();
+            $followInfo->followers_count = $followers_cnt;
 
             return $followInfo;
         } else {

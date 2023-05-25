@@ -36,6 +36,7 @@ import routes from '@/config/routes';
 import Button from '@/components/ui/button';
 import { ThreeDotsIcon } from '@/components/icons/three-dots-icon';
 import ProductTags from '@/components/product/product-tags';
+import { getPreviewOriginalImage, isVideoItem } from '@/lib/constants';
 
 type ProductGalleryThumbnailProps = {
   gallery: Attachment[];
@@ -49,26 +50,6 @@ const ProductGalleryThumbnail: React.FC<ProductGalleryThumbnailProps> = ({
   swiperParams,
 }) => {
   const { t } = useTranslation('common');
-
-  const getPreviewImage = (item: Attachment) => {
-    if (item.original.match(/\.(jpg|jpeg|png|gif)$/i)) {
-      return item.original.replace('localhost', 'localhost:8000');
-    } else {
-      return placeholder;
-    }
-  };
-
-  const isVideoItem = (item: Attachment) => {
-    if (item.original.match(/\.(jpg|jpeg|png|gif)$/i)) {
-      return false;
-    } else {
-      if (item.thumbnail) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  };
 
   return (
     <Swiper
@@ -96,7 +77,7 @@ const ProductGalleryThumbnail: React.FC<ProductGalleryThumbnailProps> = ({
               layout="fill"
               objectFit="cover"
               className="rounded-[10px]"
-              src={getPreviewImage(item)}
+              src={getPreviewOriginalImage(item)}
               alt={`Product gallery ${item.id}`}
             />
           )}

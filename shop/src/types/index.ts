@@ -751,6 +751,11 @@ export interface Post {
   ];
 }
 
+export interface PostAndLatestPosts {
+  post: Post;
+  latest_posts: Post[];
+}
+
 export interface PostPaginator extends PaginatorInfo<Post> {}
 
 export interface PostResponse {

@@ -36,6 +36,7 @@ import routes from '@/config/routes';
 import Button from '@/components/ui/button';
 import { ThreeDotsIcon } from '@/components/icons/three-dots-icon';
 import ProductTags from '@/components/product/product-tags';
+import { getPreviewThumbnailImage } from '@/lib/constants';
 
 type ProductGalleryThumbsProps = {
   gallery: Attachment[];
@@ -47,14 +48,6 @@ const ProductGalleryThumbs: React.FC<ProductGalleryThumbsProps> = ({
   setThumbsSwiper,
 }) => {
   const { t } = useTranslation('common');
-
-  const getPreviewImage = (item: Attachment) => {
-    if (item.thumbnail.match(/\.(jpg|jpeg|png|gif)$/i)) {
-      return item.thumbnail.replace('localhost', 'localhost:8000');
-    } else {
-      return placeholder;
-    }
-  };
 
   return (
     <div className="flex-shrink-0">
@@ -75,7 +68,7 @@ const ProductGalleryThumbs: React.FC<ProductGalleryThumbsProps> = ({
             <Image
               layout="fill"
               objectFit="cover"
-              src={getPreviewImage(item)}
+              src={getPreviewThumbnailImage(item)}
               alt={`Product thumb gallery ${item.id}`}
             />
           </SwiperSlide>

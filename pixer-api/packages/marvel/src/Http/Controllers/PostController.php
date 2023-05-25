@@ -30,7 +30,7 @@ class PostController extends CoreController
     {
         //return $this->repository->with(['customer', 'profile', 'packages'])->where('user_id', $request->user()->id)->orderBy('updated_at', 'desc')->get();
         $limit = $request->limit ?   $request->limit : 15;
-        return $this->repository->with(['customer', 'profile', 'packages', 'likes'])->withCount(['comments', 'likes'])->orderBy('updated_at', 'desc')->paginate($limit);
+        return $this->repository->with(['customer', 'profile', 'packages', 'likes', 'followers'])->withCount(['comments', 'likes', 'followers'])->orderBy('updated_at', 'desc')->paginate($limit);
 
     }
 
@@ -74,13 +74,20 @@ class PostController extends CoreController
      */
     public function show($id)
     {
-        $post = $this->repository->with(['customer', 'profile', 'packages', 'likes', 'comments'])->withCount(['comments', 'likes'])->findOrFail($id);
+        $post = $this->repository->with(['customer', 'profile', 'packages', 'likes', 'comments', 'followers'])->withCount(['comments', 'followers', 'likes'])->findOrFail($id);
 
+        $latest_posts_ids = $this->repository->where('id', '!=', $id)->orderBy('updated_at', 'desc')->offset(0)->limit(10)->pluck('id')->all();
+        $latest_posts = $this->repository->with(['customer', 'profile', 'packages', 'likes', 'comments', 'followers'])->withCount(['comments', 'followers', 'likes'])->whereIn('id', $latest_posts_ids)->orderBy('updated_at', 'desc')->get();
+
+        /*
         $followers_cnt = Follow::where('receiver_user_id', $post->user_id)->where('status', 1)->get()->count();
         $post->followers_count = $followers_cnt;
+        */
 
-        return $post;
-
+        return response()->json([
+            'post' => $post,
+            'latest_posts' => $latest_posts,
+        ]);
     }
 
     /**

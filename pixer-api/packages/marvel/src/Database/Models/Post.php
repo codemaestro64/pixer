@@ -45,4 +45,8 @@ class Post extends Model
     {
         return $this->hasMany(PostLike::class)->where('status', '=', 1);
     }
+
+    public function followers(): HasMany {
+        return $this->hasMany(Follow::class, 'receiver_user_id', 'user_id')->where('status', 1);
+    }
 }

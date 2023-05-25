@@ -52,7 +52,7 @@ export default function ContentSocial({ post, me }: { post: Post; me: User }) {
 
   const { mutate: mutatePost, isLoading } = useMutation(client.posts.get, {
     onSuccess: (res) => {
-      setSelectedPost(res);
+      setSelectedPost(res.post);
     },
     onError: (err: any) => {
       console.log(err.response.data, 'error');

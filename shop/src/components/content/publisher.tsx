@@ -58,7 +58,9 @@ export default function Publisher({
               small ? 'text-[8.52px]' : 'text-[10.75px] md:text-[14px]'
             }`}
           >
-            {followers} Followers
+            {`${followers} ${
+              Number(followers) > 1 ? 'Followers' : 'Follower'
+            } `}
           </div>
         </div>
       </div>

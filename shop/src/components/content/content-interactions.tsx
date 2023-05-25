@@ -61,7 +61,6 @@ export default function ContentInteractions({
     {
       onSuccess: (res) => {
         setFollowStatus(res);
-        console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@', res);
         followCallback(res.followers_count);
       },
       onError: (err: any) => {

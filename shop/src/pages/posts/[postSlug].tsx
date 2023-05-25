@@ -40,16 +40,21 @@ import ShowMoreLess from '@/components/ui/show-more-less';
 function TopAndLatestProductsButton({
   label,
   active = false,
+  type = false,
+  toggleOne,
 }: {
   label: string;
-  active?: boolean;
+  active: boolean;
+  type: boolean;
+  toggleOne: any;
 }) {
   return (
     <button
+      onClick={() => toggleOne(type)}
       className={`px-[4px] font-poppins text-[16px] font-medium md:text-[23.64px] ${
         active
           ? 'pointer-events-none text-dark-300 dark:text-[#d5d5d5] 2xl:dark:text-white'
-          : 'text-[#989898] 2xl:hidden'
+          : 'text-[#989898]'
       }`}
     >
       {label}
@@ -64,13 +69,19 @@ const swiperParams: SwiperOptions = {
 
 const PostPage: NextPageWithLayout = () => {
   const [post, setPost] = useState<Post | null>(null);
+  const [latestPosts, setLatestPosts] = useState<Post[] | []>([]);
+  const [showTopProduct, setShowTopProduct] = useState<boolean>(true);
+  const [is2XL, setIs2XL] = useState<boolean>(false);
+  const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
 
   const router = useRouter();
   const { postSlug } = router.query;
   const { me } = useMe();
   const { mutate: mutatePost, isLoading } = useMutation(client.posts.get, {
     onSuccess: (res) => {
-      setPost(res);
+      console.log('@@@@@@@@@@@@@@@@@@@@', res);
+      setPost(res.post);
+      setLatestPosts(res.latest_posts);
     },
     onError: (err: any) => {
       console.log(err.response.data, 'error');
@@ -78,27 +89,38 @@ const PostPage: NextPageWithLayout = () => {
   });
 
   useEffect(() => {
+    updateWindowSize();
+    window.addEventListener('resize', updateWindowSize);
+    return () => window.removeEventListener('resize', updateWindowSize);
+  }, []);
+
+  useEffect(() => {
     if (typeof postSlug != 'string') return;
-    mutatePost({ id: postSlug });
+
+    setPost(null);
+    setLatestPosts([]);
+    setThumbsSwiper(null);
+
+    setTimeout(() => {
+      mutatePost({ id: postSlug });
+    }, 300);
   }, [postSlug]);
 
   const onFollowCallback = (nCnt: string) => {
     setPost({ ...post, followers_count: nCnt } as Post);
   };
 
-  let [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
+  function updateWindowSize() {
+    setIs2XL(window.innerWidth < 1440 ? false : true);
+    if (window.innerWidth >= 1440) {
+      setShowTopProduct(true);
+    }
+  }
 
-  const executeOnClick = (isExpanded: boolean) => {
-    console.log(isExpanded);
+  const onSwitchTopLatest = (type: boolean) => {
+    setShowTopProduct(type);
   };
 
-  const getDescription = () => {
-    return (
-      <p className="font-poppins text-[12px] text-[#3a3a3a] dark:text-[#dedede] md:text-[14px] 2xl:text-[16px]">
-        {post!.descr}
-      </p>
-    );
-  };
   return post && me ? (
     <>
       <div className="grid grid-cols-1 2xl:grid-cols-9">
@@ -127,14 +149,16 @@ const PostPage: NextPageWithLayout = () => {
                   </h1>
                   <div className="show-more-description">
                     {/*<ShowMoreLess content={post.descr} />*/}
-                    <ShowMore
-                      lines={5}
-                      more="Show more"
-                      less="Show less"
-                      anchorClass="underline text-brand font-poppins"
-                    >
-                      {post!.descr}
-                    </ShowMore>
+                    {
+                      <ShowMore
+                        lines={5}
+                        more="Show more"
+                        less="Show less"
+                        anchorClass="underline text-brand font-poppins"
+                      >
+                        {post!.descr}
+                      </ShowMore>
+                    }
                   </div>
                 </div>
                 <div className="mt-[10.56px] md:mt-[18.75px] 2xl:mt-[28px]">
@@ -165,16 +189,35 @@ const PostPage: NextPageWithLayout = () => {
             </div>
           </div>
           <div className="mt-[27.73px] 2xl:mt-[60.5px]">
-            <div className="space-x-[22px] px-[14px] md:px-[36px] 2xl:flex 2xl:justify-between">
-              <TopAndLatestProductsButton label="Top Products" active />
-              <TopAndLatestProductsButton label="Latest Products" />
-              <div className="hidden 2xl:block">
+            <div className="px-[14px] md:px-[36px] 2xl:flex 2xl:justify-between">
+              <div className="w-full hidden items-center justify-between 2xl:flex">
+                <div className="px-[4px] font-poppins text-[16px] font-medium md:text-[23.64px] pointer-events-none text-dark-300 dark:text-[#d5d5d5] 2xl:dark:text-white">
+                  {'Top Products'}
+                </div>
                 <button className="mr-[32px] inline-block">
                   <EllipsisVerticalIcon className="h-[42px] w-[42px] rotate-90 text-dark-300 dark:text-white" />
                 </button>
               </div>
+              <div className="w-full flex flex-row gap-4 2xl:hidden">
+                <TopAndLatestProductsButton
+                  label="Top Products"
+                  type={true}
+                  active={showTopProduct}
+                  toggleOne={onSwitchTopLatest}
+                />
+                <TopAndLatestProductsButton
+                  label="Latest Products"
+                  type={false}
+                  active={!showTopProduct}
+                  toggleOne={onSwitchTopLatest}
+                />
+              </div>
             </div>
-            <div className="mt-[15px] space-y-[8px] px-[10px] pb-[16px] md:mt-[28px] md:space-y-[18px] md:px-[24px] md:pb-[24px] 2xl:mt-[25.5px] 2xl:px-[29px]">
+            <div
+              className={`${
+                showTopProduct ? 'visible' : 'hidden'
+              } mt-[15px] space-y-[8px] px-[10px] pb-[16px] md:mt-[28px] md:space-y-[18px] md:px-[24px] md:pb-[24px] 2xl:mt-[25.5px] 2xl:px-[29px]`}
+            >
               <ContentTopProduct
                 position="01"
                 name="Reactify Ecommerce Theme with Dashboard"
@@ -193,13 +236,20 @@ const PostPage: NextPageWithLayout = () => {
             </div>
           </div>
         </div>
-        <div className="mt-[24px] hidden pr-[25.85px] 2xl:col-span-3 2xl:block">
-          <div className="flex min-w-0 overflow-auto">
+        <div
+          className={`${
+            showTopProduct && !is2XL ? 'hidden' : 'visible'
+          } px-[10px] md:px-[24px] 2xl:px-0 2xl:mt-[24px] pr-[25.85px] 2xl:col-span-3`}
+        >
+          <div className="hidden min-w-0 overflow-auto 2xl:block">
             <ContentTags tags={post.keywords.split(',')} />
           </div>
           <div className="mt-[25.65px]">
             <div className="hidden items-center justify-between px-[20px] py-[14px] 2xl:flex">
-              <TopAndLatestProductsButton label="Latest Products" active />
+              <div className="px-[4px] font-poppins text-[16px] font-medium md:text-[23.64px] pointer-events-none text-dark-300 dark:text-[#d5d5d5] 2xl:dark:text-white">
+                {'Latest Products'}
+              </div>
+
               <div className="hidden 2xl:block">
                 <button className="inline-block">
                   <EllipsisVerticalIcon className="h-[42px] w-[42px] rotate-90 text-dark-300 dark:text-white" />
@@ -208,11 +258,9 @@ const PostPage: NextPageWithLayout = () => {
             </div>
           </div>
           <div className="mt-[16px] space-y-[26px] pl-[8px] pb-[32px]">
-            <ContentLatestProduct />
-            <ContentLatestProduct />
-            <ContentLatestProduct />
-            <ContentLatestProduct />
-            <ContentLatestProduct />
+            {latestPosts.map((item, index) => (
+              <ContentLatestProduct product={item} />
+            ))}
           </div>
         </div>
       </div>

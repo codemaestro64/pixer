@@ -11,6 +11,7 @@ import { ChevronLeft } from '@/components/icons/chevron-left';
 import { ChevronRight } from '@/components/icons/chevron-right';
 import placeholder from '@/assets/images/placeholders/product.svg';
 import { Attachment } from '@/types';
+import { getPreviewOriginalImage, isVideoItem } from '@/lib/constants';
 
 interface Props {
   gallery: any[];
@@ -25,26 +26,6 @@ export default function ProductThumbnailGallery({ gallery }: Props) {
   let [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
   const prevRef = useRef<HTMLDivElement>(null);
   const nextRef = useRef<HTMLDivElement>(null);
-
-  const isVideoItem = (item: Attachment) => {
-    if (item.original.match(/\.(jpg|jpeg|png|gif)$/i)) {
-      return false;
-    } else {
-      if (item.thumbnail) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  };
-
-  const getPreviewImage = (item: Attachment) => {
-    if (item.original.match(/\.(jpg|jpeg|png|gif)$/i)) {
-      return item.original.replace('localhost', 'localhost:8000');
-    } else {
-      return placeholder;
-    }
-  };
 
   return (
     <div className="w-full">
@@ -78,7 +59,7 @@ export default function ProductThumbnailGallery({ gallery }: Props) {
                 <Image
                   layout="fill"
                   objectFit="cover"
-                  src={item ? getPreviewImage(item) : placeholder}
+                  src={item ? getPreviewOriginalImage(item) : placeholder}
                   alt={`Product gallery ${item.id}`}
                 />
               )}

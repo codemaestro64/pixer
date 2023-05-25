@@ -65,6 +65,7 @@ import type {
   CreateFeedLikeInput,
   FeedLike,
   Post,
+  PostAndLatestPosts,
   PostPaginator,
   PostQueryOptions,
   CreatePostInput,
@@ -349,7 +350,7 @@ class Client {
         ...params,
       }),
     get: ({ id }: { id: string }) =>
-      HttpClient.get<Post>(`${API_ENDPOINTS.POSTS}/${id}`),
+      HttpClient.get<PostAndLatestPosts>(`${API_ENDPOINTS.POSTS}/${id}`),
     create: (input: CreatePostInput) =>
       HttpClient.post<PostResponse>(API_ENDPOINTS.POSTS, input),
     like: (input: CreatePostLikeInput) =>

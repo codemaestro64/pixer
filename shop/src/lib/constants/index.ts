@@ -1,4 +1,5 @@
 import placeholder from '@/assets/images/placeholders/product.svg';
+import { Attachment } from '@/types';
 
 export const CART_KEY = 'pixer-cart';
 export const PRODUCTS_PER_PAGE = 30;
@@ -48,5 +49,33 @@ export function getProfileAvatar(profile: any | null) {
     }
   } else {
     return undefined;
+  }
+}
+
+export function getPreviewThumbnailImage(item: Attachment) {
+  if (item.thumbnail.match(/\.(jpg|jpeg|png|gif)$/i)) {
+    return item.thumbnail.replace('localhost', 'localhost:8000');
+  } else {
+    return placeholder;
+  }
+}
+
+export function getPreviewOriginalImage(item: Attachment) {
+  if (item.original.match(/\.(jpg|jpeg|png|gif)$/i)) {
+    return item.original.replace('localhost', 'localhost:8000');
+  } else {
+    return placeholder;
+  }
+}
+
+export function isVideoItem(item: Attachment) {
+  if (item.original.match(/\.(jpg|jpeg|png|gif)$/i)) {
+    return false;
+  } else {
+    if (item.thumbnail) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

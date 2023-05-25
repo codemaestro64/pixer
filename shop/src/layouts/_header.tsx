@@ -12,6 +12,7 @@ import { Transition } from '@/components/ui/transition';
 import { UserIcon } from '@/components/icons/user-icon';
 import SearchButton from '@/components/search/search-button';
 import CartButton from '@/components/cart/cart-button';
+import NotificationButton from '@/components/notification/notification-button';
 import Hamburger from '@/components/ui/hamburger';
 import GridSwitcher from '@/components/product/grid-switcher';
 import { useIsMounted } from '@/lib/hooks/use-is-mounted';
@@ -140,7 +141,7 @@ export default function Header({
     process.env.NEXT_PUBLIC_ENABLE_MULTI_LANG === 'true' &&
     !!process.env.NEXT_PUBLIC_AVAILABLE_LANGUAGES;
   return (
-    <header className="app-header sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-light-300 bg-light py-1 px-4 ltr:left-0 rtl:right-0 dark:border-dark-300 dark:bg-dark-250 sm:h-[70px] sm:px-6">
+    <header className="app-header sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-light-300 bg-light py-1 px-4 ltr:left-0 rtl:right-0 dark:border-dark-300 dark:bg-dark-250 sm:h-[70px] sm:px-6">
       <div className="flex items-center gap-4">
         {showHamburger && (
           <Hamburger
@@ -153,6 +154,7 @@ export default function Header({
       </div>
       <div className="relative flex items-center gap-5 pr-0.5 xs:gap-6 sm:gap-7">
         <SearchButton className="hidden sm:flex" />
+        <NotificationButton />
         <ThemeSwitcher />
         <GridSwitcher />
         {asPath !== routes.checkout && (

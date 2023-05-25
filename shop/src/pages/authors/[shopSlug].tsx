@@ -200,27 +200,30 @@ const ShopPage: NextPageWithLayout<
   // const { t } = useTranslation('common');
   return (
     <>
-      <div className='xl:p-[25px]'>
+      <div className="xl:p-[25px]">
         {/* first section */}
         <div>
           <AuthorsBackground background={cover_image.original} />
-          <div className='xl:pl-[69px] xl:pr-[42px] flex flex-col xl:flex-row items-center'>
+          <div className="xl:pl-[69px] xl:pr-[42px] flex flex-col xl:flex-row items-center">
             <AuthorsLogo logo={logo.original} />
-            <div className='pt-[32px] xl:pt-[11px] xl:pl-[21px] flex-1 flex flex-col xl:flex-row justify-between items-center space-y-[31px] xl:space-y-0'>
+            <div className="pt-[32px] xl:pt-[11px] xl:pl-[21px] flex-1 flex flex-col xl:flex-row justify-between items-center space-y-[31px] xl:space-y-0">
               <AuthorsProfile name={name} slug={shop.slug} rating={4.6} />
               <AtuhorsInteractions />
             </div>
           </div>
         </div>
         {/* second section */}
-        <div className='mt-[31.44px] xl:mt-[24px] grid grid-cols-1 xl:grid-cols-[328.81px_1fr] xl:gap-[16.19px]'>
+        <div className="mt-[31.44px] xl:mt-[24px] grid grid-cols-1 xl:grid-cols-[328.81px_1fr] xl:gap-[16.19px]">
           {/* left */}
-          <div className='space-y-[11px] hidden xl:block'>
+          <div className="space-y-[11px] hidden xl:block">
             <AuthorsSkills />
-            <AuthorsContactInfo email={shop.owner.email} address={shop.address} />
+            <AuthorsContactInfo
+              email={shop.owner.email}
+              address={shop.address}
+            />
           </div>
           {/* right */}
-          <div className='space-y-[19px] overflow-hidden'>
+          <div className="space-y-[19px] overflow-hidden">
             <AuthorsAnalytics />
             <AuthorsProducts />
           </div>

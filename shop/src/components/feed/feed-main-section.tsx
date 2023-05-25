@@ -45,7 +45,11 @@ export default function FeedMainSection({ is2xl = false }: { is2xl: boolean }) {
           </div>
         ) : null}
         <div className="mt-[13px] md:mt-[19px] 2xl:mt-[12px]">
-          <FeedInput feedDescr={feedDescr} setFeedDescr={setFeedDescr} />
+          <FeedInput
+            me={me}
+            feedDescr={feedDescr}
+            setFeedDescr={setFeedDescr}
+          />
         </div>
         <div className="mt-[6px] md:mt-[7px]">
           <FeedActions feedDescr={feedDescr} setFeedDescr={setFeedDescr} />

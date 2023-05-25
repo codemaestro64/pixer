@@ -266,7 +266,7 @@ html.dark .StripeElement {
 .author-tile {
   background-size: 100% 100%;
   /* background-image: url("../images/author_tile_bg.jpg"); */
-  background-image: url("../images/author_tile_bg_correct.jpg");
+  background-image: url('../images/author_tile_bg_correct.jpg');
   background-repeat: no-repeat;
   /* background-blend-mode: multiply;
   background-color: gray; */
@@ -284,4 +284,8 @@ html.dark .StripeElement {
   display: -webkit-box;
   -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
+}
+
+.show-more-description span {
+  @apply font-poppins text-[12px] text-[#3a3a3a] dark:text-[#dedede] md:text-[14px] 2xl:text-[16px];
 }

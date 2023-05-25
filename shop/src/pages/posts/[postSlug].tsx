@@ -7,10 +7,7 @@ import type {
   InferGetStaticPropsType,
 } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import invariant from 'tiny-invariant';
 import Layout from '@/layouts/_layout';
-import Image from '@/components/ui/image';
-import TrendingProductImage from '@/assets/images/trending-product.png';
 import ContentInput from '@/components/content/content-input';
 import ContentTags from '@/components/content/content-tags';
 import ContentSocial from '@/components/content/content-social';
@@ -27,6 +24,7 @@ import ContentLoader from '@/components/content/content-loader';
 import placeholder from '@/assets/images/placeholders/product.svg';
 import ProductGalleryThumbnail from '@/components/product/product-gallery-thumbnail';
 import ProductGalleryThumbs from '@/components/product/product-gallery-thumbs';
+import ShowMore from 'react-show-more';
 
 import {
   Swiper,
@@ -90,6 +88,17 @@ const PostPage: NextPageWithLayout = () => {
 
   let [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
 
+  const executeOnClick = (isExpanded: boolean) => {
+    console.log(isExpanded);
+  };
+
+  const getDescription = () => {
+    return (
+      <p className="font-poppins text-[12px] text-[#3a3a3a] dark:text-[#dedede] md:text-[14px] 2xl:text-[16px]">
+        {post!.descr}
+      </p>
+    );
+  };
   return post && me ? (
     <>
       <div className="grid grid-cols-1 2xl:grid-cols-9">
@@ -116,8 +125,16 @@ const PostPage: NextPageWithLayout = () => {
                   <h1 className="line-clamp-2 font-poppins text-[18px] font-semibold text-[#3a3a3a] dark:text-[#dedede] md:w-[334px] md:text-[22px] 2xl:w-[400px] 2xl:text-[32px] 3xl:w-[544px]">
                     {post.title}
                   </h1>
-                  <div>
-                    <ShowMoreLess content={post.descr} />
+                  <div className="show-more-description">
+                    {/*<ShowMoreLess content={post.descr} />*/}
+                    <ShowMore
+                      lines={5}
+                      more="Show more"
+                      less="Show less"
+                      anchorClass="underline text-brand font-poppins"
+                    >
+                      {post!.descr}
+                    </ShowMore>
                   </div>
                 </div>
                 <div className="mt-[10.56px] md:mt-[18.75px] 2xl:mt-[28px]">
@@ -134,7 +151,7 @@ const PostPage: NextPageWithLayout = () => {
                   />
                 </div>
               </div>
-              <div className="mt-[20px] flex w-full items-center px-[4px] md:mt-[32.8px] md:w-auto md:flex-col md:px-0 2xl:mt-[46px]">
+              <div className="flex w-full items-center px-[4px] md:mt-[32.8px] md:w-auto md:flex-col md:px-0 2xl:mt-[46px]">
                 <ContentSocial post={post} me={me} />
                 <div className="relative ml-auto flex md:mt-[35.2px] 2xl:mt-[61.79px]">
                   <div className="flex">

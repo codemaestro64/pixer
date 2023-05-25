@@ -117,7 +117,7 @@ export function Sidebar({
               title={t('text-post')}
               href={routes.post}
               isCollapse={isCollapse}
-              icon={<PostIcon className="h-[17px] w-[17px] text-current" />}
+              icon={<PostIcon className="h-[20px] w-[20px] text-current" />}
             />
 
             <NavLink

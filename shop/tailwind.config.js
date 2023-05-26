@@ -82,6 +82,8 @@ module.exports = {
         'bottom-nav': '0 -2px 3px rgba(0, 0, 0, 0.08)',
         'feed-card': '6.92px 6.92px 3.4px rgba(71, 71, 71, 0.25)',
         'feed-cardimage': '5.21px 6.08px 8px rgba(0, 0, 0, 0.25)',
+        'trade-submit-light': '4px 7px 0px rgba(24,24,24,1)',
+        'trade-submit-dark': '4px 7px 0px rgba(230,230,230,1)',
       },
       fontSize: {
         '10px': '.625rem',

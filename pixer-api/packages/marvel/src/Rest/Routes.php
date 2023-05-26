@@ -44,6 +44,7 @@ use Marvel\Http\Controllers\PostLikeController;
 use Marvel\Http\Controllers\PackageController;
 use Marvel\Http\Controllers\FollowController;
 use Marvel\Http\Controllers\CommentLikeController;
+use Marvel\Http\Controllers\CommunityController;
 
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/token', [UserController::class, 'token']);
@@ -133,6 +134,10 @@ Route::post('orders/checkout/verify', [CheckoutController::class, 'verify']);
 
 Route::apiResource('orders', OrderController::class, [
     'only' => ['show', 'store'],
+]);
+
+Route::apiResource('communities', CommunityController::class, [
+    'only' => ['index', 'show'],
 ]);
 
 Route::post('free-downloads/digital-file', [DownloadController::class, 'generateFreeDigitalDownloadableUrl']);

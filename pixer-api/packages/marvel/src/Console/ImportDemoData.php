@@ -112,6 +112,10 @@ class ImportDemoData extends Command
         $questions_sql = file_get_contents($questions_path);
         DB::statement($questions_sql);
 
+        $communities_path = public_path('sql/communities.sql');
+        $communities_sql = file_get_contents($communities_path);
+        DB::statement($communities_sql);
+
         $this->info('Seed completed successfully!');
     }
 }

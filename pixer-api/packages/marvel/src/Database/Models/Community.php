@@ -46,11 +46,11 @@ class Community extends Model
     }
 
     /**
-     * @return HasMany
+     * @return BelongsToMany
      */
-    public function members(): HasMany
+    public function members(): BelongsToMany
     {
-        return $this->HasMany(User::class, 'community_user');
+        return $this->BelongsToMany(User::class, 'communities_users');
     }
 
 }

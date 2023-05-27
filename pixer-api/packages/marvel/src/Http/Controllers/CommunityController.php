@@ -57,9 +57,9 @@ class CommunityController extends CoreController
      */
     public function show($slug, Request $request) 
     {
-        $community = $this->repository
-            ->with(['owner'])
-            ->withCount(['members']);
+        $community = $this->repository->withCount(['members']);
+            //->with(['owner']);
+            //>withCount(['members']);
 
         try {
             $community = $community->findOneByFieldOrFail('slug', $slug);

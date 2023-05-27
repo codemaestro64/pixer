@@ -8,8 +8,10 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { ChevronLeft } from '../icons/chevron-left';
 import { ChevronRight } from '../icons/chevron-right';
+import { Shop } from '@/types';
+import { formatNumber } from '@/lib/constants';
 
-export default function AuthorsAnalytics() {
+export default function AuthorsAnalytics({ shop }: { shop: Shop }) {
   const [selectedIdx, setSelectedIdx] = useState<number>(0);
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
@@ -55,7 +57,7 @@ export default function AuthorsAnalytics() {
         <div className={`${selectedIdx === 1 ? 'block' : 'hidden'} xl:block`}>
           <ProfileAnalyticsCard
             to="Sales"
-            value="129K"
+            value={formatNumber(shop.orders_count)}
             chart={
               <SalesChart className="text-[#042D6B] dark:text-[#ACCCFC]" />
             }

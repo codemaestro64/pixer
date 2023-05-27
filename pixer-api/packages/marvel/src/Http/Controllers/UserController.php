@@ -5,6 +5,7 @@ namespace Marvel\Http\Controllers;
 use Exception;
 use Marvel\Database\Models\Product;
 use Marvel\Database\Models\Shop;
+use Illuminate\Support\Arr;
 use Newsletter;
 use Carbon\Carbon;
 use Marvel\Traits\Wallets;
@@ -26,6 +27,11 @@ use Marvel\Exceptions\MarvelException;
 use Marvel\Database\Models\OrderedFile;
 use Laravel\Socialite\Facades\Socialite;
 use Marvel\Database\Models\DownloadToken;
+use Marvel\Database\Models\Post;
+use Marvel\Database\Models\PostLike;
+use Marvel\Database\Models\Feed;
+use Marvel\Database\Models\FeedLike;
+use Marvel\Database\Models\Follow;
 use Marvel\Http\Requests\UserCreateRequest;
 use Marvel\Http\Requests\UserUpdateRequest;
 use Illuminate\Validation\ValidationException;
@@ -53,7 +59,7 @@ class UserController extends CoreController
      */
     public function index(Request $request)
     {
-        $limit = $request->limit ?   $request->limit : 15;
+        $limit = $request->limit ? $request->limit : 15;
         return $this->repository->with(['profile', 'address', 'permissions'])->paginate($limit);
     }
 
@@ -76,8 +82,24 @@ class UserController extends CoreController
      */
     public function show($id)
     {
+        $currentMonth = date('m');
+
+        $post_ids = Post::where('user_id', $id)->get()->pluck('id')->all();
+        $post_likes_cnt = PostLike::whereIn('post_id', $post_ids)->where('status', 1)->whereRaw('MONTH(updated_at)=?',[$currentMonth])->get()->count();
+
+        $feed_ids = Feed::where('user_id', $id)->get()->pluck('id')->all();
+        $feed_likes_cnt = FeedLike::whereIn('feed_id', $feed_ids)->where('status', 1)->whereRaw('MONTH(updated_at)=?',[$currentMonth])->get()->count();
+
+        $post_likes_history = PostLike::whereIn('post_id', $post_ids)->where('status', 1)->select(DB::raw('SUM(status) as likes, YEAR( updated_at ) as year, MONTH( updated_at ) as month'))->groupBy(DB::raw('MONTH(updated_at) ASC'))->get();
+        $feed_likes_history = FeedLike::whereIn('feed_id', $feed_ids)->where('status', 1)->select(DB::raw('SUM(status) as likes, YEAR( updated_at ) as year, MONTH( updated_at ) as month'))->groupBy(DB::raw('MONTH(updated_at) ASC'))->get();
+
+        $followers_cnt = Follow::where('receiver_user_id', $id)->where('status', 1)->get()->count();
+
         try {
-            return $this->repository->with(['profile', 'address', 'shops', 'managed_shop'])->findOrFail($id);
+            $user = $this->repository->with(['profile', 'address', 'shops', 'managed_shop'])->findOrFail($id);
+            $user->likes_count = $post_likes_cnt + $feed_likes_cnt;
+            $user->followers_count = $followers_cnt;
+            return $user;
         } catch (Exception $e) {
             throw new MarvelException(NOT_FOUND);
         }

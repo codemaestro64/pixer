@@ -8,8 +8,10 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { ChevronLeft } from '../icons/chevron-left';
 import { ChevronRight } from '../icons/chevron-right';
+import { User } from '@/types';
+import { formatNumber } from '@/lib/constants';
 
-export default function UserAnalytics() {
+export default function UserAnalytics({ user }: { user: User }) {
   const [selectedIdx, setSelectedIdx] = useState<number>(0);
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
@@ -46,7 +48,7 @@ export default function UserAnalytics() {
         <div className={`${selectedIdx === 0 ? 'block' : 'hidden'} xl:block`}>
           <ProfileAnalyticsCard
             to="Followers"
-            value="12K"
+            value={formatNumber(Number(user.followers_count))}
             chart={
               <FollowersChart className="text-[#28C98C] dark:text-brand" />
             }
@@ -55,7 +57,7 @@ export default function UserAnalytics() {
         <div className={`${selectedIdx === 1 ? 'block' : 'hidden'} xl:block`}>
           <ProfileAnalyticsCard
             to="Likes"
-            value="410K"
+            value={formatNumber(Number(user.likes_count))}
             chart={
               <LikesChart className="text-[#4FF536] dark:text-[#3BF31D]" />
             }

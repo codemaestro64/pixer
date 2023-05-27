@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { AuthorsButton } from './authors-interactions';
 import { FilterIcon } from '../icons/filter-icon';
 import { EllipsisVerticalIcon } from '../icons/ellipsis-vertical-icon';
 import AuthorProduct from './author-product';
@@ -10,40 +9,10 @@ import type { Post, PostByUserQueryOptions, Shop } from '@/types';
 import GridPosts from '@/components/post/grid';
 import GridProducts from '@/components/product/grid';
 import { useProducts } from '@/data/product';
-
-function MenuButton({ icon }: { icon: React.ReactElement }) {
-  const additionalClasses = icon.props?.className || '';
-  return (
-    <button className="text-[#C1C1C1] dark:text-white">
-      {React.cloneElement(icon, {
-        className: 'w-[28px] h-[28px] ' + additionalClasses,
-      })}
-    </button>
-  );
-}
-
-function AuthorsProductButton({
-  label,
-  active,
-  toggleAction,
-}: {
-  label: string;
-  active: boolean;
-  toggleAction: any;
-}) {
-  return (
-    <button
-      onClick={toggleAction}
-      className={`min-w-[120px] max-w-[180px] px-[35px] font-poppins rounded-[100px] text-[16px] xl:text-[18px] h-[41px] font-semibold ${
-        active
-          ? 'text-white bg-brand'
-          : 'text-[#9D9D9D] dark:text-[#434343] rounded-[100px]'
-      }`}
-    >
-      {label}
-    </button>
-  );
-}
+import {
+  ProfileMenuButton,
+  ProfilePostProductButton,
+} from '../profile/profile-buttons';
 
 export default function AuthorsProducts({ shop }: { shop: Shop }) {
   const [selectedType, setSelectedType] = useState<boolean>(true);
@@ -104,20 +73,22 @@ export default function AuthorsProducts({ shop }: { shop: Shop }) {
       {/* buttons */}
       <div className="pl-[16px] sm:pl-[32px] xl:pt-[14px] flex items-center">
         <div className="flex items-center gap-[2px] sm:gap-[23px]">
-          <AuthorsProductButton
+          <ProfilePostProductButton
             label="Products"
             active={selectedType}
             toggleAction={() => onSetViewType(true)}
           />
-          <AuthorsProductButton
+          <ProfilePostProductButton
             label="Posts"
             active={!selectedType}
             toggleAction={() => onSetViewType(false)}
           />
         </div>
         <div className="ml-auto flex gap-[10px] xl:gap-[42px] mr-[30px]">
-          <MenuButton icon={<FilterIcon />} />
-          <MenuButton icon={<EllipsisVerticalIcon className="rotate-90" />} />
+          <ProfileMenuButton icon={<FilterIcon />} />
+          <ProfileMenuButton
+            icon={<EllipsisVerticalIcon className="rotate-90" />}
+          />
         </div>
       </div>
       {/* products */}

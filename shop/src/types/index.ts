@@ -201,6 +201,8 @@ export interface User {
     cover: Attachment;
   };
   role: string;
+  likes_count: string;
+  followers_count: string;
   created_at: string;
   updated_at: string;
 }

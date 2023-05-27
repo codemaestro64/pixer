@@ -109,7 +109,7 @@ const UserProfilePage: NextPageWithLayout = () => {
           </div>
           {/* right */}
           <div className="space-y-[19px] overflow-hidden mt-[11px] xl:mt-0">
-            <UserAnalytics />
+            <UserAnalytics user={user} />
             <UserProducts user={user} />
           </div>
         </div>

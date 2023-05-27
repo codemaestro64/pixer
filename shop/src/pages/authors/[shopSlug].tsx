@@ -101,6 +101,7 @@ const ShopPage: NextPageWithLayout<
   const { t } = useTranslation('common');
   const router = useRouter();
 
+  console.log('@@@@@@@@@@@@@@@@@@@@ - ', shop);
   return (
     <motion.div variants={fadeInBottom()} className="justify-between">
       <div className="xl:p-[25px]">
@@ -132,7 +133,7 @@ const ShopPage: NextPageWithLayout<
           </div>
           {/* right */}
           <div className="space-y-[19px] overflow-hidden mt-[11px] xl:mt-0">
-            <AuthorsAnalytics />
+            <AuthorsAnalytics shop={shop} />
             <AuthorsProducts shop={shop} />
           </div>
         </div>

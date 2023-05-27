@@ -4,6 +4,15 @@ import { Attachment } from '@/types';
 export const CART_KEY = 'pixer-cart';
 export const PRODUCTS_PER_PAGE = 30;
 export const RTL_LANGUAGES: ReadonlyArray<string> = ['ar', 'he'];
+export const SKILLS_SUGGESTIONS: string[] = [
+  'HTML',
+  'CSS',
+  'React Js',
+  'Tailwind',
+  'Next Js',
+  'Angular Js',
+  'Figma',
+];
 
 export function getDirection(language: string | undefined) {
   if (!language) return 'ltr';

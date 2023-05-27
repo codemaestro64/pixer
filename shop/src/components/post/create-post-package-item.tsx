@@ -5,6 +5,7 @@ import { AddPackageIcon } from '../icons/post/add-package-icon';
 import Textarea from '../ui/forms/textarea';
 import Tags from '@yaireo/tagify/dist/react.tagify';
 import '@yaireo/tagify/dist/tagify.css';
+import { SKILLS_SUGGESTIONS } from '@/lib/constants';
 
 export interface PackageItem {
   getInfo: () => void;
@@ -45,6 +46,7 @@ const CreatePostPackageItem = forwardRef(
       editTags: 0,
       dropdown: {
         enabled: 0,
+        classname: 'tags-look',
       },
       callbacks: {},
     };
@@ -58,7 +60,7 @@ const CreatePostPackageItem = forwardRef(
 
     const settings = {
       ...baseTagifySettings,
-      whitelist: [],
+      whitelist: SKILLS_SUGGESTIONS,
       callbacks: {
         add: handleChange,
         remove: handleChange,

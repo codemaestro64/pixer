@@ -9,6 +9,7 @@ import '@yaireo/tagify/dist/tagify.css';
 import Button from '../ui/button';
 import CreatePostImages from './create-post-images';
 import toast from 'react-hot-toast';
+import { SKILLS_SUGGESTIONS } from '@/lib/constants';
 
 type CreatePostDetailsProps = {
   onContinue: any;
@@ -43,6 +44,7 @@ const CreatePostDetails: React.FC<CreatePostDetailsProps> = ({
     editTags: 0,
     dropdown: {
       enabled: 0,
+      classname: 'tags-look',
     },
     callbacks: {},
   };
@@ -54,7 +56,7 @@ const CreatePostDetails: React.FC<CreatePostDetailsProps> = ({
 
   const settings = {
     ...baseTagifySettings,
-    whitelist: [],
+    whitelist: SKILLS_SUGGESTIONS,
     callbacks: {
       add: handleChange,
       remove: handleChange,

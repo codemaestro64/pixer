@@ -7,6 +7,11 @@
   @apply rounded-[10px] border border-light-500 bg-transparent px-4 py-2 font-poppins text-13px text-dark ring-[0.5px] ring-light-500 hover:border-brand focus:ring-[0.5px] focus:ring-brand dark:border-dark-600 dark:text-light dark:ring-dark-600 dark:hover:border-brand dark:focus:ring-brand lg:px-5;
 }
 
+:root {
+  --tagify-dd-color-primary: #24b47e !important;
+  --tagify-dd-bg-color: transparent !important;
+}
+
 .dark .tags-input .tagify {
   --tags-disabled-bg: #f1f1f1;
   --tags-border-color: #282828;
@@ -83,4 +88,21 @@
   position: relative;
   box-sizing: border-box;
   transition: 0.1s;
+}
+.tags-look {
+  @apply bg-light dark:bg-dark-300;
+}
+
+.tags-look .tagify__dropdown__item {
+  display: inline-block;
+  vertical-align: middle;
+  @apply bg-light text-gray-800 dark:bg-dark-300 dark:text-light text-[14px] font-poppins border-light-300 dark:border-dark-600 border-[1px] rounded-[8px] px-[16px] py-[8px] m-[8px];
+}
+
+.tags-look .tagify__dropdown__item--active {
+  color: black;
+}
+
+.tags-look .tagify__dropdown__item:hover {
+  @apply dark:bg-dark-600 bg-light-600;
 }

@@ -24,6 +24,7 @@ import * as yup from 'yup';
 import Tags from '@yaireo/tagify/dist/react.tagify';
 import '@yaireo/tagify/dist/tagify.css';
 import { useState, useRef, useEffect } from 'react';
+import { SKILLS_SUGGESTIONS } from '@/lib/constants';
 
 const profileValidationSchema = yup.object().shape({
   id: yup.string().required(),
@@ -67,6 +68,7 @@ const ProfilePage: NextPageWithLayout = () => {
     editTags: 0,
     dropdown: {
       enabled: 0,
+      classname: 'tags-look',
     },
     callbacks: {},
   };
@@ -78,7 +80,7 @@ const ProfilePage: NextPageWithLayout = () => {
 
   const settings = {
     ...baseTagifySettings,
-    whitelist: [],
+    whitelist: SKILLS_SUGGESTIONS,
     callbacks: {
       add: handleChangeCallBack,
       remove: handleChangeCallBack,

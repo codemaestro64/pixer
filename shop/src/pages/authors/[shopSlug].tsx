@@ -92,7 +92,14 @@ const ShopPage: NextPageWithLayout = () => {
         {/* second section */}
         <div className="mt-[31.44px] xl:mt-[24px] grid grid-cols-1 xl:grid-cols-[328.81px_1fr] xl:gap-[16.19px]">
           {/* left */}
-          <div className="space-y-[11px] hidden xl:block">
+          <div
+            className={`${
+              (user.profile?.skills ?? 'none') === 'none' ||
+              (user.profile?.skills ?? 'none') === ''
+                ? 'space-y-[0px]'
+                : 'space-y-[11px]'
+            } hidden xl:block`}
+          >
             <AuthorsSkills skills={user.profile?.skills ?? 'none'} />
             <AuthorsContactInfo
               email={user.email}

@@ -100,10 +100,10 @@ export default function Card({ post }: { post: Post }) {
             <AnchorLink href={routes.postUrl(slug)}>{customer.name}</AnchorLink>
           </h3>
           <AnchorLink
-            href=""
+            href={routes.shopUrl(customer.id)}
             className="font-medium text-light-base hover:text-brand dark:text-dark-800 dark:hover:text-brand"
           >
-            {`@${customer.name.replace(' ', '_')}`}
+            {`@${customer.name.toLowerCase().replace(' ', '_')}`}
           </AnchorLink>
         </div>
 

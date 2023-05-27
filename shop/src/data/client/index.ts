@@ -68,6 +68,7 @@ import type {
   PostAndLatestPosts,
   PostPaginator,
   PostQueryOptions,
+  PostByUserQueryOptions,
   CreatePostInput,
   PostResponse,
   Package,
@@ -181,6 +182,8 @@ class Client {
   };
   users = {
     me: () => HttpClient.get<User>(API_ENDPOINTS.USERS_ME),
+    get: ({ id }: { id: string }) =>
+      HttpClient.get<User>(`${API_ENDPOINTS.USERS}/${id}`),
     update: (user: UpdateProfileInput) =>
       HttpClient.put<User>(`${API_ENDPOINTS.USERS}/${user.id}`, user),
     login: (input: LoginUserInput) =>
@@ -347,6 +350,10 @@ class Client {
   posts = {
     all: (params: PostQueryOptions) =>
       HttpClient.get<PostPaginator>(API_ENDPOINTS.POSTS, {
+        ...params,
+      }),
+    allByUsers: (params: PostByUserQueryOptions) =>
+      HttpClient.get<PostPaginator>(API_ENDPOINTS.POSTSBYUSER, {
         ...params,
       }),
     get: ({ id }: { id: string }) =>

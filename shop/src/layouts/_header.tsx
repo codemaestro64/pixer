@@ -23,6 +23,7 @@ import LanguageSwitcher from '@/components/ui/language-switcher';
 import { useTranslation } from 'next-i18next';
 import { useMutation } from 'react-query';
 import client from '@/data/client';
+import { getProfileAvatar } from '@/lib/constants';
 
 const AuthorizedMenuItems = [
   {
@@ -59,7 +60,7 @@ function AuthorizedMenu({ user }: { user: User }) {
           round={true}
           name={user.name}
           textSizeRatio={2}
-          src={user?.profile?.avatar?.thumbnail}
+          src={getProfileAvatar(user?.profile)}
         />
       </Menu.Button>
       <Transition

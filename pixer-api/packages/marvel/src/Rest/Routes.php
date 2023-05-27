@@ -150,6 +150,8 @@ Route::group(['middleware' => ['can:' . Permission::CUSTOMER, 'auth:sanctum']], 
     Route::apiResource('posts', PostController::class, [
         'only' => ['index', 'store', 'show'],
     ]);
+    Route::get('posts-by-user', [PostController::class, 'getPostsByUser']);
+
     Route::apiResource('postcomments', PostCommentController::class, [
         'only' => ['index', 'store', 'show'],
     ]);
@@ -193,6 +195,7 @@ Route::group(['middleware' => ['can:' . Permission::CUSTOMER, 'auth:sanctum']], 
         'only' => ['store', 'update', 'destroy'],
     ]);
     Route::get('me', [UserController::class, 'me']);
+    Route::get('users/{id}', [UserController::class, 'show']);
     Route::put('users/{id}', [UserController::class, 'update']);
     Route::post('/change-password', [UserController::class, 'changePassword']);
     Route::post('/update-contact', [UserController::class, 'updateContact']);

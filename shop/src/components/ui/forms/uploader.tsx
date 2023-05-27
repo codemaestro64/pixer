@@ -92,7 +92,7 @@ export default function Uploader({
                   <div className="relative h-20 w-20 overflow-hidden rounded-full">
                     <Image
                       alt="Avatar"
-                      src={original}
+                      src={original.replace('localhost', 'localhost:8000')}
                       layout="fill"
                       objectFit="scale-down"
                     />
@@ -129,7 +129,7 @@ export default function Uploader({
             <div className="relative h-full w-full overflow-hidden rounded-md">
               <Image
                 alt="Attachment"
-                src={original}
+                src={original.replace('localhost', 'localhost:8000')}
                 layout="fill"
                 objectFit="cover"
               />

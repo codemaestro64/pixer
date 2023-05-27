@@ -36,6 +36,22 @@ export function getProfileAvatarImage(profile: any | null) {
   }
 }
 
+export function getProfileCoverImage(profile: any | null) {
+  if (profile) {
+    if (profile.cover) {
+      if (profile.cover.original) {
+        return profile.cover.original.replace('localhost', 'localhost:8000');
+      } else {
+        return placeholder;
+      }
+    } else {
+      return placeholder;
+    }
+  } else {
+    return placeholder;
+  }
+}
+
 export function getProfileAvatar(profile: any | null) {
   if (profile) {
     if (profile.avatar) {

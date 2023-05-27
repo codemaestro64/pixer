@@ -34,6 +34,10 @@ class PostController extends CoreController
 
     }
 
+    public function getPostsByUser(Request $request) {
+        $limit = $request->limit ?   $request->limit : 15;
+        return $this->repository->with(['customer', 'profile', 'packages', 'likes', 'followers'])->withCount(['comments', 'likes', 'followers'])->where('user_id', $request->user_id)->orderBy('updated_at', 'desc')->paginate($limit);
+    }
     /**
      * Show the form for creating a new resource.
      *

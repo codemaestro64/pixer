@@ -252,9 +252,12 @@ class CreateMarvelTables extends Migration
         Schema::create('user_profiles', function (Blueprint $table) {
             $table->id();
             $table->json('avatar')->nullable();
+            $table->json('cover')->nullable();
             $table->text('bio')->nullable();
             $table->json('socials')->nullable();
             $table->string('contact')->nullable();
+            $table->string('location')->nullable();
+            $table->string('skills')->nullable();
             $table->unsignedBigInteger('customer_id');
             $table->foreign('customer_id')->references('id')->on('users');
             $table->timestamps();
@@ -378,7 +381,13 @@ class CreateMarvelTables extends Migration
         Schema::dropIfExists('attachments');
         Schema::dropIfExists('authors');
         Schema::dropIfExists('manufacturers');
-        Schema::dropIfExists('comments');
+        Schema::dropIfExists('feed_comments');
         Schema::dropIfExists('feeds');
+        Schema::dropIfExists('posts');
+        Schema::dropIfExists('packages');
+        Schema::dropIfExists('post_likes');
+        Schema::dropIfExists('post_comments');
+        Schema::dropIfExists('follows');
+        Schema::dropIfExists('comment_likes');
     }
 }

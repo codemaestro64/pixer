@@ -40,6 +40,7 @@ export const API_ENDPOINTS = {
   FEEDCOMMENTS: '/feedcomments',
   FEEDLIKES: '/feedlikes',
   POSTS: '/posts',
+  POSTSBYUSER: '/posts-by-user',
   POSTLIKES: '/postlikes',
   POSTCOMMENTS: '/postcomments',
   PACKAGES: '/packages',

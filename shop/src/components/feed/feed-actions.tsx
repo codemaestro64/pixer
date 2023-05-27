@@ -22,7 +22,7 @@ export default function FeedActions({
   setFeedDescr: any;
 }) {
   const { t } = useTranslation('common');
-  const { me } = useMe();
+    const { me } = useMe();
 
   const { triggerFeeds, setTriggerFeeds } = useContext(FeedContext);
 

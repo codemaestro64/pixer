@@ -46,7 +46,7 @@ export default function ContentCommentOwnerInfo({
 
   const { mutate: mutatePost } = useMutation(client.posts.get, {
     onSuccess: (res) => {
-      setSelectedPost(res);
+      setSelectedPost(res.post);
     },
     onError: (err: any) => {
       console.log(err.response.data, 'error');

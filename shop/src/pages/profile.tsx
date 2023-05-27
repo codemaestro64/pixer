@@ -19,7 +19,11 @@ import { useMe } from '@/data/user';
 import pick from 'lodash/pick';
 import { API_ENDPOINTS } from '@/data/client/endpoints';
 import Uploader from '@/components/ui/forms/uploader';
+import CoverUploader from '@/components/ui/forms/uploader_cover';
 import * as yup from 'yup';
+import Tags from '@yaireo/tagify/dist/react.tagify';
+import '@yaireo/tagify/dist/tagify.css';
+import { useState, useRef, useEffect } from 'react';
 
 const profileValidationSchema = yup.object().shape({
   id: yup.string().required(),
@@ -37,10 +41,54 @@ const profileValidationSchema = yup.object().shape({
       })
       .optional()
       .nullable(),
+    cover: yup
+      .object()
+      .shape({
+        id: yup.string(),
+        thumbnail: yup.string(),
+        original: yup.string(),
+      })
+      .optional()
+      .nullable(),
+    skills: yup.string(),
+    location: yup.string(),
   }),
 });
 const ProfilePage: NextPageWithLayout = () => {
   const { t } = useTranslation('common');
+  const [skillTags, setSkillTags] = useState<string[]>([]);
+  const tagsRef = useRef<HTMLDivElement>();
+
+  const baseTagifySettings = {
+    blacklist: [],
+    maxTags: 100,
+    backspace: 'edit',
+    placeholder: 'Add your Keyword',
+    editTags: 0,
+    dropdown: {
+      enabled: 0,
+    },
+    callbacks: {},
+  };
+
+  const handleChangeCallBack = (e: any) => {
+    //const tags: string[] = e.detail.tagify.value.map((item: any) => item.value);
+    //setSkillTags(tags);
+  };
+
+  const settings = {
+    ...baseTagifySettings,
+    whitelist: [],
+    callbacks: {
+      add: handleChangeCallBack,
+      remove: handleChangeCallBack,
+      blur: handleChangeCallBack,
+      invalid: handleChangeCallBack,
+      click: handleChangeCallBack,
+      focus: handleChangeCallBack,
+    },
+  };
+
   const queryClient = useQueryClient();
   const { me } = useMe();
   const { mutate, isLoading } = useMutation(client.users.update, {
@@ -59,7 +107,21 @@ const ProfilePage: NextPageWithLayout = () => {
       queryClient.invalidateQueries(API_ENDPOINTS.USERS_ME);
     },
   });
-  const onSubmit: SubmitHandler<UpdateProfileInput> = (data) => mutate(data);
+
+  const onSubmit: SubmitHandler<UpdateProfileInput> = (data) => {
+    const tags: string[] = tagsRef.current?.value.map(
+      (item: any) => item.value
+    );
+
+    data.profile.skills = tags.join(',');
+    mutate(data);
+  };
+
+  useEffect(() => {
+    if (!me) return;
+
+    setSkillTags(me.profile.skills.split(','));
+  }, [me]);
 
   return (
     <motion.div
@@ -79,6 +141,9 @@ const ProfilePage: NextPageWithLayout = () => {
             'profile.contact',
             'profile.bio',
             'profile.avatar',
+            'profile.cover',
+            'profile.location',
+            'profile.skills',
           ]),
         }}
         validationSchema={profileValidationSchema}
@@ -97,6 +162,20 @@ const ProfilePage: NextPageWithLayout = () => {
                     </span>
                     <div className="text-xs">
                       <Uploader {...rest} multiple={false} />
+                    </div>
+                  </div>
+                )}
+              />
+              <Controller
+                name="profile.cover"
+                control={control}
+                render={({ field: { ref, ...rest } }) => (
+                  <div className="sm:col-span-2">
+                    <span className="block cursor-pointer pb-2.5 font-normal text-dark/70 dark:text-light/70">
+                      {t('text-profile-cover')}
+                    </span>
+                    <div className="text-xs">
+                      <CoverUploader {...rest} />
                     </div>
                   </div>
                 )}
@@ -125,6 +204,40 @@ const ProfilePage: NextPageWithLayout = () => {
                   </span>
                 )}
               </div>
+
+              <Input
+                label={t('text-profile-location')}
+                {...register('profile.location')}
+                error={errors.profile?.location?.message}
+                className="sm:col-span-2"
+              />
+
+              <div className="sm:col-span-2">
+                <span className="block cursor-pointer pb-2.5 font-normal text-dark/70 dark:text-light/70">
+                  {t('text-profile-skills')}
+                </span>
+                <Controller
+                  name="profile.skills"
+                  control={control}
+                  render={({ field }) => (
+                    <Tags
+                      tagifyRef={tagsRef}
+                      settings={settings}
+                      value={skillTags}
+                    />
+                  )}
+                />
+
+                {errors.profile?.skills?.message && (
+                  <span
+                    role="alert"
+                    className="block pt-2 text-xs text-warning"
+                  >
+                    {'contact field is required'}
+                  </span>
+                )}
+              </div>
+
               <Textarea
                 label={t('text-profile-bio')}
                 {...register('profile.bio')}
@@ -142,8 +255,10 @@ const ProfilePage: NextPageWithLayout = () => {
                     profile: {
                       id: me?.profile?.id,
                       avatar: null,
+                      cover: null,
                       bio: '',
                       contact: '',
+                      location: '',
                     },
                   })
                 }

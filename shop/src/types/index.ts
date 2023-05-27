@@ -56,7 +56,9 @@ export interface MyReportsQueryOptions extends QueryOptions {}
 export interface MyQuestionQueryOptions extends QueryOptions {}
 
 export interface PostQueryOptions extends QueryOptions {}
-
+export interface PostByUserQueryOptions extends QueryOptions {
+  user_id: string;
+}
 export interface ShopQueryOptions extends QueryOptions {
   is_active?: number;
 }
@@ -194,6 +196,9 @@ export interface User {
     bio: string;
     contact: string;
     avatar: Attachment;
+    skills: string;
+    location: string;
+    cover: Attachment;
   };
   role: string;
   created_at: string;
@@ -208,6 +213,9 @@ export interface UpdateProfileInput {
     bio?: string;
     contact?: string;
     avatar?: Attachment | null;
+    cover?: Attachment | null;
+    location?: string;
+    skills?: string;
   };
 }
 

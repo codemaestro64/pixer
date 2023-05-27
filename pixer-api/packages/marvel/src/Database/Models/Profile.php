@@ -14,6 +14,7 @@ class Profile extends Model
     protected $casts = [
         'socials' => 'json',
         'avatar' => 'json',
+        'cover' => 'json',
     ];
 
     /**

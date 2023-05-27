@@ -36,6 +36,7 @@ import {
 import { useMe } from '@/data/user';
 import { getProfileAvatar, getProfileAvatarImage } from '@/lib/constants';
 import ShowMoreLess from '@/components/ui/show-more-less';
+import ItemNotFound from '@/components/ui/item-not-found';
 
 function TopAndLatestProductsButton({
   label,
@@ -73,18 +74,20 @@ const PostPage: NextPageWithLayout = () => {
   const [showTopProduct, setShowTopProduct] = useState<boolean>(true);
   const [is2XL, setIs2XL] = useState<boolean>(false);
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
+  const [notFound, setNotFound] = useState<boolean>(false);
 
   const router = useRouter();
   const { postSlug } = router.query;
   const { me } = useMe();
   const { mutate: mutatePost, isLoading } = useMutation(client.posts.get, {
     onSuccess: (res) => {
-      console.log('@@@@@@@@@@@@@@@@@@@@', res);
       setPost(res.post);
+      setNotFound(false);
       setLatestPosts(res.latest_posts);
     },
     onError: (err: any) => {
       console.log(err.response.data, 'error');
+      setNotFound(true);
     },
   });
 
@@ -265,6 +268,12 @@ const PostPage: NextPageWithLayout = () => {
         </div>
       </div>
     </>
+  ) : notFound ? (
+    <ItemNotFound
+      title={'No post found!'}
+      message={"Sorry, we don't found any post"}
+      className="px-4 pt-5 pb-10 md:px-6 md:pt-6 lg:px-7 lg:pb-12 3xl:px-8"
+    />
   ) : (
     <ContentLoader />
   );

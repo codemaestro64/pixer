@@ -42,13 +42,13 @@ export function getProfileCoverImage(profile: any | null) {
       if (profile.cover.original) {
         return profile.cover.original.replace('localhost', 'localhost:8000');
       } else {
-        return placeholder;
+        return '/hero-bg-desktop.png';
       }
     } else {
-      return placeholder;
+      return '/hero-bg-desktop.png';
     }
   } else {
-    return placeholder;
+    return '/hero-bg-desktop.png';
   }
 }
 

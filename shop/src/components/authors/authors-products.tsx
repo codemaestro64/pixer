@@ -100,10 +100,10 @@ export default function AuthorsProducts({ user }: { user: User }) {
   };
 
   return (
-    <div className="px-[20px] xl:px-[16.5px] py-[10px] pt-[20px] xl:pt-[10px] bg-white dark:bg-[#292929] xl:rounded-[15px]">
+    <div className="px-[0px] sm:px-[20px] xl:px-[16.5px] py-[10px] pt-[20px] xl:pt-[10px] bg-white dark:bg-[#292929] xl:rounded-[15px]">
       {/* buttons */}
-      <div className="pl-[32px] xl:pt-[14px] flex items-center">
-        <div className="flex items-center gap-[23px]">
+      <div className="pl-[16px] sm:pl-[32px] xl:pt-[14px] flex items-center">
+        <div className="flex items-center gap-[2px] sm:gap-[23px]">
           <AuthorsProductButton
             label="Products"
             active={selectedType}
@@ -115,7 +115,7 @@ export default function AuthorsProducts({ user }: { user: User }) {
             toggleAction={() => onSetViewType(false)}
           />
         </div>
-        <div className="ml-auto flex gap-[10px] xl:gap-[42px]">
+        <div className="ml-auto flex gap-[10px] xl:gap-[42px] mr-[30px]">
           <MenuButton icon={<FilterIcon />} />
           <MenuButton icon={<EllipsisVerticalIcon className="rotate-90" />} />
         </div>

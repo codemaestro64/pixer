@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ChevronLeft } from '../icons/chevron-left';
 import { ChevronRight } from '../icons/chevron-right';
 
-export default function AuthorsAnalytics() {
+export default function UserAnalytics() {
   const [selectedIdx, setSelectedIdx] = useState<number>(0);
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
@@ -35,7 +35,7 @@ export default function AuthorsAnalytics() {
   };
 
   const goNext = () => {
-    if (selectedIdx < 2) {
+    if (selectedIdx < 1) {
       setSelectedIdx(selectedIdx + 1);
     }
   };
@@ -53,15 +53,6 @@ export default function AuthorsAnalytics() {
           />
         </div>
         <div className={`${selectedIdx === 1 ? 'block' : 'hidden'} xl:block`}>
-          <ProfileAnalyticsCard
-            to="Sales"
-            value="129K"
-            chart={
-              <SalesChart className="text-[#042D6B] dark:text-[#ACCCFC]" />
-            }
-          />
-        </div>
-        <div className={`${selectedIdx === 2 ? 'block' : 'hidden'} xl:block`}>
           <ProfileAnalyticsCard
             to="Likes"
             value="410K"
@@ -91,7 +82,7 @@ export default function AuthorsAnalytics() {
         <div
           onClick={goNext}
           className={`${
-            selectedIdx === 2
+            selectedIdx === 1
               ? isMobile
                 ? 'block bg-light-900 hover:bg-light-900 hover:text-dark/90 cursor-default'
                 : 'invisible'
@@ -114,12 +105,6 @@ export default function AuthorsAnalytics() {
               selectedIdx === 1 ? 'w-[20px] bg-brand' : 'w-[11px] bg-[#6B6B6B]'
             } block h-[4px] rounded-full`}
             onClick={() => onCarouselIndentifier(1)}
-          ></button>
-          <button
-            className={`${
-              selectedIdx === 2 ? 'w-[20px] bg-brand' : 'w-[11px] bg-[#6B6B6B]'
-            } block h-[4px] rounded-full`}
-            onClick={() => onCarouselIndentifier(2)}
           ></button>
         </div>
       </div>

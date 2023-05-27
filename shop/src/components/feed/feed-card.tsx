@@ -17,6 +17,8 @@ import FeedCardButton from './feed-card-button';
 import Avatar from 'react-avatar';
 import FeedContext from '@/lib/feed-context';
 import { getProfileAvatar } from '@/lib/constants';
+import AnchorLink from '../ui/links/anchor-link';
+import routes from '@/config/routes';
 
 interface FeedCardProps {
   feed: Feed;
@@ -93,9 +95,14 @@ export default function FeedCard({ feed }: FeedCardProps) {
           />
         </div>
         <div className="max-w-[224.13px] font-poppins">
-          <p className="mb-[4px] truncate text-[14.88px] font-semibold text-dark-300 dark:text-white md:text-[13.91px] 2xl:text-[16px]">
-            {selectedFeed.customer.name}
-          </p>
+          <h3
+            title={selectedFeed.customer.name}
+            className="mb-0.5 truncate font-medium text-dark-100 dark:text-light"
+          >
+            <AnchorLink href={routes.userUrl(selectedFeed.customer.id)}>
+              {selectedFeed.customer.name}
+            </AnchorLink>
+          </h3>
           <p className="truncate text-[13.02px] font-medium italic text-dark-700 md:text-[12.17px] 2xl:text-[14px]">
             {selectedFeed.descr}
           </p>

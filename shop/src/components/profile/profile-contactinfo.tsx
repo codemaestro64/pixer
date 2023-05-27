@@ -35,7 +35,7 @@ function Contact({
   );
 }
 
-export default function AuthorsContactInfo({ email, phone, address }: any) {
+export default function ProfileContactInfo({ email, phone, address }: any) {
   return (
     <div className="py-[20px] px-[23px] bg-white dark:bg-[#292929] rounded-[20px]">
       <div className="text-[14.76px] text-dark-300 dark:text-white font-poppins font-semibold">

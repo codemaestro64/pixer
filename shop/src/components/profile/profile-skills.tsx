@@ -1,4 +1,4 @@
-export default function AuthorsSkills({ skills }: { skills: string }) {
+export default function ProfileSkills({ skills }: { skills: string }) {
   return !(skills === 'none' || skills === '') ? (
     <div className="py-[24px] px-[20px] bg-white dark:bg-[#292929] rounded-[20px]">
       <div className="text-[24px] text-dark-300 dark:text-white font-poppins font-semibold">

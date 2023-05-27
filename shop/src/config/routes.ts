@@ -27,5 +27,6 @@ const routes = {
   postUrl: (slug: string) => `/posts/${slug}`,
   tagUrl: (slug: string) => `/products/tags/${slug}`,
   shopUrl: (slug: string) => `/authors/${slug}`,
+  userUrl: (slug: string) => `/users/${slug}`,
 };
 export default routes;

@@ -1,7 +1,7 @@
 import Image from '@/components/ui/image';
 import Avatar from 'react-avatar';
 
-export default function AuthorsLogo({
+export default function ProfileLogo({
   name,
   logo,
 }: {

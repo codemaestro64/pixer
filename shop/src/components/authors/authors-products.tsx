@@ -6,7 +6,7 @@ import AuthorProduct from './author-product';
 import { User } from '@/types';
 import client from '@/data/client';
 import { useMutation } from 'react-query';
-import type { Post, PostByUserQueryOptions } from '@/types';
+import type { Post, PostByUserQueryOptions, Shop } from '@/types';
 import GridPosts from '@/components/post/grid';
 import GridProducts from '@/components/product/grid';
 import { useProducts } from '@/data/product';
@@ -45,12 +45,12 @@ function AuthorsProductButton({
   );
 }
 
-export default function AuthorsProducts({ user }: { user: User }) {
+export default function AuthorsProducts({ shop }: { shop: Shop }) {
   const [selectedType, setSelectedType] = useState<boolean>(true);
   const [hasNextPage, setHasNextPage] = useState<boolean>(false);
   const [posts, setPosts] = useState<Post[] | []>([]);
   const [params, setParams] = useState<PostByUserQueryOptions>({
-    user_id: user.id,
+    user_id: shop.owner.id,
     page: 1,
     limit: 30,
   });
@@ -62,7 +62,7 @@ export default function AuthorsProducts({ user }: { user: User }) {
     isLoadingMore: isLoadingMoreProducts,
     hasNextPage: hasNextPageProducts,
   } = useProducts({
-    shop_id: user.id,
+    shop_id: shop.id,
   });
 
   const onClicedProductType = (bValue: boolean) => {

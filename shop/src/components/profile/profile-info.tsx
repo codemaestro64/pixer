@@ -1,6 +1,6 @@
-import AuthorsRating from './authors-rating';
+import ProfileRating from './profile-rating';
 
-export default function AuthorsProfile({
+export default function ProfileInfo({
   name,
   slug,
   rating,
@@ -21,7 +21,7 @@ export default function AuthorsProfile({
           @{slug}
         </div>
         <div className="hidden lg:block">
-          <AuthorsRating rating={rating} />
+          <ProfileRating rating={rating} />
         </div>
       </div>
     </div>

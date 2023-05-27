@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArrowRightUpIcon } from '../icons/arrow-right-up-icon';
 
-export default function AuthorsAnalyticsCard({
+export default function ProfileAnalyticsCard({
   to,
   value,
   chart,

@@ -1,6 +1,6 @@
 import Image from '@/components/ui/image';
 
-export default function AuthorsBackground({ background }: { background: any }) {
+export default function ProfileBackground({ background }: { background: any }) {
   return (
     <div className="h-[134px] sm:h-[256px] relative">
       <Image

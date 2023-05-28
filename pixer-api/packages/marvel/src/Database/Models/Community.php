@@ -14,6 +14,11 @@ class Community extends Model
 	use Sluggable;
 
 	protected $table = 'communities';
+	
+	protected $casts = [
+        'logo'   => 'json',
+        'cover_image' => 'json',
+    ];
 
 	/**
      * Return the sluggable configuration array for this model.

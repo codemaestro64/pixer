@@ -65,7 +65,7 @@ class CommunityController extends CoreController
             $community = $community->findOneByFieldOrFail('slug', $slug);
             return $community;
         } catch (\Exception $e) {
-            throw new MarvelException(NOT_FOUND);
+            //throw new MarvelException(NOT_FOUND);
         }
     }
 

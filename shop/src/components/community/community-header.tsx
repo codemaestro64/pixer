@@ -1,22 +1,43 @@
+import type { 
+  Community,
+  Attachment
+} from '@/types';
+import placeholder from '@/assets/images/placeholders/product.svg';
+import { abbreviateNumbertoString } from '@/lib/number';
 import Image from '@/components/ui/image';
 import coverImage from '@/assets/images/community/cover-image.png';
-import profileImage from '@/assets/images/community/community-profile-image.png';
+import profileImagePlaceholder from '@/assets/images/community/community-profile-image.png';
 import memberImage from '@/assets/images/community/member-1.png';
 import { NotificationIcon } from '../icons/notification-icon';
 import PrivacyAndMembersIndicator from './privacy-and-members-indicator';
 
-function HeaderImage() {
+type ImageProps = {
+  image: Attachment;
+  alt: string;
+}
+
+function HeaderImage({ image, alt }: ImageProps) {
   return (
     <div className='relative h-[141px] sm:h-[153px] 2xl:h-[213px] overflow-hidden rounded-[4.82px] 2xl:rounded-[10px] sm:rounded-[7.18px] z-[1]'>
-      <Image src={coverImage} alt='Community Cover' layout='fill' objectFit='cover' />
+      <Image 
+        src={image?.original ?? placeholder} 
+        alt={alt} 
+        layout='fill' 
+        objectFit='cover' 
+      />
     </div>
   )
 }
 
-function ProfileImage() {
+function ProfileImage({ image, alt }: ImageProps) {
   return (
     <div className='relative w-[77.1px] sm:w-[114.83px] 2xl:w-[160px] h-[77.1px] sm:h-[114.83px] 2xl:h-[160px] mt-[-65px] sm:mt-[-90px] 2xl:mt-[-126px] rounded-[15.42px] overflow-hidden z-[2]'>
-      <Image src={profileImage} alt='Community Profile' layout='fill' objectFit='cover' />
+      <Image 
+        src={image?.original ?? profileImagePlaceholder} 
+        alt={alt} 
+        layout='fill' 
+        objectFit='cover' 
+      />
     </div>
   )
 }
@@ -64,25 +85,29 @@ function MembersGallery() {
   )
 }
 
-export default function CommunityHeader() {
+type CommunityProp = {
+  community: Community
+}
+
+export default function CommunityHeader({ community }: CommunityProp ) {
   return (
     <div className='py-[18px] sm:py-[26px] 2xl:py-[34px] px-[6px] sm:px-[18px] 2xl:px-[24px] bg-white dark:bg-[#292929] rounded-[4.82px] sm:rounded-[7.18px]'>
-      <HeaderImage />
+      <HeaderImage image={community.cover_image} alt={community.name} />
       <div className='pl-[27px] sm:pl-[30px] 2xl:pl-[42px] flex justify-between'>
-        <ProfileImage />
+        <ProfileImage image={community.logo} alt={community.name} />
         <div className='pt-[5px] sm:pt-[10px] 2xl:pt-[14px] pr-[5px] sm:pr-[10px] 2xl:pr-[14px]'>
           <MemberSince />
         </div>
       </div>
       <div className='mt-[18px] 2xl:mt-[28px] grid grid-cols-[80%_20%]'>
         <div className='pl-[27px] sm:pl-[30px] 2xl:pl-[42px] 2xl:max-w-[600px]'>
-          <CommunityName name='Motion Graphic &#38; Design Community' />
+          <CommunityName name={community.name} />
         </div>
         <div className='pr-[21px] sm:pr-[10px] self-center justify-self-end sm:row-span-2'>
           <NotificationButton />
         </div>
         <div className='mt-[14px] sm:mt-[8px] 2xl:mt-[10px] px-[22px] sm:px-[30px] 2xl:px-[42px] col-span-2 sm:col-span-1 flex flex-wrap gap-[9px] items-center'>
-          <PrivacyAndMembersIndicator members='120.6k' to='banner' />
+          <PrivacyAndMembersIndicator isPublic={!community.is_private} members={abbreviateNumbertoString(community.members_count)} to='banner' />
           <MembersGallery />
         </div>
       </div>

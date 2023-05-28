@@ -20,8 +20,8 @@ class CreateCommunitiesTable extends Migration
             $table->string('name');
             $table->string('slug')->nullable();
             $table->string('description');
-            $table->string('cover_image');
-            $table->string('logo');
+            $table->json('cover_image');
+            $table->json('logo');
             $table->boolean('is_active');
             $table->boolean('is_private');
             $table->timestamps();

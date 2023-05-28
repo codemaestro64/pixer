@@ -168,6 +168,7 @@ export interface Shop {
   logo: Attachment;
   cover_image: Attachment;
   settings: {
+    contact: string;
     socials: {
       icon: string;
       url: string;

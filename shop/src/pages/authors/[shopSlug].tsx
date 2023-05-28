@@ -101,7 +101,6 @@ const ShopPage: NextPageWithLayout<
   const { t } = useTranslation('common');
   const router = useRouter();
 
-  console.log('@@@@@@@@@@@@@@@@@@@@ - ', shop);
   return (
     <motion.div variants={fadeInBottom()} className="justify-between">
       <div className="xl:p-[25px]">
@@ -127,8 +126,9 @@ const ShopPage: NextPageWithLayout<
           <div className={`space-y-[0px] hidden xl:block`}>
             <ProfileContactInfo
               email={shop.owner.email}
-              phone={'none'}
-              address={formatAddress(shop.address)}
+              phone={shop.settings.contact}
+              address={formatAddress(shop.address) ?? 'none'}
+              socials={shop.settings.socials}
             />
           </div>
           {/* right */}

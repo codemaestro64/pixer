@@ -82,7 +82,7 @@ class ShopController extends CoreController
         $language = $request->language ?? DEFAULT_LANGUAGE;
         $shop = $this->repository
             ->with(['categories', 'owner'])
-            ->withCount(['orders'])
+            ->withCount(['orders', 'users'])
             ->withCount(['products' => function ($query) use ($language) {
                 $query->where('language', $language);
             }]);

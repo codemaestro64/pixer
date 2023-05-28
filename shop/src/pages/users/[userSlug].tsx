@@ -105,6 +105,7 @@ const UserProfilePage: NextPageWithLayout = () => {
               email={user.email}
               phone={user.profile?.contact ?? 'none'}
               address={user.profile?.location ?? 'none'}
+              socials={[]}
             />
           </div>
           {/* right */}

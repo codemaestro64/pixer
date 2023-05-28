@@ -2,6 +2,9 @@ import React from 'react';
 import { PhoneFillIcon } from '../icons/phone-fill-icon';
 import { MailOpenFillicon } from '../icons/mail-open-fill-icon';
 import { MapPinFillIcon } from '../icons/map-pin-fill-icon';
+import { BookmarkIcon } from '../icons/bookmark-icon';
+import { getIcon } from '@/lib/get-icon';
+import * as socialIcons from '@/components/icons/social';
 
 function Contact({
   text,
@@ -35,19 +38,47 @@ function Contact({
   );
 }
 
-export default function ProfileContactInfo({ email, phone, address }: any) {
+export default function ProfileContactInfo({
+  email,
+  phone,
+  address,
+  socials,
+}: {
+  email: string;
+  phone: string;
+  address: string;
+  socials: {
+    icon: string;
+    url: string;
+  }[];
+}) {
+  console.log('@@@@@@@@@@@@ - ', socials);
+  const makeSocialInfo = () => {
+    return socials.map(({ icon, url }, idx) => {
+      if (url) {
+        const socialIcon = getIcon({
+          iconList: socialIcons,
+          iconName: icon,
+          className: 'w-3.5 h-3.5 text-dark-800 dark:text-light-900 shrink-0',
+        });
+
+        const socialURL = url.slice(12, -1).split('/').slice(0, 1);
+        return (
+          <Contact
+            text={socialURL[0]}
+            icon={socialIcon as React.ReactElement}
+          />
+        );
+      }
+    });
+  };
+
   return (
     <div className="py-[20px] px-[23px] bg-white dark:bg-[#292929] rounded-[20px]">
       <div className="text-[14.76px] text-dark-300 dark:text-white font-poppins font-semibold">
         Contact Info
       </div>
       <div className="mt-[13.71px] space-y-[13.71px]">
-        {/*
-        <Contact
-          phone={{ code: '+12', number: '222-323-9898' }}
-          icon={<PhoneFillIcon />}
-        />
-        */}
         <Contact text={email} icon={<MailOpenFillicon />} />
         {!(phone === 'none' || phone === '') && (
           <Contact text={`+${phone}`} icon={<PhoneFillIcon />} />
@@ -55,6 +86,8 @@ export default function ProfileContactInfo({ email, phone, address }: any) {
         {!(address === 'none' || address === '') && (
           <Contact text={address} icon={<MapPinFillIcon />} />
         )}
+
+        {socials.length > 0 && makeSocialInfo()}
       </div>
     </div>
   );

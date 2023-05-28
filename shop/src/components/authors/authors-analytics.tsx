@@ -48,7 +48,7 @@ export default function AuthorsAnalytics({ shop }: { shop: Shop }) {
         <div className={`${selectedIdx === 0 ? 'block' : 'hidden'} xl:block`}>
           <ProfileAnalyticsCard
             to="Followers"
-            value="12K"
+            value={formatNumber(shop.users_count)}
             chart={
               <FollowersChart className="text-[#28C98C] dark:text-brand" />
             }

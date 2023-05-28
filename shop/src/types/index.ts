@@ -1,5 +1,6 @@
 import type { NextPage } from 'next';
 import type { ReactElement, ReactNode } from 'react';
+import { Query } from 'react-query';
 
 export interface QueryOptions {
   page?: number;
@@ -81,6 +82,11 @@ export interface ReviewQueryOptions extends QueryOptions {
 export interface QuestionQueryOptions extends QueryOptions {
   product_id: string;
   question?: string;
+}
+
+export interface CommunityQueryOptions extends QueryOptions {
+  is_active?: number;
+  is_private?: number;
 }
 
 export type NextPageWithLayout<P = {}> = NextPage<P> & {
@@ -886,3 +892,21 @@ export interface CommentLike {
   type: string;
   status: boolean;
 }
+
+
+export interface Community {
+  id: string;
+  owner_id: string;
+  name: string;
+  slug: string;
+  description: string;
+  logo: Attachment;
+  cover_image: Attachment;
+  is_active: boolean;
+  is_private: boolean;
+  members_count: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CommunityPaginator extends PaginatorInfo<Community> {}

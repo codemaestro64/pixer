@@ -14,6 +14,11 @@ class Community extends Model
 	use Sluggable;
 
 	protected $table = 'communities';
+	
+	protected $casts = [
+        'logo'   => 'json',
+        'cover_image' => 'json',
+    ];
 
 	/**
      * Return the sluggable configuration array for this model.
@@ -46,11 +51,11 @@ class Community extends Model
     }
 
     /**
-     * @return HasMany
+     * @return BelongsToMany
      */
-    public function members(): HasMany
+    public function members(): BelongsToMany
     {
-        return $this->HasMany(User::class, 'community_user');
+        return $this->BelongsToMany(User::class, 'communities_users');
     }
 
 }

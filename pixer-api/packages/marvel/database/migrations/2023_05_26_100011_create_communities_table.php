@@ -18,8 +18,10 @@ class CreateCommunitiesTable extends Migration
             $table->unsignedBigInteger('owner_id'); //->after('id');
             $table->foreign('owner_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('name');
+            $table->string('slug')->nullable();
             $table->string('description');
-            $table->string('cover_image');
+            $table->json('cover_image');
+            $table->json('logo');
             $table->boolean('is_active');
             $table->boolean('is_private');
             $table->timestamps();

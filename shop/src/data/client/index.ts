@@ -81,6 +81,9 @@ import type {
   CreateCommentLikeInput,
   CommentLike,
   TagQueryOptions,
+  Community,
+  CommunityPaginator,
+  CommunityQueryOptions
 } from '@/types';
 import { API_ENDPOINTS } from './endpoints';
 import { HttpClient } from './http-client';
@@ -383,6 +386,12 @@ class Client {
   commentlikes = {
     create: (input: CreateCommentLikeInput) =>
       HttpClient.post<CommentLike>(API_ENDPOINTS.COMMENTLIKES, input),
+  };
+  communities = {
+    all: (query?: CommunityQueryOptions) =>
+      HttpClient.get<CommunityPaginator>(API_ENDPOINTS.COMMUNITIES, { ...query }),
+    get: (slug: string) =>
+      HttpClient.get<Community>(`${API_ENDPOINTS.COMMUNITIES}/${slug}`),
   };
 }
 

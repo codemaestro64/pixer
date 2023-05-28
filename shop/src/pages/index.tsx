@@ -38,6 +38,7 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
           client.categories.all(queryKey[1] as CategoryQueryOptions)
       ),
     ]);
+
     return {
       props: {
         ...(await serverSideTranslations(locale!, ['common'])),

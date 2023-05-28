@@ -22,11 +22,13 @@ const routes = {
   post: '/posts',
   createPost: 'posts/create',
   followedShop: '/followed-authors',
+  communities: '/communities',
   orderUrl: (tracking_number: string) => `/orders/${tracking_number}`,
   productUrl: (slug: string) => `/products/${slug}`,
   postUrl: (slug: string) => `/posts/${slug}`,
   tagUrl: (slug: string) => `/products/tags/${slug}`,
   shopUrl: (slug: string) => `/authors/${slug}`,
   userUrl: (slug: string) => `/users/${slug}`,
+  communityUrl: (slug: string) => `/communities/${slug}`
 };
 export default routes;

@@ -1,11 +1,19 @@
 import Input from '@/components/ui/forms/input';
-import { useState, forwardRef, Ref, useImperativeHandle } from 'react';
+import {
+  useState,
+  forwardRef,
+  Ref,
+  useImperativeHandle,
+  useRef,
+  useEffect,
+} from 'react';
 import { InfoIcon } from '../icons/post/info-icon';
 import { AddPackageIcon } from '../icons/post/add-package-icon';
 import Textarea from '../ui/forms/textarea';
 import Tags from '@yaireo/tagify/dist/react.tagify';
 import '@yaireo/tagify/dist/tagify.css';
 import { SKILLS_SUGGESTIONS } from '@/lib/constants';
+import { useTags } from '@/data/tags';
 
 export interface PackageItem {
   getInfo: () => void;
@@ -23,6 +31,10 @@ const CreatePostPackageItem = forwardRef(
     ref: Ref<PackageItem>
   ) => {
     const { title, isExtended, setIsExtended } = props;
+    const tagsRef = useRef<HTMLDivElement>();
+    const { tags, isLoading: isLoadingTags } = useTags({
+      limit: 999,
+    });
 
     const [detailsData, setDetailsData] = useState({
       name: '',
@@ -33,7 +45,11 @@ const CreatePostPackageItem = forwardRef(
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
     function getInfo() {
-      return { ...detailsData, keywords: selectedTags.join(',') };
+      const curTags: string[] = tagsRef.current?.value.map(
+        (item: any) => item.value
+      );
+
+      return { ...detailsData, keywords: curTags.join(',') };
     }
 
     useImperativeHandle(ref, () => ({ getInfo }));
@@ -45,6 +61,7 @@ const CreatePostPackageItem = forwardRef(
       placeholder: 'Add your Keyword',
       editTags: 0,
       dropdown: {
+        maxItems: 100,
         enabled: 0,
         classname: 'tags-look',
       },
@@ -52,15 +69,18 @@ const CreatePostPackageItem = forwardRef(
     };
 
     const handleChange = (e: any) => {
+      /*
       const tags: string[] = e.detail.tagify.value.map(
         (item: any) => item.value
       );
       setSelectedTags(tags);
+      */
     };
 
     const settings = {
       ...baseTagifySettings,
-      whitelist: SKILLS_SUGGESTIONS,
+      whitelist: [],
+      enforceWhitelist: true,
       callbacks: {
         add: handleChange,
         remove: handleChange,
@@ -70,6 +90,10 @@ const CreatePostPackageItem = forwardRef(
         focus: handleChange,
       },
     };
+
+    useEffect(() => {
+      tagsRef.current?.settings.whitelist = tags.map((item) => item.name);
+    }, [isLoadingTags]);
 
     return (
       <div
@@ -178,7 +202,11 @@ const CreatePostPackageItem = forwardRef(
             <InfoIcon className="h-4 w-4 text-dark-800 focus-visible:outline-none" />
           </div>
           <div className="flex w-full">
-            <Tags settings={settings} initialValue={[]} />
+            <Tags
+              tagifyRef={tagsRef}
+              settings={settings}
+              value={selectedTags}
+            />
           </div>
         </div>
       </div>

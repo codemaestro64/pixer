@@ -44,8 +44,9 @@ export interface TopShopQueryOptions {
   name: string;
   range: number;
 }
-
 export interface CategoryQueryOptions extends QueryOptions {}
+
+export interface TagQueryOptions extends QueryOptions {}
 
 export interface TypeQueryOptions extends QueryOptions {}
 

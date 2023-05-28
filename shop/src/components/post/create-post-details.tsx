@@ -10,6 +10,8 @@ import Button from '../ui/button';
 import CreatePostImages from './create-post-images';
 import toast from 'react-hot-toast';
 import { SKILLS_SUGGESTIONS } from '@/lib/constants';
+import { useCategories } from '@/data/category';
+import { useTags } from '@/data/tags';
 
 type CreatePostDetailsProps = {
   onContinue: any;
@@ -20,6 +22,14 @@ const CreatePostDetails: React.FC<CreatePostDetailsProps> = ({
   onContinue,
   onSaveAsDraft,
 }) => {
+  const tagsRef = useRef<HTMLDivElement>();
+  const { tags, isLoading: isLoadingTags } = useTags({
+    limit: 999,
+  });
+  const { categories } = useCategories({
+    limit: 999,
+  });
+
   const [detailsData, setDetailsData] = useState({
     title: '',
     categories: '',
@@ -43,6 +53,7 @@ const CreatePostDetails: React.FC<CreatePostDetailsProps> = ({
     placeholder: 'Add your Keyword',
     editTags: 0,
     dropdown: {
+      maxItems: 100,
       enabled: 0,
       classname: 'tags-look',
     },
@@ -50,13 +61,14 @@ const CreatePostDetails: React.FC<CreatePostDetailsProps> = ({
   };
 
   const handleChange = (e: any) => {
-    const tags: string[] = e.detail.tagify.value.map((item: any) => item.value);
-    setSelectedTags(tags);
+    // const tags: string[] = e.detail.tagify.value.map((item: any) => item.value);
+    // setSelectedTags(tags);
   };
 
   const settings = {
     ...baseTagifySettings,
-    whitelist: SKILLS_SUGGESTIONS,
+    whitelist: [],
+    enforceWhitelist: true,
     callbacks: {
       add: handleChange,
       remove: handleChange,
@@ -100,7 +112,11 @@ const CreatePostDetails: React.FC<CreatePostDetailsProps> = ({
       return;
     }
 
-    if (selectedTags.length == 0) {
+    const curTags: string[] = tagsRef.current?.value.map(
+      (item: any) => item.value
+    );
+
+    if (curTags.length == 0) {
       toast.error(<b>Please add keywords!</b>, {
         className: '-mt-10 xs:mt-0',
       });
@@ -119,7 +135,7 @@ const CreatePostDetails: React.FC<CreatePostDetailsProps> = ({
 
     onContinue({
       ...detailsData,
-      keywords: selectedTags.join(','),
+      keywords: curTags.join(','),
       files: uploadedFiles,
     });
   };
@@ -134,6 +150,10 @@ const CreatePostDetails: React.FC<CreatePostDetailsProps> = ({
 
     setSelectedFiles(updatedFiles);
   };
+
+  useEffect(() => {
+    tagsRef.current?.settings.whitelist = tags.map((item) => item.name);
+  }, [isLoadingTags]);
 
   return (
     <div className="mt-12 flex w-full flex-col items-start justify-between gap-4 md:flex-row">
@@ -169,6 +189,7 @@ const CreatePostDetails: React.FC<CreatePostDetailsProps> = ({
             </div>
             <div className="flex w-full">
               <Dropdown
+                values={categories.map((item) => item.name)}
                 selectedValue={detailsData.categories}
                 setSelectedValue={(value: string) =>
                   setDetailsData({ ...detailsData, categories: value })
@@ -185,6 +206,7 @@ const CreatePostDetails: React.FC<CreatePostDetailsProps> = ({
             </div>
             <div className="flex w-full">
               <Dropdown
+                values={categories.map((item) => item.name)}
                 selectedValue={detailsData.sub_categories}
                 setSelectedValue={(value: string) =>
                   setDetailsData({ ...detailsData, sub_categories: value })
@@ -229,7 +251,11 @@ const CreatePostDetails: React.FC<CreatePostDetailsProps> = ({
             <InfoIcon className="h-4 w-4 text-dark-800 focus-visible:outline-none" />
           </div>
           <div className="flex w-full">
-            <Tags settings={settings} initialValue={[]} />
+            <Tags
+              tagifyRef={tagsRef}
+              settings={settings}
+              value={selectedTags}
+            />
           </div>
         </div>
       </div>

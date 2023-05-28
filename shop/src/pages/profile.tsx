@@ -25,6 +25,8 @@ import Tags from '@yaireo/tagify/dist/react.tagify';
 import '@yaireo/tagify/dist/tagify.css';
 import { useState, useRef, useEffect } from 'react';
 import { SKILLS_SUGGESTIONS } from '@/lib/constants';
+import { useRouter } from 'next/router';
+import { useTags } from '@/data/tags';
 
 const profileValidationSchema = yup.object().shape({
   id: yup.string().required(),
@@ -59,6 +61,9 @@ const ProfilePage: NextPageWithLayout = () => {
   const { t } = useTranslation('common');
   const [skillTags, setSkillTags] = useState<string[]>([]);
   const tagsRef = useRef<HTMLDivElement>();
+  const { tags, isLoading: isLoadingTags } = useTags({
+    limit: 999,
+  });
 
   const baseTagifySettings = {
     blacklist: [],
@@ -67,6 +72,7 @@ const ProfilePage: NextPageWithLayout = () => {
     placeholder: 'Add your Keyword',
     editTags: 0,
     dropdown: {
+      maxItems: 100,
       enabled: 0,
       classname: 'tags-look',
     },
@@ -80,7 +86,8 @@ const ProfilePage: NextPageWithLayout = () => {
 
   const settings = {
     ...baseTagifySettings,
-    whitelist: SKILLS_SUGGESTIONS,
+    whitelist: [],
+    enforceWhitelist: true,
     callbacks: {
       add: handleChangeCallBack,
       remove: handleChangeCallBack,
@@ -122,8 +129,16 @@ const ProfilePage: NextPageWithLayout = () => {
   useEffect(() => {
     if (!me) return;
 
-    setSkillTags(me.profile.skills.split(','));
-  }, [me]);
+    if (me.profile) {
+      setSkillTags(
+        me.profile.skills.trim().length === 0
+          ? []
+          : me.profile.skills.split(',')
+      );
+    }
+
+    tagsRef.current?.settings.whitelist = tags.map((item) => item.name);
+  }, [me, isLoadingTags]);
 
   return (
     <motion.div

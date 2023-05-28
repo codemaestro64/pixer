@@ -4,11 +4,13 @@ import { DropdownIcon } from '@/components/icons/post/dropdown-icon';
 import cn from 'classnames';
 
 interface DropdownProps {
+  values: string[];
   selectedValue: string;
   setSelectedValue: any;
 }
 
 export default function Dropdown({
+  values,
   selectedValue,
   setSelectedValue,
 }: DropdownProps) {
@@ -33,30 +35,14 @@ export default function Dropdown({
         >
           Eg: Graphic Design
         </option>
-        <option
-          className="bg-light text-gray-800 dark:bg-dark-300 dark:text-light"
-          value="United States"
-        >
-          United States
-        </option>
-        <option
-          className="bg-light text-gray-800 dark:bg-dark-300 dark:text-light"
-          value="Canada"
-        >
-          Canada
-        </option>
-        <option
-          className="bg-light text-gray-800 dark:bg-dark-300 dark:text-light"
-          value="France"
-        >
-          France
-        </option>
-        <option
-          className="bg-light text-gray-800 dark:bg-dark-300 dark:text-light"
-          value="Germany"
-        >
-          Germany
-        </option>
+        {values.map((item) => (
+          <option
+            className="bg-light text-gray-800 dark:bg-dark-300 dark:text-light"
+            value={item}
+          >
+            {item}
+          </option>
+        ))}
       </select>
     </>
   );

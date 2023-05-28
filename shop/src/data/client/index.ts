@@ -80,6 +80,7 @@ import type {
   Follow,
   CreateCommentLikeInput,
   CommentLike,
+  TagQueryOptions,
 } from '@/types';
 import { API_ENDPOINTS } from './endpoints';
 import { HttpClient } from './http-client';
@@ -130,7 +131,7 @@ class Client {
       HttpClient.get<CategoryPaginator>(API_ENDPOINTS.CATEGORIES, { ...query }),
   };
   tags = {
-    all: (query?: QueryOptions) =>
+    all: (query?: TagQueryOptions) =>
       HttpClient.get<TagPaginator>(API_ENDPOINTS.TAGS, query),
     get: ({ slug, language }: { slug: string; language?: string }) =>
       HttpClient.get<Tag>(`${API_ENDPOINTS.TAGS}/${slug}`, { language }),

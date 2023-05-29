@@ -96,6 +96,7 @@ module.exports = {
         body: ["'Inter', sans-serif"],
         poppins: ["'Poppins', 'Inter', sans-serif"],
         quicksand: ["'Quicksand', 'Poppins', sans-serif"],
+        raleway: ["'Raleway', 'Poppins', sans-serif"],
       },
     },
   },

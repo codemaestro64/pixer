@@ -1,6 +1,11 @@
-export default function SectionBackdrop({ children }: { children?: React.ReactNode }) {
+export default function SectionBackdrop({ children, variant = 'dark' }: {
+  children?: React.ReactNode
+  variant?: 'light' | 'dark'
+}) {
   return (
-    <section className='bg-[#0E0725] relative overflow-hidden'>
+    <section className={`relative overflow-hidden ${
+      variant === 'light' ? 'bg-[#FFFFFF]' : 'bg-[#0E0725]'
+    }`}>
       {/* backdrop */}
       <div className='absolute inset-0 z-[2] bg-[#3CFF3812] backdrop-blur-[240px]'></div>
       <div className='max-w-[1728px] mx-auto relative'>

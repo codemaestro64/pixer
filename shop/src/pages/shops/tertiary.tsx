@@ -10,7 +10,7 @@ import BannerAlt from '@/components/shops/banner-alt';
 import AllProduct from '@/components/shops/all-product';
 import TertiaryProducts from '@/components/shops/tertiary/tertiary-products';
 
-export default function PrimaryPage() {
+export default function TertiaryPage() {
   return (
     <>
       {/* <Seo

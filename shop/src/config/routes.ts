@@ -21,14 +21,17 @@ const routes = {
   feed: '/feed',
   post: '/posts',
   createPost: 'posts/create',
+  service: '/services',
+  createService: 'services/create',
   followedShop: '/followed-authors',
   communities: '/communities',
   orderUrl: (tracking_number: string) => `/orders/${tracking_number}`,
   productUrl: (slug: string) => `/products/${slug}`,
   postUrl: (slug: string) => `/posts/${slug}`,
+  serviceUrl: (slug: string) => `/services/${slug}`,
   tagUrl: (slug: string) => `/products/tags/${slug}`,
   shopUrl: (slug: string) => `/authors/${slug}`,
   userUrl: (slug: string) => `/users/${slug}`,
-  communityUrl: (slug: string) => `/communities/${slug}`
+  communityUrl: (slug: string) => `/communities/${slug}`,
 };
 export default routes;

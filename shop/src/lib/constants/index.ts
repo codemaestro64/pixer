@@ -14,6 +14,32 @@ export const SKILLS_SUGGESTIONS: string[] = [
   'Figma',
 ];
 
+export const DELIVERY_LIST: string[] = [
+  '1 Day',
+  '3 Days',
+  '5 Days',
+  '7 Days',
+  '15 Days',
+  '1 Month',
+  '2 Month',
+  '3 Month',
+  '6 Month',
+  '1 Year',
+];
+
+export const REVISION_LIST: string[] = [
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  '10',
+];
+
 export function getDirection(language: string | undefined) {
   if (!language) return 'ltr';
   return RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';

@@ -8,16 +8,16 @@ use Illuminate\Http\Request;
 use Marvel\Database\Models\Language;
 use Marvel\Database\Models\Package;
 use Marvel\Database\Models\Follow;
-use Marvel\Database\Repositories\PostRepository;
+use Marvel\Database\Repositories\GigRepository;
 use Marvel\Exceptions\MarvelException;
-use Marvel\Http\Requests\PostRequest;
+use Marvel\Http\Requests\GigRequest;
 use Prettus\Validator\Exceptions\ValidatorException;
 
-class PostController extends CoreController
+class GigController extends CoreController
 {
     public $repository;
 
-    public function __construct(PostRepository $repository)
+    public function __construct(GigRepository $repository)
     {
         $this->repository = $repository;
     }
@@ -29,15 +29,11 @@ class PostController extends CoreController
     public function index(Request $request)
     {
         //return $this->repository->with(['customer', 'profile', 'packages'])->where('user_id', $request->user()->id)->orderBy('updated_at', 'desc')->get();
-        $limit = $request->limit ?   $request->limit : 15;
-        return $this->repository->with(['customer', 'profile', 'likes', 'followers'])->withCount(['comments', 'likes', 'followers'])->orderBy('updated_at', 'desc')->paginate($limit)->withQueryString();
+        $limit = $request->limit ? $request->limit : 15;
+        return $this->repository->with(['customer', 'profile', 'likes'])->withCount(['likes'])->orderBy('updated_at', 'desc')->paginate($limit)->withQueryString();
 
     }
 
-    public function getPostsByUser(Request $request) {
-        $limit = $request->limit ?   $request->limit : 15;
-        return $this->repository->with(['customer', 'profile', 'likes', 'followers'])->withCount(['comments', 'likes', 'followers'])->where('user_id', $request->user_id)->orderBy('updated_at', 'desc')->paginate($limit);
-    }
     /**
      * Show the form for creating a new resource.
      *
@@ -54,18 +50,16 @@ class PostController extends CoreController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PostRequest $request)
+    public function store(GigRequest $request)
     {
         if ($request->user()) {
-            $new_post = $this->repository->storePost($request);
+            $new_gig = $this->repository->storePost($request);
 
-            /*
             foreach ($request->packages as $eachPackage) {
-                Package::create(['post_id' => $new_post->id, 'name' => $eachPackage['name'], 'price' => $eachPackage['price'], 'descr' => $eachPackage['descr'], 'keywords' => $eachPackage['keywords']]);
+                Package::create(['gig_id' => $new_gig->id, 'title' => $eachPackage['title'], 'name' => $eachPackage['name'], 'price' => $eachPackage['price'], 'descr' => $eachPackage['descr'], 'keywords' => $eachPackage['keywords'], 'delivery' => $eachPackage['delivery'], 'revision' => $eachPackage['revision'], 'additional_banner' => $eachPackage['additional_banner'], 'additional_source' => $eachPackage['additional_source']]);
             }
-            */
 
-            return $new_post;
+            return $new_gig;
         } else {
             throw new MarvelException(NOT_AUTHORIZED);
         }
@@ -80,20 +74,9 @@ class PostController extends CoreController
      */
     public function show($id)
     {
-        $post = $this->repository->with(['customer', 'profile', 'likes', 'comments', 'followers'])->withCount(['comments', 'followers', 'likes'])->findOrFail($id);
+        $gig = $this->repository->with(['customer', 'profile', 'packages', 'likes'])->withCount(['likes'])->findOrFail($id);
 
-        $latest_posts_ids = $this->repository->where('id', '!=', $id)->orderBy('updated_at', 'desc')->offset(0)->limit(10)->pluck('id')->all();
-        $latest_posts = $this->repository->with(['customer', 'profile', 'likes', 'comments', 'followers'])->withCount(['comments', 'followers', 'likes'])->whereIn('id', $latest_posts_ids)->orderBy('updated_at', 'desc')->get();
-
-        /*
-        $followers_cnt = Follow::where('receiver_user_id', $post->user_id)->where('status', 1)->get()->count();
-        $post->followers_count = $followers_cnt;
-        */
-
-        return response()->json([
-            'post' => $post,
-            'latest_posts' => $latest_posts,
-        ]);
+        return $gig;
     }
 
     /**

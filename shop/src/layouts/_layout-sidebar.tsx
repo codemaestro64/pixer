@@ -12,12 +12,13 @@ import { ProductIcon } from '@/components/icons/product-icon';
 import { PeopleIcon } from '@/components/icons/people-icon';
 import { ChatIcon } from '@/components/icons/chat-icon';
 import { PostIcon } from '@/components/icons/post-icon';
+import { FeedIcon } from '@/components/icons/feed-icon';
+import { ServiceIcon } from '@/components/icons/service-icon';
 import { PaperPlaneIcon } from '@/components/icons/paper-plane-icon';
 import Scrollbar from '@/components/ui/scrollbar';
 import Copyright from '@/layouts/_copyright';
 import { UserFollowingIcon } from '@/components/icons/user-following-icon';
 import { useMe } from '@/data/user';
-import { FeedIcon } from '@/components/icons/feed-icon';
 import { useTranslation } from 'next-i18next';
 
 interface NavLinkProps {
@@ -119,7 +120,12 @@ export function Sidebar({
               isCollapse={isCollapse}
               icon={<PostIcon className="h-[20px] w-[20px] text-current" />}
             />
-
+            <NavLink
+              title={t('text-service')}
+              href={routes.service}
+              isCollapse={isCollapse}
+              icon={<ServiceIcon className="h-[24px] w-[24px] text-current" />}
+            />
             <NavLink
               title={t('text-contact')}
               href={routes.contact}

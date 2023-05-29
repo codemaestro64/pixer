@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Relations\hasManyThrough;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Post extends Model
+class Gig extends Model
 {
-    protected $table = 'posts';
+    protected $table = 'gigs';
 
     protected $fillable = [
         'user_id', 'title', 'categories', 'sub_categories', 'descr', 'keywords', 'attachments'
@@ -31,17 +31,14 @@ class Post extends Model
         return $this->hasOne(Profile::class, 'customer_id', 'user_id');
     }
 
-    public function comments(): HasMany
+    public function packages(): HasMany
     {
-        return $this->hasMany(PostComment::class)->orderBy('updated_at', 'desc');
+        return $this->hasMany(Package::class)->orderBy('updated_at', 'desc');
     }
 
     public function likes(): HasMany
     {
-        return $this->hasMany(PostLike::class)->where('status', '=', 1);
+        return $this->hasMany(GigLike::class)->where('status', '=', 1);
     }
 
-    public function followers(): HasMany {
-        return $this->hasMany(Follow::class, 'receiver_user_id', 'user_id')->where('status', 1);
-    }
 }

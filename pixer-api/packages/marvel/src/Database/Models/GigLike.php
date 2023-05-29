@@ -5,18 +5,26 @@ namespace Marvel\Database\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\hasManyThrough;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
-class Package extends Model
+class GigLike extends Model
 {
-    protected $table = 'packages';
+    protected $table = 'gig_likes';
 
     protected $fillable = [
-        'gig_id', 'title', 'name', 'price', 'descr', 'keywords', 'delivery', 'revision', 'additional_banner', 'additional_source'
+        'user_id', 'gig_id', 'status'
     ];
+
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function profile(): HasOne
+    {
+        return $this->hasOne(Profile::class, 'customer_id', 'user_id');
+    }
 
     public function gig(): BelongsTo
     {

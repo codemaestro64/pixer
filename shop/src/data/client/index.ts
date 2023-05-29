@@ -81,9 +81,16 @@ import type {
   CreateCommentLikeInput,
   CommentLike,
   TagQueryOptions,
+  GigQueryOptions,
+  GigPaginator,
+  Gig,
+  GigResponse,
+  GigLike,
+  CreateGigInput,
+  CreateGigLikeInput,
   Community,
   CommunityPaginator,
-  CommunityQueryOptions
+  CommunityQueryOptions,
 } from '@/types';
 import { API_ENDPOINTS } from './endpoints';
 import { HttpClient } from './http-client';
@@ -352,9 +359,9 @@ class Client {
       HttpClient.post<FeedComment>(API_ENDPOINTS.FEEDCOMMENTS, input),
   };
   posts = {
-    all: (params: PostQueryOptions) =>
+    all: (query: PostQueryOptions) =>
       HttpClient.get<PostPaginator>(API_ENDPOINTS.POSTS, {
-        ...params,
+        ...query,
       }),
     allByUsers: (params: PostByUserQueryOptions) =>
       HttpClient.get<PostPaginator>(API_ENDPOINTS.POSTSBYUSER, {
@@ -387,9 +394,23 @@ class Client {
     create: (input: CreateCommentLikeInput) =>
       HttpClient.post<CommentLike>(API_ENDPOINTS.COMMENTLIKES, input),
   };
+  gigs = {
+    all: (query: GigQueryOptions) =>
+      HttpClient.get<GigPaginator>(API_ENDPOINTS.GIGS, {
+        ...query,
+      }),
+    get: ({ id }: { id: string }) =>
+      HttpClient.get<Gig>(`${API_ENDPOINTS.GIGS}/${id}`),
+    create: (input: CreateGigInput) =>
+      HttpClient.post<GigResponse>(API_ENDPOINTS.GIGS, input),
+    like: (input: CreateGigLikeInput) =>
+      HttpClient.post<GigLike>(API_ENDPOINTS.GIGLIKES, input),
+  };
   communities = {
     all: (query?: CommunityQueryOptions) =>
-      HttpClient.get<CommunityPaginator>(API_ENDPOINTS.COMMUNITIES, { ...query }),
+      HttpClient.get<CommunityPaginator>(API_ENDPOINTS.COMMUNITIES, {
+        ...query,
+      }),
     get: (slug: string) =>
       HttpClient.get<Community>(`${API_ENDPOINTS.COMMUNITIES}/${slug}`),
   };

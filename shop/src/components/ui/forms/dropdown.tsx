@@ -4,12 +4,14 @@ import { DropdownIcon } from '@/components/icons/post/dropdown-icon';
 import cn from 'classnames';
 
 interface DropdownProps {
+  egValue: string;
   values: string[];
   selectedValue: string;
   setSelectedValue: any;
 }
 
 export default function Dropdown({
+  egValue,
   values,
   selectedValue,
   setSelectedValue,
@@ -33,7 +35,7 @@ export default function Dropdown({
           disabled
           selected
         >
-          Eg: Graphic Design
+          {egValue}
         </option>
         {values.map((item) => (
           <option

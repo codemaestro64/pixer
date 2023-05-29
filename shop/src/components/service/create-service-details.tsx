@@ -7,22 +7,20 @@ import Textarea from '../ui/forms/textarea';
 import Tags from '@yaireo/tagify/dist/react.tagify';
 import '@yaireo/tagify/dist/tagify.css';
 import Button from '../ui/button';
-import CreatePostImages from './create-post-images';
+import CreateServiceImages from './create-service-images';
 import toast from 'react-hot-toast';
 import { SKILLS_SUGGESTIONS } from '@/lib/constants';
 import { useCategories } from '@/data/category';
 import { useTags } from '@/data/tags';
 
-type CreatePostDetailsProps = {
+type CreateServiceDetailsProps = {
   onContinue: any;
   onSaveAsDraft: any;
-  isLoading: boolean;
 };
 
-const CreatePostDetails: React.FC<CreatePostDetailsProps> = ({
+const CreateServiceDetails: React.FC<CreateServiceDetailsProps> = ({
   onContinue,
   onSaveAsDraft,
-  isLoading,
 }) => {
   const tagsRef = useRef<HTMLDivElement>();
   const { tags, isLoading: isLoadingTags } = useTags({
@@ -264,16 +262,14 @@ const CreatePostDetails: React.FC<CreatePostDetailsProps> = ({
         </div>
       </div>
       <div className="mt-10 flex w-full flex-col gap-4 md:mt-0 md:w-5/12">
-        <CreatePostImages gotFile={gotFile} />
+        <CreateServiceImages gotFile={gotFile} />
         <Button
-          className="w-full rounded-[8px] font-poppins text-sm tracking-[0.2px]"
+          className="mt-4 w-full rounded-[8px] font-poppins text-sm tracking-[0.2px]"
           onClick={onProcessContinue}
-          isLoading={isLoading}
         >
           Continue
           <ContinueIcon className="h-3 w-3 text-light focus-visible:outline-none" />
         </Button>
-
         <Button
           onClick={onProcessSaveAsDraft}
           variant="outline"
@@ -286,4 +282,4 @@ const CreatePostDetails: React.FC<CreatePostDetailsProps> = ({
   );
 };
 
-export default CreatePostDetails;
+export default CreateServiceDetails;

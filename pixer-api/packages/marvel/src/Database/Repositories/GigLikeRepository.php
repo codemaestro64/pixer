@@ -14,31 +14,19 @@ use Marvel\Mail\ForgetPassword;
 use Illuminate\Support\Facades\Mail;
 use Marvel\Database\Models\Address;
 use Marvel\Database\Models\Profile;
-use Marvel\Database\Models\Package;
-use Marvel\Database\Models\Post;
+use Marvel\Database\Models\Shop;
+use Marvel\Database\Models\GigLike;
 use Marvel\Exceptions\MarvelException;
 
-class PackageRepository extends BaseRepository
+class GigLikeRepository extends BaseRepository
 {
     /**
      * @var array
      */
-    protected $fieldSearchable = [
-        'name' => 'like',
-        'descr' => 'like',
-    ];
-
     protected $dataArray = [
-        'post_id',
-        'title',
-        'name',
-        'price',
-        'descr',
-        'keywords',
-        'delivery',
-        'revision',
-        'additional_banner',
-        'additional_source',
+        'user_id',
+        'gig_id',
+        'status',
     ];
 
     /**
@@ -46,7 +34,7 @@ class PackageRepository extends BaseRepository
      **/
     public function model()
     {
-        return Package::class;
+        return GigLike::class;
     }
 
     public function boot()
@@ -57,8 +45,27 @@ class PackageRepository extends BaseRepository
         }
     }
 
-    public function storePackage($request)
+    public function storeLike($request)
     {
+        try {
+            $data = $request->only($this->dataArray);
+            $gigLike = $this->create($data);
+
+            $gigLike->save();
+            return $gigLike;
+        } catch (ValidatorException $e) {
+            throw new MarvelException(SOMETHING_WENT_WRONG);
+        }
     }
 
+    public function updateLike($request, $id) {
+        try {
+            $gigLike = $this->findOrFail($id);
+            $gigLike->update($request->only($this->dataArray));
+
+            return $gigLike;
+        } catch (ValidatorException $e) {
+            throw new MarvelException(SOMETHING_WENT_WRONG);
+        }
+    }
 }

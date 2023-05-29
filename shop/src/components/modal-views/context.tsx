@@ -11,6 +11,7 @@ export type MODAL_VIEWS =
   | 'QUESTION_FORM'
   | 'REVIEW_RATING'
   | 'POST_SUCCESS_VIEW'
+  | 'SERVICE_SUCCESS_VIEW'
   | 'REVIEW_IMAGE_POPOVER';
 
 interface State {

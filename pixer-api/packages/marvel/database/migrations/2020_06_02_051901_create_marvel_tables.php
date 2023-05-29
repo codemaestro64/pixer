@@ -310,16 +310,6 @@ class CreateMarvelTables extends Migration
             $table->timestamps();
         });
 
-        Schema::create('packages', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('post_id');
-            $table->string('name');
-            $table->string('price');
-            $table->string('descr');
-            $table->string('keywords');
-            $table->timestamps();
-        });
-
         Schema::create('post_likes', function (Blueprint $table) {
             $table->id('id');
             $table->unsignedBigInteger('post_id');
@@ -348,6 +338,41 @@ class CreateMarvelTables extends Migration
             $table->id();
             $table->string('type');
             $table->unsignedBigInteger('comment_id');
+            $table->unsignedBigInteger('user_id');
+            $table->boolean('status');
+            $table->timestamps();
+        });
+
+        Schema::create('gigs', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->string('title');
+            $table->string('categories');
+            $table->string('sub_categories');
+            $table->string('descr');
+            $table->string('keywords');
+            $table->longText('attachments');
+            $table->timestamps();
+        });
+
+        Schema::create('packages', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('gig_id');
+            $table->string('title');
+            $table->string('name');
+            $table->string('price');
+            $table->string('descr');
+            $table->string('keywords');
+            $table->string('delivery');
+            $table->string('revision');
+            $table->boolean('additional_banner');
+            $table->boolean('additional_source');
+            $table->timestamps();
+        });
+
+        Schema::create('gig_likes', function (Blueprint $table) {
+            $table->id('id');
+            $table->unsignedBigInteger('gig_id');
             $table->unsignedBigInteger('user_id');
             $table->boolean('status');
             $table->timestamps();

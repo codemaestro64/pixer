@@ -1,16 +1,18 @@
 import { useEffect, useState, useContext, useCallback, useRef } from 'react';
 import { ContinueIcon } from '../icons/post/continue-icon';
 import Button from '../ui/button';
-import CreatePostPackageItem, { PackageItem } from './create-post-package-item';
+import CreateServicePackageItem, {
+  PackageItem,
+} from './create-service-package-item';
 import toast from 'react-hot-toast';
 
-type CreatePostPackageProps = {
+type CreateServicePackageProps = {
   onContinue: any;
   onSaveAsDraft: any;
   isLoading: boolean;
 };
 
-const CreatePostPackage: React.FC<CreatePostPackageProps> = ({
+const CreateServicePackage: React.FC<CreateServicePackageProps> = ({
   onContinue,
   onSaveAsDraft,
   isLoading,
@@ -26,7 +28,9 @@ const CreatePostPackage: React.FC<CreatePostPackageProps> = ({
       data.name.length === 0 &&
       data.price.length === 0 &&
       data.descr.length === 0 &&
-      data.keywords.length === 0
+      data.keywords.length === 0 &&
+      data.delivery.length === 0 &&
+      data.revision.length === 0
     )
       return 2;
 
@@ -56,6 +60,22 @@ const CreatePostPackage: React.FC<CreatePostPackageProps> = ({
 
     if (data.keywords.length === 0) {
       toast.error(<b>Please add keywords!</b>, {
+        className: '-mt-10 xs:mt-0',
+      });
+
+      return 1;
+    }
+
+    if (data.delivery.length === 0) {
+      toast.error(<b>Please select delivery!</b>, {
+        className: '-mt-10 xs:mt-0',
+      });
+
+      return 1;
+    }
+
+    if (data.revision.length === 0) {
+      toast.error(<b>Please select revision!</b>, {
         className: '-mt-10 xs:mt-0',
       });
 
@@ -107,7 +127,7 @@ const CreatePostPackage: React.FC<CreatePostPackageProps> = ({
 
   return (
     <div className="mt-12 flex w-full flex-col items-start justify-between gap-4 md:w-11/12">
-      <CreatePostPackageItem
+      <CreateServicePackageItem
         ref={basicRef}
         title={'BASIC'}
         isExtended={isExtended}
@@ -116,13 +136,13 @@ const CreatePostPackage: React.FC<CreatePostPackageProps> = ({
 
       {isExtended && (
         <>
-          <CreatePostPackageItem
+          <CreateServicePackageItem
             ref={standardRef}
             title={'STANDARD'}
             isExtended={isExtended}
             setIsExtended={setIsExtended}
           />
-          <CreatePostPackageItem
+          <CreateServicePackageItem
             ref={premiumRef}
             title={'PREMIUM'}
             isExtended={isExtended}
@@ -152,4 +172,4 @@ const CreatePostPackage: React.FC<CreatePostPackageProps> = ({
   );
 };
 
-export default CreatePostPackage;
+export default CreateServicePackage;

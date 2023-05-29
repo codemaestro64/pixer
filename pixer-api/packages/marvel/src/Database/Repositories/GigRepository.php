@@ -4,7 +4,7 @@ namespace Marvel\Database\Repositories;
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use Marvel\Database\Models\User;
+use Marvel\Database\Models\Feed;
 use Prettus\Validator\Exceptions\ValidatorException;
 use Spatie\Permission\Models\Permission;
 use Marvel\Enums\Permission as UserPermission;
@@ -14,31 +14,28 @@ use Marvel\Mail\ForgetPassword;
 use Illuminate\Support\Facades\Mail;
 use Marvel\Database\Models\Address;
 use Marvel\Database\Models\Profile;
+use Marvel\Database\Models\Gig;
 use Marvel\Database\Models\Package;
-use Marvel\Database\Models\Post;
 use Marvel\Exceptions\MarvelException;
 
-class PackageRepository extends BaseRepository
+class GigRepository extends BaseRepository
 {
     /**
      * @var array
      */
     protected $fieldSearchable = [
-        'name' => 'like',
+        'title' => 'like',
         'descr' => 'like',
     ];
 
     protected $dataArray = [
-        'post_id',
+        'user_id',
         'title',
-        'name',
-        'price',
+        'categories',
+        'sub_categories',
         'descr',
         'keywords',
-        'delivery',
-        'revision',
-        'additional_banner',
-        'additional_source',
+        'attachments',
     ];
 
     /**
@@ -46,7 +43,7 @@ class PackageRepository extends BaseRepository
      **/
     public function model()
     {
-        return Package::class;
+        return Gig::class;
     }
 
     public function boot()
@@ -57,8 +54,19 @@ class PackageRepository extends BaseRepository
         }
     }
 
-    public function storePackage($request)
+    public function storePost($request)
     {
+        try {
+            $user = $request->user();
+            $data = $request->only($this->dataArray);
+            $data['user_id'] = $user->id;
+            $gig = $this->create($data);
+
+            $gig->save();
+            return $gig;
+        } catch (ValidatorException $e) {
+            throw new MarvelException(SOMETHING_WENT_WRONG);
+        }
     }
 
 }

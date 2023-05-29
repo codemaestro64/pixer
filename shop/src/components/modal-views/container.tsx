@@ -40,6 +40,9 @@ const QuestionForm = dynamic(
 const PostSuccessView = dynamic(
   () => import('@/components/post/create-post-success')
 );
+const ServiceSuccessView = dynamic(
+  () => import('@/components/service/create-service-success')
+);
 
 function renderModalContent(view: MODAL_VIEWS) {
   switch (view) {
@@ -65,6 +68,8 @@ function renderModalContent(view: MODAL_VIEWS) {
       return <QuestionForm />;
     case 'POST_SUCCESS_VIEW':
       return <PostSuccessView />;
+    case 'SERVICE_SUCCESS_VIEW':
+      return <ServiceSuccessView />;
     default:
       return null;
   }
@@ -89,7 +94,11 @@ export default function ModalsContainer() {
       <Dialog
         as="div"
         className="fixed inset-0 z-50 overflow-y-auto overflow-x-hidden xs:p-4"
-        onClose={view === 'POST_SUCCESS_VIEW' ? () => {} : closeModal}
+        onClose={
+          view === 'POST_SUCCESS_VIEW' || view === 'SERVICE_SUCCESS_VIEW'
+            ? () => {}
+            : closeModal
+        }
         dir={dir}
       >
         <div className="min-h-screen text-center">
@@ -129,6 +138,7 @@ export default function ModalsContainer() {
                     'COMMENT_DETAILS',
                     'POST_COMMENT_DETAILS',
                     'POST_SUCCESS_VIEW',
+                    'SERVICE_SUCCESS_VIEW',
                   ].includes(view) && (
                     <button
                       onClick={closeModal}

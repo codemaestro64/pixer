@@ -9,7 +9,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Marvel\Enums\WithdrawStatus;
 
-class PackageRequest extends FormRequest
+class GigLikeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,16 +29,9 @@ class PackageRequest extends FormRequest
     public function rules()
     {
         return [
+            'user_id'     => ['nullable', 'exists:Marvel\Database\Models\User,id'],
             'gig_id'     => ['nullable', 'exists:Marvel\Database\Models\Gig,id'],
-            'title' => ['nullable', 'string'],
-            'name' => ['nullable', 'string'],
-            'price' => ['nullable', 'string'],
-            'descr' => ['nullable', 'string'],
-            'keywords' => ['nullable', 'string'],
-            'delivery' => ['nullable', 'string'],
-            'revision' => ['nullable', 'string'],
-            'additional_banner'      => ['boolean'],
-            'additional_source'      => ['boolean'],
+            'status'      => ['boolean'],
         ];
     }
 

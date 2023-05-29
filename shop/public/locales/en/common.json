@@ -63,6 +63,8 @@
   "text-logout": "Logout",
   "text-no-products-found": "No products found!",
   "text-no-products-found-message": "Sorry, we don’t found any product",
+  "text-no-gigs-found": "No gigs found!",
+  "text-no-gigs-found-message": "Sorry, we don’t found any gig",
   "text-home": "Home",
   "text-explore": "Explore",
   "text-popular-products": "Popular Products",
@@ -70,6 +72,7 @@
   "text-feed": "Feed",
   "text-chat": "Chat",
   "text-post": "Post",
+  "text-service": "Gig",
   "text-contact": "Contact",
   "text-settings": "Settings",
   "text-terms": "Terms",
@@ -291,6 +294,9 @@
   "PIXER_MESSAGE.EMAIL_SENT_SUCCESSFUL": "Email successfully sent",
   "PIXER_ERROR.YOU_HAVE_ALREADY_GIVEN_ABUSIVE_REPORT_FOR_THIS": "You've already given report",
   "PIXER_ERROR.MAXIMUM_QUESTION_LIMIT_EXCEEDED": "Maximum Question Limit Exceeded",
+
+  "text-gig-banner": "1 Banner",
+  "text-gig-included-source": "Included Sources File",
 
   "text-order-received-title": "Order Received Successfully",
   "text-order-thank-you-message": "Thanks for your order, click here to check your purchase bucket",

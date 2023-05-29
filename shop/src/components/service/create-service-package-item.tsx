@@ -12,34 +12,39 @@ import { AddPackageIcon } from '../icons/post/add-package-icon';
 import Textarea from '../ui/forms/textarea';
 import Tags from '@yaireo/tagify/dist/react.tagify';
 import '@yaireo/tagify/dist/tagify.css';
-import { SKILLS_SUGGESTIONS } from '@/lib/constants';
+import {
+  DELIVERY_LIST,
+  REVISION_LIST,
+  SKILLS_SUGGESTIONS,
+} from '@/lib/constants';
 import { useTags } from '@/data/tags';
+import Dropdown from '../ui/forms/dropdown';
+import CheckBox from '../ui/forms/checkbox';
 
 export interface PackageItem {
   getInfo: () => void;
 }
 
-type CreatePostPackageItemProps = {
-  title: string;
-  isExtended: boolean;
-  setIsExtended: any;
-};
-
-const CreatePostPackageItem = forwardRef(
+const CreateServicePackageItem = forwardRef(
   (
     props: { title: string; isExtended: boolean; setIsExtended: any },
     ref: Ref<PackageItem>
   ) => {
     const { title, isExtended, setIsExtended } = props;
     const tagsRef = useRef<HTMLDivElement>();
+    const bannerRef = useRef<HTMLInputElement>(null);
+    const sourceRef = useRef<HTMLInputElement>(null);
     const { tags, isLoading: isLoadingTags } = useTags({
       limit: 999,
     });
 
     const [detailsData, setDetailsData] = useState({
+      title,
       name: '',
       price: '',
       descr: '',
+      delivery: '',
+      revision: '',
     });
 
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -49,7 +54,12 @@ const CreatePostPackageItem = forwardRef(
         (item: any) => item.value
       );
 
-      return { ...detailsData, keywords: curTags.join(',') };
+      return {
+        ...detailsData,
+        keywords: curTags.join(','),
+        additional_banner: bannerRef.current?.checked,
+        additional_source: sourceRef.current?.checked,
+      };
     }
 
     useImperativeHandle(ref, () => ({ getInfo }));
@@ -80,7 +90,7 @@ const CreatePostPackageItem = forwardRef(
     const settings = {
       ...baseTagifySettings,
       whitelist: [],
-      enforceWhitelist: true,
+      //enforceWhitelist: true,
       callbacks: {
         add: handleChange,
         remove: handleChange,
@@ -209,10 +219,69 @@ const CreatePostPackageItem = forwardRef(
             />
           </div>
         </div>
+
+        <div className="mt-4 flex w-full flex-col items-start justify-center gap-4 md:flex-row">
+          <div className="flex w-full flex-col items-start justify-center gap-4">
+            <div className="mx-4 flex flex-row items-center justify-start gap-4">
+              <p className="font-poppins text-[16px] text-dark-400 dark:text-light">
+                Delivery
+              </p>
+              <InfoIcon className="h-4 w-4 text-dark-800 focus-visible:outline-none" />
+            </div>
+            <div className="flex w-full">
+              <Dropdown
+                egValue="Eg: 1 Day"
+                values={DELIVERY_LIST}
+                selectedValue={detailsData.delivery}
+                setSelectedValue={(value: string) =>
+                  setDetailsData({ ...detailsData, delivery: value })
+                }
+              />
+            </div>
+          </div>
+          <div className="mt-8 flex w-full flex-col items-start justify-center gap-4 md:mt-0">
+            <div className="mx-4 flex flex-row items-center justify-start gap-4">
+              <p className="font-poppins text-[16px] text-dark-400 dark:text-light">
+                Revision
+              </p>
+              <InfoIcon className="h-4 w-4 text-dark-800 focus-visible:outline-none" />
+            </div>
+            <div className="flex w-full">
+              <Dropdown
+                egValue="Eg: 5 Revision"
+                values={REVISION_LIST}
+                selectedValue={detailsData.revision}
+                setSelectedValue={(value: string) =>
+                  setDetailsData({ ...detailsData, revision: value })
+                }
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-4 mx-4 flex flex-row items-center justify-start gap-4">
+          <p className="font-poppins text-[16px] text-dark-400 dark:text-light">
+            Additional Fields
+          </p>
+          <InfoIcon className="h-4 w-4 text-dark-800 focus-visible:outline-none" />
+        </div>
+
+        <div className="flex w-full flex-col items-start justify-start gap-2 md:gap-12 md:flex-row">
+          <CheckBox
+            ref={bannerRef}
+            label="text-gig-banner"
+            className="text-[13px] font-poppins text-dark-400 dark:text-light"
+          />
+          <CheckBox
+            ref={sourceRef}
+            label="text-gig-included-source"
+            className="text-[13px] font-poppins text-dark-400 dark:text-light"
+          />
+        </div>
       </div>
     );
   }
 );
-CreatePostPackageItem.displayName = 'Package Item';
+CreateServicePackageItem.displayName = 'Package Item';
 
-export default CreatePostPackageItem;
+export default CreateServicePackageItem;

@@ -43,6 +43,8 @@ use Marvel\Http\Controllers\PostCommentController;
 use Marvel\Http\Controllers\PostLikeController;
 use Marvel\Http\Controllers\PackageController;
 use Marvel\Http\Controllers\FollowController;
+use Marvel\Http\Controllers\GigController;
+use Marvel\Http\Controllers\GigLikeController;
 use Marvel\Http\Controllers\CommentLikeController;
 use Marvel\Http\Controllers\CommunityController;
 
@@ -171,6 +173,12 @@ Route::group(['middleware' => ['can:' . Permission::CUSTOMER, 'auth:sanctum']], 
     ]);
     Route::apiResource('commentlikes', CommentLikeController::class, [
         'only' => ['store'],
+    ]);
+    Route::apiResource('gigs', GigController::class, [
+        'only' => ['index', 'store', 'show'],
+    ]);
+    Route::apiResource('giglikes', GigLikeController::class, [
+        'only' => ['store', 'update'],
     ]);
     Route::apiResource('orders', OrderController::class, [
         'only' => ['index'],

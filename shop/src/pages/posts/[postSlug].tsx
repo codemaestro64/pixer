@@ -142,6 +142,7 @@ const PostPage: NextPageWithLayout = () => {
                 gallery={post.attachments}
                 thumbsSwiper={thumbsSwiper}
                 swiperParams={swiperParams}
+                navigationHidden={true}
               />
             </div>
             <div className="flex w-full flex-col items-start justify-between gap-12 md:flex-row">

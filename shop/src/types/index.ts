@@ -58,6 +58,8 @@ export interface MyReportsQueryOptions extends QueryOptions {}
 export interface MyQuestionQueryOptions extends QueryOptions {}
 
 export interface PostQueryOptions extends QueryOptions {}
+
+export interface GigQueryOptions extends QueryOptions {}
 export interface PostByUserQueryOptions extends QueryOptions {
   user_id: string;
 }
@@ -733,18 +735,6 @@ export interface Post {
     avatar?: Attachment;
     bio: string;
   };
-  packages?: [
-    {
-      id: string;
-      post_id: string;
-      name: string;
-      price: string;
-      descr: string;
-      keywords: string;
-      created_at: string;
-      updated_at: string;
-    }
-  ];
   comments_count: number;
   likes_count: number;
   comments?: [
@@ -796,26 +786,6 @@ export interface CreatePostInput {
   descr: string;
   keywords: string;
   attachments: Attachment[];
-  packages: [
-    {
-      name: string;
-      price: string;
-      descr: string;
-      keywords: string;
-    }
-  ];
-}
-
-export interface Package {
-  id: string;
-  post_id: string;
-  name: string;
-  price: string;
-  descr: string;
-  keywords: string;
-  created_at: string;
-  updated_at: string;
-  post: PostResponse;
 }
 
 export interface PostComment {
@@ -893,7 +863,97 @@ export interface CommentLike {
   status: boolean;
 }
 
+export interface Package {
+  id: string;
+  gig_id: string;
+  title: string;
+  name: string;
+  price: string;
+  descr: string;
+  keywords: string;
+  delivery: string;
+  revision: string;
+  additional_banner: number;
+  additional_source: number;
+  created_at: string;
+  updated_at: string;
+}
 
+export interface GigPaginator extends PaginatorInfo<Gig> {}
+export interface Gig {
+  id: string;
+  user_id: string;
+  title: string;
+  categories: string;
+  sub_categories: string;
+  descr: string;
+  keywords: string;
+  attachments: Attachment[];
+  created_at: string;
+  updated_at: string;
+  followers_count: string;
+  customer: {
+    id: string;
+    name: string;
+    email: string;
+  };
+  profile: {
+    id: string;
+    avatar?: Attachment;
+    bio: string;
+  };
+  likes_count: number;
+  packages?: [Package];
+}
+
+export interface GigResponse {
+  id: string;
+  user_id: string;
+  title: string;
+  categories: string;
+  sub_categories: string;
+  descr: string;
+  keywords: string;
+  attachments: Attachment[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CreateGigInput {
+  title: string;
+  categories: string;
+  sub_categories: string;
+  descr: string;
+  keywords: string;
+  attachments: Attachment[];
+  packages: [
+    {
+      id: string;
+      post_id: string;
+      name: string;
+      price: string;
+      descr: string;
+      keywords: string;
+      delivery: string;
+      revision: string;
+      additional_banner: boolean;
+      additional_source: boolean;
+    }
+  ];
+}
+
+export interface GigLike {
+  id: string;
+  gig_id: string;
+  user_id: string;
+  status: number;
+  created_at: string;
+  updated_at: string;
+}
+export interface CreateGigLikeInput {
+  user_id: string;
+  gig_id: string;
+}
 export interface Community {
   id: string;
   owner_id: string;

@@ -87,7 +87,7 @@ const ProfilePage: NextPageWithLayout = () => {
   const settings = {
     ...baseTagifySettings,
     whitelist: [],
-    enforceWhitelist: true,
+    //enforceWhitelist: true,
     callbacks: {
       add: handleChangeCallBack,
       remove: handleChangeCallBack,

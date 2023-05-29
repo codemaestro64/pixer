@@ -63,6 +63,8 @@
   "text-logout": "تسجيل خروج",
   "text-no-products-found": "لا توجد منتجات!",
   "text-no-products-found-message": "عذرا ، لم نعثر على أي منتج",
+  "text-no-gigs-found": "No gigs found!",
+  "text-no-gigs-found-message": "Sorry, we don’t found any gig",
   "text-home": "مسكن",
   "text-explore": "يكتشف",
   "text-popular-products": "المنتجات الشعبية",
@@ -70,6 +72,7 @@
   "text-feed": "تغذية",
   "text-chat": "محادثة",
   "text-post": "بريد",
+  "text-service": "أزعج",
   "text-contact": "اتصال",
   "text-settings": "إعدادات",
   "text-terms": "شروط",
@@ -291,6 +294,9 @@
   "PIXER_MESSAGE.EMAIL_SENT_SUCCESSFUL": "البريد الإلكتروني المرسلة بنجاح",
   "PIXER_ERROR.YOU_HAVE_ALREADY_GIVEN_ABUSIVE_REPORT_FOR_THIS": "لقد قدمت بالفعل تقريرًا",
   "PIXER_ERROR.MAXIMUM_QUESTION_LIMIT_EXCEEDED": "تم تجاوز الحد الأقصى للأسئلة",
+
+  "text-gig-banner": "1 لافتة",
+  "text-gig-included-source": "ملف المصادر المضمنة",
 
   "text-order-received-title": "تم استلام الطلب بنجاح",
   "text-order-thank-you-message": "شكرًا لطلبك ، انقر هنا للتحقق من حزمة الشراء الخاصة بك",

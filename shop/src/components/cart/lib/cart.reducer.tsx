@@ -24,10 +24,20 @@ type Action =
       item: Optional<Item, 'quantity'>;
       quantity: number;
     }
-  | { type: 'REMOVE_ITEM_OR_QUANTITY'; id: Item['id']; quantity?: number }
+  | {
+      type: 'REMOVE_ITEM_OR_QUANTITY';
+      id: Item['id'];
+      slug: Item['slug'];
+      quantity?: number;
+    }
   | { type: 'ADD_ITEM'; id: Item['id']; item: Item }
-  | { type: 'UPDATE_ITEM'; id: Item['id']; item: UpdateItemInput }
-  | { type: 'REMOVE_ITEM'; id: Item['id'] }
+  | {
+      type: 'UPDATE_ITEM';
+      id: Item['id'];
+      slug: Item['slug'];
+      item: UpdateItemInput;
+    }
+  | { type: 'REMOVE_ITEM'; id: Item['id']; slug: Item['slug'] }
   | { type: 'SET_VERIFIED_RESPONSE'; response: VerifiedResponse }
   | { type: 'RESET_CART' }
   | { type: 'UPDATE_CART_LANGUAGE'; language: string };
@@ -53,6 +63,7 @@ export const initialState: State = {
   language: 'en',
 };
 export function cartReducer(state: State, action: Action): State {
+  console.log('@@@@@@@@@@@@@@@@@@@@ - ', action);
   switch (action.type) {
     case 'ADD_ITEM_WITH_QUANTITY': {
       const items = addItemWithQuantity(
@@ -66,6 +77,7 @@ export function cartReducer(state: State, action: Action): State {
       const items = removeItemOrQuantity(
         state.items,
         action.id,
+        action.slug,
         action.quantity ?? 1
       );
       return generateFinalState(state, items);
@@ -75,11 +87,16 @@ export function cartReducer(state: State, action: Action): State {
       return generateFinalState(state, items);
     }
     case 'REMOVE_ITEM': {
-      const items = removeItem(state.items, action.id);
+      const items = removeItem(state.items, action.id, action.slug);
       return generateFinalState(state, items);
     }
     case 'UPDATE_ITEM': {
-      const items = updateItem(state.items, action.id, action.item);
+      const items = updateItem(
+        state.items,
+        action.id,
+        action.slug,
+        action.item
+      );
       return generateFinalState(state, items);
     }
     case 'SET_VERIFIED_RESPONSE': {

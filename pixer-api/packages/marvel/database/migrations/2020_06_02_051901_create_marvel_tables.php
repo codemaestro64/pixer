@@ -164,6 +164,7 @@ class CreateMarvelTables extends Migration
             $table->string('order_quantity');
             $table->double('unit_price');
             $table->double('subtotal');
+            $table->string('type');
             $table->softDeletes();
             $table->timestamps();
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');

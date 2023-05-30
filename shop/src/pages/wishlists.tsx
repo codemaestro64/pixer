@@ -81,6 +81,7 @@ function WishlistItem({ product }: { product: Product }) {
         <div className="flex flex-col-reverse items-center xs:flex-row xs:gap-2.5 xs:pb-4 xs:pt-8 md:flex-nowrap md:gap-3.5 lg:gap-4">
           {!isFreeItem ? (
             <AddToCart
+              itemType="product"
               item={product}
               withPrice={false}
               toastClassName="-mt-10 xs:mt-0"

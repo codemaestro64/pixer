@@ -98,13 +98,17 @@ const ServicePage: NextPageWithLayout = () => {
               }
             </div>
             <div className="mt-[15.49px] xl:mt-[35px] px-[7.5px]">
-              <ProfileInfo name={gig.customer.name} info={gig.profile} />
+              <ProfileInfo
+                name={gig.customer.name}
+                info={gig.profile}
+                orders_amount={gig.orders_amount ?? 0}
+              />
             </div>
           </div>
           {/* right */}
           <div className="mt-[27px] mb-[16px] xl:px-[24px]">
             <div className="p-[7px] xl:p-[10px]">
-              <Packages packages={gig.packages!} />
+              <Packages me={me} gig={gig} />
             </div>
           </div>
         </div>

@@ -892,6 +892,7 @@ export interface Gig {
   created_at: string;
   updated_at: string;
   followers_count: string;
+  orders_amount?: number;
   customer: {
     id: string;
     name: string;
@@ -903,6 +904,7 @@ export interface Gig {
     bio: string;
   };
   likes_count: number;
+  likes: [{ user_id: string }];
   packages?: [Package];
 }
 
@@ -946,7 +948,7 @@ export interface GigLike {
   id: string;
   gig_id: string;
   user_id: string;
-  status: number;
+  status: boolean;
   created_at: string;
   updated_at: string;
 }

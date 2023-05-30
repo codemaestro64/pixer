@@ -7,11 +7,13 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Marvel\Database\Models\Language;
 use Marvel\Database\Models\Package;
+use Marvel\Database\Models\Gig;
 use Marvel\Database\Models\Follow;
 use Marvel\Database\Repositories\GigRepository;
 use Marvel\Exceptions\MarvelException;
 use Marvel\Http\Requests\GigRequest;
 use Prettus\Validator\Exceptions\ValidatorException;
+use Illuminate\Support\Facades\DB;
 
 class GigController extends CoreController
 {
@@ -74,7 +76,17 @@ class GigController extends CoreController
      */
     public function show($id)
     {
+        $ordered_package_ids = DB::table('orders')
+            ->join('order_product', 'orders.id', '=', 'order_product.order_id')// joining the contacts table , where user_id and contact_user_id are same
+            ->where('orders.parent_id', '!=', 'null')
+            ->where('order_product.type', 'package')
+            ->select('orders.*', 'order_product.type', 'order_product.product_id')
+            ->get()
+            ->pluck('product_id')->all();
+
+        $cur_orders_amount = Package::whereIn('id', $ordered_package_ids)->where('gig_id', $id)->get()->count();
         $gig = $this->repository->with(['customer', 'profile', 'packages', 'likes'])->withCount(['likes'])->findOrFail($id);
+        $gig->orders_amount = $cur_orders_amount;
 
         return $gig;
     }

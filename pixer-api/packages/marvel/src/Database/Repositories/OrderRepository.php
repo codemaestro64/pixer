@@ -17,6 +17,8 @@ use Marvel\Database\Models\OrderedFile;
 use Marvel\Database\Models\OrderWalletPoint;
 use Marvel\Database\Models\Wallet;
 use Marvel\Database\Models\Product;
+use Marvel\Database\Models\Gig;
+use Marvel\Database\Models\Package;
 use Marvel\Database\Models\Settings;
 use Marvel\Database\Models\User;
 use Marvel\Database\Models\Variation;
@@ -90,7 +92,6 @@ class OrderRepository extends BaseRepository
      */
     public function storeOrder($request)
     {
-
         $useWalletPoints = isset($request->use_wallet_points) ? $request->use_wallet_points : false;
         $request['tracking_number'] = Str::random(12);
         if ($request->user() && $request->user()->hasPermissionTo(Permission::SUPER_ADMIN) && isset($request['customer_id'])) {
@@ -195,7 +196,6 @@ class OrderRepository extends BaseRepository
             $wallet->points_used = $spend;
             $wallet->save();
         } catch (Exception $e) {
-
             throw new MarvelException(SOMETHING_WENT_WRONG);
         }
     }
@@ -399,17 +399,50 @@ class OrderRepository extends BaseRepository
     {
         $products = $request->products;
         $productsByShop = [];
+        $packagesByShop = [];
         $language = $request->language ?? DEFAULT_LANGUAGE;
 
         foreach ($products as $key => $cartProduct) {
-            $product = Product::findOrFail($cartProduct['product_id']);
-            $productsByShop[$product->shop_id][] = $cartProduct;
+            if ($cartProduct['type'] == 'product') {
+                $product = Product::findOrFail($cartProduct['product_id']);
+                $productsByShop[$product->shop_id][] = $cartProduct;
+            } else {
+                $package = Package::findOrFail($cartProduct['product_id']);
+                $gig = Gig::findOrFail($package->gig_id);
+                $packagesByShop[$gig->user_id][] = $cartProduct;
+            }
         }
 
         foreach ($productsByShop as $shop_id => $cartProduct) {
             $amount = array_sum(array_column($cartProduct, 'subtotal'));
             $orderInput = [
                 'tracking_number'  => Str::random(12),
+                'shop_id'          => $shop_id,
+                'status'           => $request->status,
+                'customer_id'      => $request->customer_id,
+                'shipping_address' => $request->shipping_address,
+                'billing_address'  => $request->billing_address,
+                'customer_contact' => $request->customer_contact,
+                'delivery_time'    => $request->delivery_time,
+                'delivery_fee'     => 0,
+                'sales_tax'        => 0,
+                'discount'         => 0,
+                'parent_id'        => $id,
+                'amount'           => $amount,
+                'total'            => $amount,
+                'paid_total'       => $amount,
+                'language'         => $language
+            ];
+
+            $order = $this->create($orderInput);
+            $order->products()->attach($this->processProducts($cartProduct,  $request['customer_id'],  $order));
+            // event(new OrderReceived($order));
+        }
+
+        foreach ($packagesByShop as $shop_id => $cartProduct) {
+            $amount = array_sum(array_column($cartProduct, 'subtotal'));
+            $orderInput = [
+                'tracking_number'  => Str::random(16),
                 'shop_id'          => $shop_id,
                 'status'           => $request->status,
                 'customer_id'      => $request->customer_id,

@@ -40,11 +40,13 @@ function TopRated() {
   );
 }
 
-function Order() {
+function Order({ amount }: { amount: number }) {
   return (
     <div className="px-[5.85px] xl:px-[11px] py-[5.52px] xl:py-[10px]">
       <div className="text-[7.73px] xl:text-[14px] text-[#767676] font-poppins italic font-medium">
-        01 Order in Queue
+        {`${amount < 10 && amount > 0 ? '0' + amount : amount} ${
+          amount > 1 ? 'Orders' : 'Order'
+        } in Queue`}
       </div>
     </div>
   );
@@ -63,9 +65,11 @@ function Separator({ hideOnXl = false }) {
 export default function ProfileInfo({
   name,
   info,
+  orders_amount,
 }: {
   name: string;
   info: any;
+  orders_amount: number;
 }) {
   return (
     <div className="px-[6.29px] xl:px-[10px] flex items-center justify-between">
@@ -77,7 +81,7 @@ export default function ProfileInfo({
       <div className="space-x-[2.72px] xl:space-x-[5px] flex items-center">
         <RatingStars rating={4.8} stars={4} />
         <Separator />
-        <Order />
+        <Order amount={orders_amount} />
       </div>
     </div>
   );

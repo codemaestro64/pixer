@@ -9,7 +9,8 @@ import { generateCartItem } from './lib/generate-cart-item';
 import { useTranslation } from 'next-i18next';
 
 interface Props {
-  item: Product;
+  itemType: string;
+  item: any;
   className?: string;
   toastClassName?: string;
   withPrice?: boolean;
@@ -17,6 +18,7 @@ interface Props {
 }
 
 export default function AddToCart({
+  itemType,
   item,
   className,
   toastClassName,
@@ -40,11 +42,14 @@ export default function AddToCart({
     }, 650);
   }
   function addSuccessfully() {
+    /*
     if (item?.language !== language) {
       updateCartLanguage(item?.language);
     }
+    */
+
     setCartingSuccess(true);
-    addItemToCart(generateCartItem(item), 1);
+    addItemToCart(generateCartItem(itemType, item), 1);
     toast.success(<b>{t('text-add-to-cart-message')}</b>, {
       className: toastClassName,
     });
@@ -63,7 +68,7 @@ export default function AddToCart({
           : 'pointer-events-auto cursor-pointer',
         className
       )}
-      disabled={isInStock(item?.id)}
+      disabled={isInStock(item?.id, item?.slug)}
     >
       {t('text-add-to-cart')} {withPrice && price}
       <svg

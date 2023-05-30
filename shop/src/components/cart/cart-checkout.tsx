@@ -86,6 +86,7 @@ export default function CartCheckout() {
       window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       return;
     }
+
     mutate({
       amount: base_amount,
       total: totalPrice,
@@ -95,6 +96,7 @@ export default function CartCheckout() {
         order_quantity: item.quantity,
         unit_price: item.price,
         subtotal: item.price * item.quantity,
+        type: item.slug.includes('@@@') ? 'package' : 'product',
       })),
       status: '1',
       payment_gateway: 'STRIPE',

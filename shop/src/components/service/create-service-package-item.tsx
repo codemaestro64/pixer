@@ -161,7 +161,7 @@ const CreateServicePackageItem = forwardRef(
             </div>
             <div className="flex w-full">
               <Input
-                type="search"
+                type="number"
                 placeholder="Enter your post Title"
                 className="w-full"
                 inputClassName="font-poppins rounded-[10px]"

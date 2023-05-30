@@ -32,7 +32,8 @@ export function addItemWithQuantity(
     throw new Error("cartQuantity can't be zero or less than zero");
   }
   const existingItemIndex = items.findIndex(
-    (existingItem) => existingItem.id === item.id
+    (existingItem) =>
+      existingItem.id === item.id && existingItem.slug === item.slug
   );
 
   if (existingItemIndex > -1) {
@@ -46,10 +47,11 @@ export function addItemWithQuantity(
 export function removeItemOrQuantity(
   items: Item[],
   id: Item['id'],
+  slug: Item['slug'],
   quantity: number
 ) {
   return items.reduce((acc: Item[], item) => {
-    if (item.id === id) {
+    if (item.id === id && item.slug == slug) {
       const newQuantity = item.quantity - quantity;
 
       return newQuantity > 0
@@ -64,25 +66,30 @@ export function addItem(items: Item[], item: Item) {
   return [...items, item];
 }
 
-export function getItem(items: Item[], id: Item['id']) {
-  return items.find((item) => item.id === id);
+export function getItem(items: Item[], id: Item['id'], slug: Item['slug']) {
+  return items.find((item) => item.id === id && item.slug === slug);
 }
 
 export function updateItem(
   items: Item[],
   id: Item['id'],
+  slug: Item['id'],
   item: UpdateItemInput
 ) {
   return items.map((existingItem) =>
-    existingItem.id === id ? { ...existingItem, ...item } : existingItem
+    existingItem.id === id && existingItem.slug === slug
+      ? { ...existingItem, ...item }
+      : existingItem
   );
 }
 
-export function removeItem(items: Item[], id: Item['id']) {
-  return items.filter((existingItem) => existingItem.id !== id);
+export function removeItem(items: Item[], id: Item['id'], slug: Item['slug']) {
+  return items.filter(
+    (existingItem) => existingItem.id !== id && existingItem.slug !== slug
+  );
 }
-export function inStock(items: Item[], id: Item['id']) {
-  const item = getItem(items, id);
+export function inStock(items: Item[], id: Item['id'], slug: Item['slug']) {
+  const item = getItem(items, id, slug);
   if (item) return item['quantity'] < item['stock'];
   return false;
 }
